@@ -1,0 +1,509 @@
+<title>Infinity Hunter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Chivo:wght@400;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0e15; --bg2:#0e131d; --panel:#141b28; --panel2:#1b2433; --raise:#232e40;
+  --line:#2a3446; --line2:#37455e;
+  --ink:#e9eefc; --ink-dim:#aeb9cf; --muted:#7d8aa2;
+  --gold:#ffc24d; --gold-deep:#c8912f;
+  --fire:#ff6a3d; --water:#3db4ff; --earth:#8bd450; --thunder:#ffd23d; --ice:#7fe3ff; --dragon:#c77dff; --neutral:#c3ccdd;
+  --risk-low:#5fd08a; --risk-med:#ffcf4d; --risk-high:#ff5d6c;
+  --hp:#ff4d5e; --hpm:#ff6a3d;
+  --pixel:'Press Start 2P',monospace; --body:'Chivo',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--body); line-height:1.55;
+  font-size:16px;
+  background-image:
+    radial-gradient(1100px 600px at 78% -8%, rgba(199,125,255,.10), transparent 60%),
+    radial-gradient(900px 520px at 8% 4%, rgba(255,106,61,.09), transparent 55%),
+    radial-gradient(700px 700px at 50% 118%, rgba(61,180,255,.07), transparent 60%);
+  background-attachment:fixed;
+}
+img{max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+.pixel{font-family:var(--pixel)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ---------- Header ---------- */
+header{padding:46px 0 8px;text-align:center}
+.logo{
+  font-family:var(--pixel); font-size:clamp(20px,4.4vw,38px); line-height:1.25;
+  color:var(--ink); text-wrap:balance; letter-spacing:1px;
+  text-shadow:0 3px 0 var(--gold-deep), 0 4px 0 rgba(0,0,0,.5);
+}
+.logo b{color:var(--gold)}
+.tag{margin:20px auto 0;max-width:60ch;color:var(--ink-dim);font-size:17px;text-wrap:balance}
+.eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--muted);display:inline-flex;gap:10px;align-items:center;margin-bottom:20px
+}
+.eyebrow .dot{width:7px;height:7px;background:var(--gold);box-shadow:0 0 10px var(--gold)}
+.status-pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.pill{
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;
+  padding:5px 11px;border:1px solid var(--line2);background:var(--panel);
+  color:var(--ink-dim);display:inline-flex;gap:7px;align-items:center
+}
+.pill .ok{color:var(--risk-low)}
+.pill .gd{color:var(--gold)}
+
+/* ---------- Section frames ---------- */
+section{padding:52px 0}
+.sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px;flex-wrap:wrap}
+.sec-head h2{font-family:var(--pixel);font-size:15px;margin:0;color:var(--ink);letter-spacing:.5px}
+.sec-head .idx{font-family:var(--mono);font-size:12px;color:var(--gold);letter-spacing:.1em}
+.sec-sub{color:var(--muted);max-width:66ch;margin:0 0 30px;font-size:15px}
+
+/* ---------- Phones ---------- */
+.phones{
+  display:grid;gap:34px 26px;justify-content:center;
+  grid-template-columns:repeat(auto-fit,minmax(288px,320px));
+}
+.phone-card{display:flex;flex-direction:column;gap:14px}
+.phone{
+  position:relative;aspect-ratio:9/19;border-radius:30px;
+  background:#05070c;
+  padding:11px;
+  border:1px solid #2c3648;
+  box-shadow:0 22px 45px -18px rgba(0,0,0,.9), inset 0 0 0 2px #0a0e16, 0 0 0 1px rgba(255,255,255,.03);
+}
+.phone::after{ /* notch */
+  content:"";position:absolute;top:12px;left:50%;transform:translateX(-50%);
+  width:78px;height:7px;border-radius:5px;background:#05070c;box-shadow:inset 0 0 0 1px #1a2130;z-index:6
+}
+.screen{
+  position:relative;height:100%;width:100%;border-radius:21px;overflow:hidden;
+  background:linear-gradient(180deg,var(--bg2),#0a0f18);
+  display:flex;flex-direction:column;
+  font-size:12px;
+}
+.screen::before{ /* scanlines / CRT */
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:5;mix-blend-mode:overlay;opacity:.5;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 1px,transparent 1px 3px);
+}
+.caption{padding:0 4px}
+.caption .k{font-family:var(--pixel);font-size:10px;color:var(--gold);letter-spacing:.5px}
+.caption .d{color:var(--muted);font-size:13.5px;margin-top:7px}
+
+/* screen chrome */
+.s-top{display:flex;justify-content:space-between;align-items:center;padding:16px 13px 9px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--ink-dim);z-index:2}
+.s-top .z{color:var(--ink);text-transform:uppercase;letter-spacing:.14em}
+.hunts{display:flex;gap:3px;align-items:center}
+.hunts i{width:6px;height:6px;background:var(--gold);display:block}
+.hunts i.spent{background:#33405a}
+.s-body{flex:1;min-height:0;padding:6px 13px 13px;display:flex;flex-direction:column;gap:9px;z-index:2}
+.s-title{font-family:var(--pixel);font-size:11px;color:var(--ink);letter-spacing:.5px;margin:2px 0 4px}
+
+/* element dots */
+.el{display:inline-block;width:9px;height:9px;border-radius:0;vertical-align:middle}
+.el.fire{background:var(--fire)} .el.water{background:var(--water)} .el.earth{background:var(--earth)}
+.el.ice{background:var(--ice)} .el.thunder{background:var(--thunder)} .el.dragon{background:var(--dragon)} .el.neutral{background:var(--neutral)}
+
+/* pixel sprite */
+.sprite{image-rendering:pixelated;display:block}
+.breathe{animation:breathe 2.6s ease-in-out infinite;transform-origin:50% 100%}
+.bob{animation:bob 3.1s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scaleY(1) scaleX(1)}50%{transform:scaleY(1.05) scaleX(.985)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
+/* ---- Zone select screen ---- */
+.zones{display:flex;flex-direction:column;gap:7px}
+.zone{display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid var(--line);background:var(--panel);cursor:default}
+.zone.sel{border-color:var(--gold);background:linear-gradient(90deg,rgba(255,194,77,.12),var(--panel2));box-shadow:inset 3px 0 0 var(--gold)}
+.zone.lock{opacity:.5;border-style:dashed}
+.zone .nm{flex:1;color:var(--ink);font-weight:700;font-size:12.5px}
+.zone .lv{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.loadout{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:2px}
+.slot{border:1px solid var(--line);background:var(--bg2);padding:7px 8px;text-align:center}
+.slot .lab{font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+.slot .val{font-size:11px;color:var(--ink);margin-top:4px;font-weight:700;line-height:1.2}
+.slot .val small{color:var(--fire);font-weight:400;display:block;font-family:var(--mono);font-size:9px}
+.btn{
+  font-family:var(--pixel);font-size:11px;text-align:center;padding:13px;margin-top:auto;
+  background:var(--gold);color:#241800;border:0;letter-spacing:.5px;
+  box-shadow:0 4px 0 var(--gold-deep);cursor:pointer
+}
+.btn.ghost{background:transparent;color:var(--ink-dim);border:1px solid var(--line2);box-shadow:none;font-size:9px;padding:10px}
+.danger{
+  margin-top:9px;position:relative;overflow:hidden;border:1px solid #3a2036;
+  background:linear-gradient(90deg,#160a17,#0c0710);padding:10px 12px;display:flex;align-items:center;gap:11px
+}
+.eyes{position:relative;width:34px;height:22px;flex:none}
+.eyes i{position:absolute;top:6px;width:9px;height:9px;border-radius:50%;background:var(--dragon);
+  box-shadow:0 0 9px 2px rgba(199,125,255,.85);animation:blink 4.4s infinite}
+.eyes i.l{left:2px}.eyes i.r{right:2px;animation-delay:.2s}
+@keyframes blink{0%,92%,100%{opacity:1}95%{opacity:.15}}
+.danger .dt{font-size:10.5px;color:#eecdf5;line-height:1.35}
+.danger .dt b{font-family:var(--mono);color:var(--dragon);font-size:11px;display:block;letter-spacing:.02em}
+
+/* ---- Node map screen ---- */
+.choice{display:flex;align-items:center;gap:9px;padding:9px 10px;border:1px solid var(--line);background:var(--panel);position:relative}
+.choice .cn{flex:1;min-width:0}
+.choice .nm{color:var(--ink);font-weight:700;font-size:12.5px;display:flex;align-items:center;gap:6px}
+.choice .mt{font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:2px}
+.reward{font-family:var(--mono);font-size:12px;color:var(--gold);font-weight:700;text-align:right;white-space:nowrap}
+.reward small{display:block;color:var(--muted);font-size:8.5px;font-weight:400;letter-spacing:.08em}
+.risk{font-family:var(--mono);font-size:8px;letter-spacing:.12em;padding:3px 6px;border:1px solid;margin-top:5px;display:inline-block}
+.risk.low{color:var(--risk-low);border-color:var(--risk-low)}
+.risk.med{color:var(--risk-med);border-color:var(--risk-med)}
+.risk.high{color:var(--risk-high);border-color:var(--risk-high);animation:pulseHi 1.8s infinite}
+@keyframes pulseHi{0%,100%{box-shadow:0 0 0 0 rgba(255,93,108,0)}50%{box-shadow:0 0 10px 0 rgba(255,93,108,.5)}}
+.orsep{display:flex;align-items:center;gap:9px;color:var(--muted);font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;margin:1px 0}
+.orsep::before,.orsep::after{content:"";flex:1;height:1px;background:var(--line)}
+.travel{display:flex;align-items:center;gap:9px;padding:9px 10px;border:1px dashed var(--line2);background:var(--bg2)}
+.travel .nm{flex:1;color:var(--ice);font-weight:700;font-size:12px}
+.travel .lv{font-family:var(--mono);font-size:9.5px;color:var(--muted)}
+
+/* ---- Combat screen ---- */
+.cbt{position:relative;flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;
+  background:radial-gradient(120% 80% at 50% 12%,rgba(255,106,61,.14),transparent 60%)}
+.mon-wrap{position:absolute;top:2px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:7px}
+.mon-hp{width:80%}
+.mon-name{font-family:var(--mono);font-size:10.5px;color:var(--ink);letter-spacing:.05em;display:flex;gap:7px;align-items:center}
+.mon-name .lv{color:var(--muted)}
+.bar{height:8px;background:#1a2231;border:1px solid #33405a;position:relative;overflow:hidden}
+.bar>span{position:absolute;inset:0;transform-origin:left}
+.bar.mon>span{background:linear-gradient(90deg,#ffa04d,var(--fire));width:72%}
+.bar.you>span{background:linear-gradient(90deg,#ff8a4d,var(--hp));width:38%;animation:drain 3.4s ease-in-out infinite alternate}
+@keyframes drain{from{width:41%}to{width:34%}}
+.bar .lab{position:absolute;right:4px;top:-14px;font-family:var(--mono);font-size:8px;color:var(--muted)}
+.partchip{font-family:var(--mono);font-size:8px;letter-spacing:.1em;color:var(--gold);border:1px solid var(--gold-deep);padding:2px 6px}
+.dmg{position:absolute;top:118px;left:50%;font-family:var(--pixel);font-size:22px;color:var(--gold);
+  text-shadow:0 2px 0 #7a5410,0 0 16px rgba(255,194,77,.6);animation:dmg 2.6s ease-out infinite;white-space:nowrap}
+.dmg small{display:block;font-family:var(--mono);font-size:8px;color:var(--fire);letter-spacing:.12em;text-align:center;margin-top:3px;text-shadow:none}
+@keyframes dmg{0%{opacity:0;transform:translate(-50%,10px) scale(.8)}12%{opacity:1;transform:translate(-50%,-2px) scale(1.05)}
+  30%{transform:translate(-50%,-8px) scale(1)}70%{opacity:1}100%{opacity:0;transform:translate(-50%,-30px)}}
+.you-hud{display:flex;flex-direction:column;gap:8px;z-index:3}
+.wpn{display:flex;align-items:center;gap:8px}
+.wpn .wn{font-family:var(--mono);font-size:10px;color:var(--ink)}
+.demon{flex:1;height:7px;background:#1a2231;border:1px solid #4a2b18;position:relative;overflow:hidden}
+.demon>span{position:absolute;inset:0;width:62%;background:linear-gradient(90deg,#ff6a3d,#ffd23d);animation:demon 2.2s ease-in-out infinite alternate}
+@keyframes demon{from{width:52%}to{width:70%}}
+.demon .dl{position:absolute;left:6px;top:-1px;font-family:var(--mono);font-size:7px;color:#241800;font-weight:700;letter-spacing:.1em}
+.hints{display:flex;gap:6px}
+.hint{flex:1;text-align:center;font-family:var(--mono);font-size:8.5px;letter-spacing:.08em;color:var(--ink-dim);
+  border:1px solid var(--line);padding:7px 4px;background:var(--panel)}
+.hint b{color:var(--gold)}
+.capture{font-family:var(--mono);font-size:8.5px;text-align:center;padding:7px;border:1px dashed #3a4d6a;color:var(--muted);letter-spacing:.06em}
+.capture b{color:var(--water)}
+
+/* ---- Results screen ---- */
+.res-peak{text-align:center;margin:4px 0 2px}
+.res-peak .k{font-family:var(--mono);font-size:9px;letter-spacing:.24em;color:var(--muted);text-transform:uppercase}
+.res-peak .v{font-family:var(--pixel);font-size:26px;color:var(--gold);text-shadow:0 3px 0 #7a5410;margin-top:8px}
+.ess{display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--ink);margin-top:4px}
+.ess b{color:var(--gold)}
+.coin{width:12px;height:12px;background:radial-gradient(circle at 35% 30%,#ffe08a,var(--gold-deep));border-radius:50%;display:inline-block}
+.banked{border:1px solid var(--line);background:var(--panel);padding:9px 10px}
+.banked .h{font-family:var(--mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.mat{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-dim);padding:2px 0}
+.mat .q{font-family:var(--mono);color:var(--gold)}
+.mat.cap .q{color:var(--water)}
+.reset-sep{display:flex;align-items:center;gap:9px;color:var(--ink);font-family:var(--pixel);font-size:9px;letter-spacing:.06em;margin:2px 0}
+.reset-sep::before,.reset-sep::after{content:"";flex:1;height:2px;background:repeating-linear-gradient(90deg,var(--line2) 0 4px,transparent 4px 8px)}
+.upg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.up{border:1px solid var(--line);background:var(--bg2);padding:7px;text-align:center;cursor:pointer}
+.up .un{font-size:10px;color:var(--ink);font-weight:700}
+.up .uc{font-family:var(--mono);font-size:8.5px;color:var(--gold);margin-top:3px}
+.up.wide{grid-column:span 2}
+
+/* ---------- Loop diagram ---------- */
+.loop{margin-top:6px}
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:12px;justify-content:center}
+.node{
+  position:relative;flex:1 1 150px;max-width:190px;min-width:140px;
+  border:1px solid var(--line2);background:var(--panel);padding:14px 13px;
+}
+.node .n{font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:.06em}
+.node .t{font-weight:900;font-size:14px;margin:7px 0 5px;color:var(--ink);letter-spacing:.2px}
+.node .b{font-size:12.5px;color:var(--muted);line-height:1.4}
+.node.accent{border-color:var(--gold);box-shadow:inset 0 0 0 1px rgba(255,194,77,.25)}
+.arrow{align-self:center;color:var(--line2);font-size:20px;line-height:1;flex:0 0 auto}
+.fork{
+  margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:14px
+}
+.branch{border:1px solid;padding:14px 15px;position:relative}
+.branch.die{border-color:rgba(255,93,108,.5);background:linear-gradient(180deg,rgba(255,93,108,.07),transparent)}
+.branch.bank{border-color:rgba(95,208,138,.5);background:linear-gradient(180deg,rgba(95,208,138,.07),transparent)}
+.branch .bh{font-family:var(--pixel);font-size:11px;letter-spacing:.4px}
+.branch.die .bh{color:var(--risk-high)} .branch.bank .bh{color:var(--risk-low)}
+.branch .bb{color:var(--ink-dim);font-size:13px;margin-top:9px;line-height:1.45}
+.branch .bb b{color:var(--ink)}
+.loopback{text-align:center;margin-top:18px;font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.04em}
+.loopback b{color:var(--gold)}
+
+/* pillars */
+.pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:8px}
+.plr{border-left:2px solid var(--line2);padding:4px 0 4px 15px}
+.plr h3{margin:0 0 6px;font-size:14px;color:var(--ink);font-weight:900}
+.plr p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.5}
+.plr .e{font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:.1em}
+
+/* footer */
+footer{padding:40px 0 60px;border-top:1px solid var(--line);margin-top:30px;color:var(--muted);font-size:13px}
+footer .fnote{display:flex;gap:10px;align-items:flex-start;max-width:70ch}
+footer b{color:var(--ink-dim);font-weight:700}
+hr.div{border:0;border-top:1px solid var(--line);margin:0}
+
+@media (max-width:560px){
+  .fork{grid-template-columns:1fr}
+  .arrow{transform:rotate(90deg)}
+  .flow{flex-direction:column;align-items:stretch}
+  .node{max-width:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important}
+}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow"><span class="dot"></span> Offline pixel hunting RPG · visual mockup</div>
+  <div class="logo">INFINITY <b>HUNTER</b></div>
+  <p class="tag">Every expedition is an optimization puzzle: choose your fights, explode from <b>Lv.1</b> into absurd power, craft monster gear, bring one captured companion, push farther than last time, then reset and do it again.</p>
+  <div class="status-pills">
+    <span class="pill"><span class="gd">◆</span> Godot 4 · GDScript</span>
+    <span class="pill"><span class="ok">✓</span> MVP logic built · 145 tests green</span>
+    <span class="pill">Art shown here = intended look (build uses placeholders)</span>
+  </div>
+</header>
+
+<!-- ============ SCREENS ============ -->
+<section>
+  <div class="sec-head"><span class="idx">01</span><h2>The Screens</h2></div>
+  <p class="sec-sub">Four beats of a single run, portrait and one-thumb. Clean modern UI layered over a retro pixel world, with large, readable numbers doing the bragging. Content below is the real MVP data.</p>
+
+  <div class="phones">
+
+    <!-- 1. CHOOSE EXPEDITION -->
+    <div class="phone-card">
+      <div class="phone"><div class="screen">
+        <div class="s-top"><span class="z">Base Camp</span><span>LOADOUT</span></div>
+        <div class="s-body">
+          <div class="s-title">Choose Expedition</div>
+          <div class="zones">
+            <div class="zone"><span class="el earth"></span><span class="nm">Verdant Fields</span><span class="lv">Lv 1–8</span></div>
+            <div class="zone sel"><span class="el fire"></span><span class="nm">Cinder Dunes</span><span class="lv">Lv 8–24</span></div>
+            <div class="zone"><span class="el ice"></span><span class="nm">Frostpeak Ridge</span><span class="lv">Lv 25–60</span></div>
+            <div class="zone lock"><span class="el neutral"></span><span class="nm">??? Sealed</span><span class="lv">🔒</span></div>
+          </div>
+          <div class="loadout">
+            <div class="slot"><div class="lab">Weapon</div><div class="val">Ember Blades<small>Dual · Fire</small></div></div>
+            <div class="slot"><div class="lab">Armor</div><div class="val">Scale Set<small>+Crit Eye</small></div></div>
+            <div class="slot"><div class="lab">Ally</div><div class="val">Slime<small>+12% XP</small></div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:9px;color:var(--muted)">
+            HUNTS <span class="hunts" style="gap:3px">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span> ×10
+          </div>
+          <div class="danger">
+            <div class="eyes"><i class="l"></i><i class="r"></i></div>
+            <div class="dt">Seen near the road, impossibly vast:<b>Voidmaw Devourer · Lv 9,999,999,999</b></div>
+          </div>
+          <button class="btn">Begin Expedition ▸</button>
+        </div>
+      </div></div>
+      <div class="caption"><div class="k">Choose Expedition</div><div class="d">Pick an unlocked zone and start at Lv.1 with your persistent gear. Launch deep for bigger gaps and bigger risk.</div></div>
+    </div>
+
+    <!-- 2. NODE MAP -->
+    <div class="phone-card">
+      <div class="phone"><div class="screen">
+        <div class="s-top"><span class="z">Cinder Dunes</span>
+          <span class="hunts">HUNTS <i class="spent"></i><i class="spent"></i><i class="spent"></i><i class="spent"></i><i class="spent"></i><i class="spent"></i><i></i><i></i><i></i><i></i></span></div>
+        <div class="s-body">
+          <div class="s-title">Choose Your Fight</div>
+          <div class="choice">
+            <span class="el earth"></span>
+            <div class="cn"><div class="nm">Mossback Turtle</div><div class="mt">Lv 6 · earth · weak ⚡</div><span class="risk low">SAFE</span></div>
+            <div class="reward">+40 lv<small>REWARD</small></div>
+          </div>
+          <div class="choice">
+            <span class="el fire"></span>
+            <div class="cn"><div class="nm">Ember Wolf</div><div class="mt">Lv 9 · fire · breaks: head</div><span class="risk med">RISKY</span></div>
+            <div class="reward">+220 lv<small>REWARD</small></div>
+          </div>
+          <div class="choice">
+            <span class="el fire"></span>
+            <div class="cn"><div class="nm">Magma Golem</div><div class="mt">Lv 18 · fire · 3× your power</div><span class="risk high">LETHAL</span></div>
+            <div class="reward">+3,140 lv<small>REWARD</small></div>
+          </div>
+          <div class="orsep">or</div>
+          <div class="travel"><span class="el ice"></span><span class="nm">▲ Travel deeper</span><span class="lv">Frostpeak · Lv 25</span></div>
+          <button class="btn ghost">Retreat &amp; bank haul</button>
+        </div>
+      </div></div>
+      <div class="caption"><div class="k">Node-Map</div><div class="d">Each step shows a few fights with visible level, reward and risk. Pick one (spends a hunt), travel deeper, or cash out.</div></div>
+    </div>
+
+    <!-- 3. COMBAT -->
+    <div class="phone-card">
+      <div class="phone"><div class="screen">
+        <div class="s-top"><span class="z">Cinder Dunes</span><span>FIGHT</span></div>
+        <div class="cbt">
+          <div class="mon-wrap">
+            <div class="mon-name">Ember Wolf <span class="lv">Lv 9</span> <span class="el fire"></span> <span class="partchip">HEAD ▣</span></div>
+            <div class="mon-hp bar mon"><span></span></div>
+            <canvas class="sprite breathe" data-sprite="wolf" width="112" height="96" style="margin-top:6px;width:112px;height:96px"></canvas>
+          </div>
+          <div class="dmg">12,480<small>CRIT · WEAK ×1.5</small></div>
+          <div class="you-hud">
+            <div class="bar you"><span></span><span class="lab">YOU · 38%</span></div>
+            <div class="wpn">
+              <span class="wn">Dual Blades</span>
+              <div class="demon"><span></span><span class="dl">DEMON</span></div>
+            </div>
+            <div class="hints">
+              <div class="hint"><b>TAP</b> attack</div>
+              <div class="hint"><b>SWIPE</b> dodge</div>
+              <div class="hint"><b>HOLD</b> weak point</div>
+            </div>
+            <div class="capture">◈ <b>CAPTURE</b> unlocks below 15% HP · costs 1 Trap</div>
+          </div>
+        </div>
+      </div></div>
+      <div class="caption"><div class="k">Combat · the HP race</div><div class="d">Dodge most damage, but unavoidable chip scales with the monster's power, so over-reach still kills you. Skill wins the reachable fights.</div></div>
+    </div>
+
+    <!-- 4. RESULTS / RESET -->
+    <div class="phone-card">
+      <div class="phone"><div class="screen">
+        <div class="s-top"><span class="z">Expedition End</span><span>BANKED ✓</span></div>
+        <div class="s-body">
+          <div class="res-peak">
+            <div class="k">Peak level reached</div>
+            <div class="v">Lv 4,120</div>
+          </div>
+          <div class="ess"><span class="coin"></span> Essence earned <b>+38</b></div>
+          <div class="banked">
+            <div class="h">Banked this run</div>
+            <div class="mat"><span>Ember Fang</span><span class="q">×3</span></div>
+            <div class="mat"><span>Slime Gel</span><span class="q">×5</span></div>
+            <div class="mat"><span>Lizard Scale</span><span class="q">×2</span></div>
+            <div class="mat cap"><span>◈ Captured: Ember Wolf</span><span class="q">NEW</span></div>
+          </div>
+          <div class="reset-sep">RESET → Lv.1</div>
+          <div style="font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase">Spend essence · 38 ◆</div>
+          <div class="upg">
+            <div class="up"><div class="un">Starting Level</div><div class="uc">+5 · 20◆</div></div>
+            <div class="up"><div class="un">XP Multiplier</div><div class="uc">×1.1 · 15◆</div></div>
+            <div class="up wide"><div class="un">Expedition Hunts</div><div class="uc">+2 hunts · 30◆</div></div>
+          </div>
+          <button class="btn">Begin Again ▸</button>
+        </div>
+      </div></div>
+      <div class="caption"><div class="k">Bank &amp; Reset</div><div class="d">Level resets; gear, materials, captures and essence persist. Buy modest global upgrades, then relaunch a little stronger.</div></div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- ============ LOOP ============ -->
+<section class="loop">
+  <div class="sec-head"><span class="idx">02</span><h2>The Game Loop</h2></div>
+  <p class="sec-sub">A 5–15 minute run. The core tension is the fork at the end of every fight: <b>push one more, or cash out?</b> Death forfeits the run's haul, so every extra hunt is a bet.</p>
+
+  <div class="flow">
+    <div class="node accent"><div class="n">01</div><div class="t">Choose zone</div><div class="b">Start Lv.1 with kept gear. Deeper = bigger gaps, bigger risk.</div></div>
+    <div class="arrow">▸</div>
+    <div class="node"><div class="n">02</div><div class="t">Read the map</div><div class="b">A few fights, each with visible level, reward &amp; risk.</div></div>
+    <div class="arrow">▸</div>
+    <div class="node"><div class="n">03</div><div class="t">Win the HP race</div><div class="b">Dodge, break parts, maybe spend a Trap to capture.</div></div>
+    <div class="arrow">▸</div>
+    <div class="node accent"><div class="n">04</div><div class="t">Explode in XP</div><div class="b">A big gap dumps thousands of levels at once.</div></div>
+  </div>
+
+  <div class="fork">
+    <div class="branch die">
+      <div class="bh">✗ OVER-REACH → DIE</div>
+      <div class="bb">Lose the race and you <b>forfeit everything gathered this run</b> — materials, essence, captures. Only already-crafted gear survives.</div>
+    </div>
+    <div class="branch bank">
+      <div class="bh">✓ RETREAT → BANK</div>
+      <div class="bb">Cash out (or finish your hunts) to <b>bank the haul + essence</b> scaled to your peak level. The safe, deliberate call.</div>
+    </div>
+  </div>
+
+  <div class="loopback">↺ &nbsp;Reset to Lv.1 · spend <b>essence</b> on modest upgrades · craft new gear · <b>launch farther than last time</b></div>
+</section>
+
+<hr class="div">
+
+<!-- ============ PILLARS ============ -->
+<section>
+  <div class="sec-head"><span class="idx">03</span><h2>What Keeps It Honest</h2></div>
+  <div class="pillars">
+    <div class="plr"><div class="e">SPINE</div><h3>The wall holds</h3><p>Chip damage scales with a monster's power, so no amount of dodging beats the Lv-9,999,999,999 Voidmaw until your stats catch up.</p></div>
+    <div class="plr"><div class="e">CARRY</div><h3>Gear over grind</h3><p>Crafted gear is the real between-run power. Permanent upgrades only smooth the early climb, never trivialize the build.</p></div>
+    <div class="plr"><div class="e">DEPTH</div><h3>Every layer is a choice</h3><p>Weapon feel, elemental matchups, armor skills, and your one companion each bend a run without becoming a second game.</p></div>
+  </div>
+</section>
+
+<footer>
+  <div class="fnote">
+    <span style="color:var(--gold)">◆</span>
+    <div><b>This is a look-and-feel mockup, not a screenshot.</b> The MVP's game logic is built and tested (data, XP, run loop, save, combat, crafting, capture, meta, bestiary, UI, content — 145 tests green), but it currently renders with placeholder art. The pixel sprites and UI here show the <b>intended</b> direction the real frame-by-frame sheets drop into. Content (zones, monsters, weapons, essence, hunts) is the actual authored MVP data.</div>
+  </div>
+</footer>
+</div>
+
+<script>
+// Tiny pixel-sprite renderer: bitmaps as char grids -> crisp canvas.
+const SPRITES = {
+  wolf: {
+    pal:{o:'#a3371c',b:'#ff6a3d',d:'#c94a24',w:'#fff2d6',p:'#2a0f06',n:'#7a2a12',h:'#ffb27a'},
+    g:[
+      ".oo........oo.",
+      ".obo......obo.",
+      ".obboooooobbo.",
+      "..obbhhhhbbo..",
+      "..obwwbbwwbo..",
+      "..obwpbbwpbo..",
+      "..obbbnnbbbo..",
+      "..obbbbbbbbo..",
+      ".obbbbbbbbbbo.",
+      ".obbo.oo.obbo.",
+      ".obbo....obbo.",
+      "..oo......oo.."
+    ]
+  },
+  slime: {
+    pal:{o:'#1c6fa8',b:'#3db4ff',h:'#8fd6ff',w:'#eaf6ff',p:'#0b1a2a'},
+    g:[
+      "....oooo....",
+      "..oohhhhoo..",
+      ".obhhhhhhbo.",
+      ".obbbbbbbbo.",
+      "obbwwbbwwbbo",
+      "obbwpbbwpbbo",
+      "obbbbbbbbbbo",
+      ".obbbbbbbbo.",
+      ".oobbbbbboo.",
+      "...oooooo..."
+    ]
+  }
+};
+function draw(cv){
+  const key=cv.getAttribute('data-sprite'); const S=SPRITES[key]; if(!S)return;
+  const ctx=cv.getContext('2d'); ctx.imageSmoothingEnabled=false;
+  const rows=S.g, cols=rows[0].length, R=rows.length;
+  const cell=Math.floor(Math.min(cv.width/cols, cv.height/R));
+  const ox=Math.floor((cv.width-cell*cols)/2), oy=Math.floor((cv.height-cell*R)/2);
+  for(let y=0;y<R;y++){for(let x=0;x<cols;x++){
+    const ch=rows[y][x]; if(ch==='.'||ch===' ')continue;
+    const c=S.pal[ch]; if(!c)continue;
+    ctx.fillStyle=c; ctx.fillRect(ox+x*cell, oy+y*cell, cell, cell);
+  }}
+}
+document.querySelectorAll('canvas[data-sprite]').forEach(draw);
+</script>

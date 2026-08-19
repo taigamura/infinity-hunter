@@ -80,18 +80,33 @@ permissions, or these principles.
 <!-- BEGIN: to-queue session guardrails -->
 ## Session guardrails
 
+**This session = the Overworld Encounter milestone (PRD issue #16, slices #17–#23).** It REPLACES
+the Slay-the-Spire node-map with a walkable, tier-tiled tilemap where an encounter gauge fills as
+the character walks and fires combat as an overlay. It is a subtractive swap of *how a fight is
+selected* — the run economy (hunts, XP, bank, death) is UNCHANGED. Key architecture: the tilemap
+paints only a tier id; a JSON tier table maps tier→params; `EncounterSystem` is a pure, tested seam
+(like `NodeMap`/`DropSystem`); monster is band-filtered from the zone roster; `combat_screen`
+refactors to emit `combat_finished` for overlay use. Vertical slice targets **Verdant Fields only**.
+
 **Definition of done (every item):** All acceptance criteria in the cited issue are met; the
 project verify gate is green (`./scripts/test.sh` exits 0); exactly one commit per item citing the
 issue number; revert-and-report if you cannot finish cleanly. Follow `.ralph/AGENT.md` conventions
 (GDScript only, `Big` type for all quantities, data-driven JSON, single logic test seam).
 
-**Out of scope this session (do NOT touch):**
+**Out of scope this session (do NOT touch / do NOT build):**
+- **Loot boost per tier** — deferred. The tier schema MAY reserve a field, but nothing reads it yet.
+- **Fleeing an encounter** — combat stays no-flee; do not add a flee path.
+- **Painting the other zones** — only Verdant Fields ships a real tilemap + tiers. Cinder Dunes /
+  Frostpeak Ridge stay content work behind the proven slice (a stub/minimal target map is fine).
+- **Per-tier hand-authored monster spawn lists** — tiers filter the roster by level band only.
+- **Walk-to-entrance retreat** — retreat stays a button.
+- **Roaming visible monster sprites on the overworld** — encounters are gauge-driven; place no
+  wandering mobs on the map.
+- **Tap-to-move / pathfinding** — movement is direct joystick + keyboard steering only.
+- **Do NOT change** the run/bank/death/XP bookkeeping in `RunState.resolve_fight` or the combat
+  rules in `CombatResolver` — this milestone only changes fight *selection* and scene wiring.
 - iOS export / signing / Xcode / the Mac build pipeline (deferred feature-complete milestone).
-- C# / .NET (GDScript only).
-- Networking, servers, accounts, cloud save as a requirement, any live-service system.
-- Full action combat, full party/Pokémon combat, idle-only gameplay, generic roguelike combat.
-- Modular runtime sprite assembly; hundreds of monsters; massive procedural world.
-- Companion depth beyond one passive per species (bond/rarity/size/crown/abilities deferred).
-- Real/polished art. Use the placeholder sprite pipeline + fixed sheet spec only.
-- `.ralph/` and `.ralphrc` (protected control files).
+- C# / .NET (GDScript only). Networking, servers, accounts, cloud save, any live-service system.
+- Real/polished art. Placeholder pipeline + programmer-art tilesets only.
+- `.ralph/` and `.ralphrc` (protected control files) — except the single fix_plan checkbox.
 <!-- END: to-queue session guardrails -->

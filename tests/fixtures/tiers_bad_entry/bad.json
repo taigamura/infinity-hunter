@@ -1,0 +1,6 @@
+{
+  "zone_id": "verdant_fields",
+  "tiers": {
+    "0": { "level_min": 1, "level_max": 3, "gauge_rate": "fast", "weight": 1 }
+  }
+}

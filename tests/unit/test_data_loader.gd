@@ -80,6 +80,25 @@ func test_load_directory_companions() -> void:
 	assert_eq(pal.source_monster_id, "slime")
 	assert_almost_eq(pal.passive_value, 0.05)
 
+func test_load_directory_tiers() -> void:
+	var result := DataLoader.load_directory("res://data/tiers", TierTableDef.from_dict)
+	assert_true(result["ok"], "expected data/tiers to load cleanly: %s" % result.get("error", ""))
+	var table: TierTableDef = result["defs"]["verdant_fields"]
+	assert_eq(table.zone_id, "verdant_fields")
+	var params := table.tier_params(0)
+	assert_almost_eq(params["level_min"], 1.0)
+	assert_almost_eq(params["level_max"], 3.0)
+	assert_almost_eq(params["gauge_rate"], 6.0)
+	assert_almost_eq(params["weight"], 1.0)
+	assert_true(table.tier_params(2).has("level_max"))
+	assert_eq(table.tier_params(99), {})
+
+func test_load_file_tier_entry_bad_type_is_rejected() -> void:
+	var path := "res://tests/fixtures/tiers_bad_entry/bad.json"
+	var result := DataLoader.load_file(path, TierTableDef.from_dict)
+	assert_false(result["ok"], "malformed tier entry must be rejected")
+	assert_true(result["error"].contains("gauge_rate"), "error should name the mistyped field: %s" % result["error"])
+
 func test_load_file_not_found() -> void:
 	var result := DataLoader.load_file("res://data/materials/does_not_exist.json", MaterialDef.from_dict)
 	assert_false(result["ok"], "missing file must be rejected")
