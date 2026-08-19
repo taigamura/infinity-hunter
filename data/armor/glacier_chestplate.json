@@ -1,0 +1,11 @@
+{
+  "id": "glacier_chestplate",
+  "name": "Glacier Chestplate",
+  "slot": "chest",
+  "base_defense": 55,
+  "skills": ["Defense Boost", "Ice Resist"],
+  "recipe": {
+    "troll_hide": 2,
+    "frost_shard": 2
+  }
+}

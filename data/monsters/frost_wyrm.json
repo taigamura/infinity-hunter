@@ -1,0 +1,17 @@
+{
+  "id": "frost_wyrm",
+  "name": "Frost Wyrm",
+  "level": 30,
+  "element": "ice",
+  "base_hp": 500,
+  "base_attack": 32,
+  "xp_reward": 420,
+  "zone_id": "frostpeak_ridge",
+  "parts": ["wings", "tail"],
+  "capturable": true,
+  "capture_hp_threshold": 0.12,
+  "drop_table": [
+    {"material_id": "frost_shard", "weight": 60, "part": "wings", "break_boost": 3.0},
+    {"material_id": "magma_core", "weight": 40}
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "boulder_hammer",
+  "name": "Boulder Hammer",
+  "weapon_class": "hammer",
+  "element": "earth",
+  "base_damage": 18,
+  "recipe": {
+    "lizard_scale": 2,
+    "moss_shell": 2
+  }
+}

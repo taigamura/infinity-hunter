@@ -1,0 +1,11 @@
+{
+  "id": "magma_greatsword",
+  "name": "Magma Greatsword",
+  "weapon_class": "great_sword",
+  "element": "fire",
+  "base_damage": 45,
+  "recipe": {
+    "magma_core": 2,
+    "ember_fang": 2
+  }
+}

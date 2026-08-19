@@ -1,0 +1,10 @@
+{
+  "id": "ember_helm",
+  "name": "Ember Helm",
+  "slot": "head",
+  "base_defense": 18,
+  "skills": ["Fire Resist"],
+  "recipe": {
+    "ember_fang": 2
+  }
+}

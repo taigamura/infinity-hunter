@@ -1,0 +1,11 @@
+{
+  "id": "glacier_greatsword",
+  "name": "Glacier Greatsword",
+  "weapon_class": "great_sword",
+  "element": "ice",
+  "base_damage": 110,
+  "recipe": {
+    "troll_hide": 2,
+    "frost_shard": 3
+  }
+}

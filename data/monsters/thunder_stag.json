@@ -1,0 +1,17 @@
+{
+  "id": "thunder_stag",
+  "name": "Thunder Stag",
+  "level": 35,
+  "element": "thunder",
+  "base_hp": 620,
+  "base_attack": 40,
+  "xp_reward": 520,
+  "zone_id": "frostpeak_ridge",
+  "parts": ["antlers", "legs"],
+  "capturable": true,
+  "capture_hp_threshold": 0.12,
+  "drop_table": [
+    {"material_id": "stag_antler", "weight": 45, "part": "antlers", "guaranteed_on_break": true},
+    {"material_id": "frost_shard", "weight": 55}
+  ]
+}

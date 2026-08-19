@@ -1,0 +1,10 @@
+{
+  "id": "verdant_boots",
+  "name": "Verdant Boots",
+  "slot": "feet",
+  "base_defense": 5,
+  "skills": ["Evasion Boost"],
+  "recipe": {
+    "moss_shell": 2
+  }
+}

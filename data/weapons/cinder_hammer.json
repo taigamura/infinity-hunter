@@ -1,0 +1,11 @@
+{
+  "id": "cinder_hammer",
+  "name": "Cinder Hammer",
+  "weapon_class": "hammer",
+  "element": "fire",
+  "base_damage": 55,
+  "recipe": {
+    "magma_core": 1,
+    "scorpion_stinger": 3
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "id": "storm_dual_blades",
+  "name": "Storm Dual Blades",
+  "weapon_class": "dual_blades",
+  "element": "thunder",
+  "base_damage": 120,
+  "recipe": {
+    "stag_antler": 2,
+    "frost_shard": 2
+  }
+}

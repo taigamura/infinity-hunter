@@ -1,0 +1,18 @@
+{
+  "id": "magma_golem",
+  "name": "Magma Golem",
+  "level": 18,
+  "element": "fire",
+  "base_hp": 320,
+  "base_attack": 24,
+  "xp_reward": 260,
+  "zone_id": "cinder_dunes",
+  "parts": ["core", "arms"],
+  "capturable": true,
+  "capture_hp_threshold": 0.1,
+  "drop_table": [
+    {"material_id": "magma_core", "weight": 40, "part": "core", "guaranteed_on_break": true},
+    {"material_id": "scorpion_stinger", "weight": 30},
+    {"material_id": "ember_fang", "weight": 30}
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "verdant_greaves",
+  "name": "Verdant Greaves",
+  "slot": "legs",
+  "base_defense": 7,
+  "skills": ["Defense Boost"],
+  "recipe": {
+    "moss_shell": 2,
+    "lizard_scale": 1
+  }
+}

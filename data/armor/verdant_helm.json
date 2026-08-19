@@ -1,0 +1,10 @@
+{
+  "id": "verdant_helm",
+  "name": "Verdant Helm",
+  "slot": "head",
+  "base_defense": 6,
+  "skills": ["XP Boost"],
+  "recipe": {
+    "sprite_dust": 2
+  }
+}

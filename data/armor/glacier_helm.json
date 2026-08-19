@@ -1,0 +1,10 @@
+{
+  "id": "glacier_helm",
+  "name": "Glacier Helm",
+  "slot": "head",
+  "base_defense": 40,
+  "skills": ["Ice Resist"],
+  "recipe": {
+    "frost_shard": 3
+  }
+}

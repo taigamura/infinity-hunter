@@ -1,0 +1,17 @@
+{
+  "id": "mossback_turtle",
+  "name": "Mossback Turtle",
+  "level": 6,
+  "element": "earth",
+  "base_hp": 90,
+  "base_attack": 5,
+  "xp_reward": 55,
+  "zone_id": "verdant_fields",
+  "parts": ["shell"],
+  "capturable": true,
+  "capture_hp_threshold": 0.25,
+  "drop_table": [
+    {"material_id": "moss_shell", "weight": 70, "part": "shell", "break_boost": 3.0},
+    {"material_id": "slime_gel", "weight": 30}
+  ]
+}

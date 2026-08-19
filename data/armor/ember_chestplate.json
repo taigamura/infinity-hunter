@@ -1,0 +1,11 @@
+{
+  "id": "ember_chestplate",
+  "name": "Ember Chestplate",
+  "slot": "chest",
+  "base_defense": 24,
+  "skills": ["Attack Boost", "Fire Resist"],
+  "recipe": {
+    "magma_core": 1,
+    "ember_fang": 2
+  }
+}

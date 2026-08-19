@@ -1,0 +1,10 @@
+{
+  "id": "glacier_greaves",
+  "name": "Glacier Greaves",
+  "slot": "legs",
+  "base_defense": 45,
+  "skills": ["Defense Boost"],
+  "recipe": {
+    "troll_hide": 2
+  }
+}

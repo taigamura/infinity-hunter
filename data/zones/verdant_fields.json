@@ -3,6 +3,6 @@
   "name": "Verdant Fields",
   "min_level": 1,
   "max_level": 8,
-  "monster_ids": ["slime", "rock_lizard"],
+  "monster_ids": ["slime", "rock_lizard", "mossback_turtle", "thistle_sprite", "voidmaw_devourer"],
   "connections": ["cinder_dunes"]
 }

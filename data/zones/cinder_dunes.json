@@ -3,6 +3,6 @@
   "name": "Cinder Dunes",
   "min_level": 8,
   "max_level": 25,
-  "monster_ids": ["ember_wolf"],
-  "connections": []
+  "monster_ids": ["ember_wolf", "sand_scorpion", "magma_golem"],
+  "connections": ["frostpeak_ridge"]
 }

@@ -1,0 +1,10 @@
+{
+  "id": "glacier_gloves",
+  "name": "Glacier Gloves",
+  "slot": "hands",
+  "base_defense": 32,
+  "skills": ["Crit"],
+  "recipe": {
+    "stag_antler": 2
+  }
+}

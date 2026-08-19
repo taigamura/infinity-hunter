@@ -7,6 +7,7 @@ const NodeMap = preload("res://src/systems/node_map.gd")
 var _monster_defs: Dictionary
 var _verdant: ZoneDef
 var _cinder: ZoneDef
+var _frostpeak: ZoneDef
 
 func before_each() -> void:
 	var monster_result := DataLoader.load_directory("res://data/monsters", MonsterDef.from_dict)
@@ -14,6 +15,7 @@ func before_each() -> void:
 	var zone_result := DataLoader.load_directory("res://data/zones", ZoneDef.from_dict)
 	_verdant = zone_result["defs"]["verdant_fields"]
 	_cinder = zone_result["defs"]["cinder_dunes"]
+	_frostpeak = zone_result["defs"]["frostpeak_ridge"]
 
 func test_generate_yields_one_monster_node_per_zone_monster() -> void:
 	var nodes := NodeMap.generate(_verdant, _monster_defs)
@@ -32,7 +34,7 @@ func test_generate_yields_one_travel_node_per_connection() -> void:
 	assert_eq(travel_nodes[0]["target_zone_id"], "cinder_dunes")
 
 func test_generate_zone_with_no_connections_has_no_travel_nodes() -> void:
-	var nodes := NodeMap.generate(_cinder, _monster_defs)
+	var nodes := NodeMap.generate(_frostpeak, _monster_defs)
 	var travel_nodes := nodes.filter(func(n): return n["type"] == "travel")
 	assert_true(travel_nodes.is_empty())
 

@@ -1,0 +1,16 @@
+{
+  "id": "voidmaw_devourer",
+  "name": "Voidmaw Devourer",
+  "level": 9999999999,
+  "element": "dragon",
+  "base_hp": 999999999999,
+  "base_attack": 999999999,
+  "xp_reward": 999999999999,
+  "zone_id": "verdant_fields",
+  "parts": ["maw"],
+  "capturable": false,
+  "capture_hp_threshold": 0.0,
+  "drop_table": [
+    {"material_id": "void_essence", "weight": 100, "part": "maw", "guaranteed_on_break": true}
+  ]
+}

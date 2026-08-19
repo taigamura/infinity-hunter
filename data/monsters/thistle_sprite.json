@@ -1,0 +1,17 @@
+{
+  "id": "thistle_sprite",
+  "name": "Thistle Sprite",
+  "level": 3,
+  "element": "neutral",
+  "base_hp": 35,
+  "base_attack": 3,
+  "xp_reward": 25,
+  "zone_id": "verdant_fields",
+  "parts": ["wings"],
+  "capturable": true,
+  "capture_hp_threshold": 0.3,
+  "drop_table": [
+    {"material_id": "sprite_dust", "weight": 65, "part": "wings", "break_boost": 3.0},
+    {"material_id": "slime_gel", "weight": 35}
+  ]
+}

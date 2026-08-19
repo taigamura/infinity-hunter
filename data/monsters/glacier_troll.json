@@ -1,0 +1,18 @@
+{
+  "id": "glacier_troll",
+  "name": "Glacier Troll",
+  "level": 45,
+  "element": "ice",
+  "base_hp": 900,
+  "base_attack": 55,
+  "xp_reward": 780,
+  "zone_id": "frostpeak_ridge",
+  "parts": ["head", "hide"],
+  "capturable": true,
+  "capture_hp_threshold": 0.1,
+  "drop_table": [
+    {"material_id": "troll_hide", "weight": 50, "part": "hide", "break_boost": 3.0},
+    {"material_id": "stag_antler", "weight": 25},
+    {"material_id": "frost_shard", "weight": 25}
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "frostfall_hammer",
+  "name": "Frostfall Hammer",
+  "weapon_class": "hammer",
+  "element": "ice",
+  "base_damage": 130,
+  "recipe": {
+    "troll_hide": 3,
+    "stag_antler": 1
+  }
+}

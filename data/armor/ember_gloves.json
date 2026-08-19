@@ -1,0 +1,11 @@
+{
+  "id": "ember_gloves",
+  "name": "Ember Gloves",
+  "slot": "hands",
+  "base_defense": 14,
+  "skills": ["Crit"],
+  "recipe": {
+    "scorpion_stinger": 2,
+    "ember_fang": 1
+  }
+}

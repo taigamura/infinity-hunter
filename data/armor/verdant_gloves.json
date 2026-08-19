@@ -1,0 +1,11 @@
+{
+  "id": "verdant_gloves",
+  "name": "Verdant Gloves",
+  "slot": "hands",
+  "base_defense": 4,
+  "skills": ["Crit"],
+  "recipe": {
+    "slime_gel": 2,
+    "sprite_dust": 1
+  }
+}

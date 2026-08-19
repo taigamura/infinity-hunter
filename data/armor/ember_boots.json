@@ -1,0 +1,11 @@
+{
+  "id": "ember_boots",
+  "name": "Ember Boots",
+  "slot": "feet",
+  "base_defense": 16,
+  "skills": ["Evasion Boost"],
+  "recipe": {
+    "magma_core": 1,
+    "scorpion_stinger": 1
+  }
+}

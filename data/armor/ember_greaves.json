@@ -1,0 +1,10 @@
+{
+  "id": "ember_greaves",
+  "name": "Ember Greaves",
+  "slot": "legs",
+  "base_defense": 20,
+  "skills": ["Defense Boost"],
+  "recipe": {
+    "scorpion_stinger": 3
+  }
+}

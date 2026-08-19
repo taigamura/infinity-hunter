@@ -1,0 +1,11 @@
+{
+  "id": "venom_dual_blades",
+  "name": "Venom Dual Blades",
+  "weapon_class": "dual_blades",
+  "element": "earth",
+  "base_damage": 50,
+  "recipe": {
+    "scorpion_stinger": 3,
+    "ember_fang": 1
+  }
+}

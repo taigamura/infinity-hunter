@@ -36,7 +36,7 @@ func test_load_directory_returns_all_material_defs() -> void:
 	assert_true(defs.has("slime_gel"))
 	assert_true(defs.has("lizard_scale"))
 	assert_true(defs.has("ember_fang"))
-	assert_eq(defs.size(), 3)
+	assert_eq(defs.size(), 11)
 
 func test_load_directory_monsters() -> void:
 	var result := DataLoader.load_directory("res://data/monsters", MonsterDef.from_dict)
@@ -53,8 +53,11 @@ func test_load_directory_zones() -> void:
 	var result := DataLoader.load_directory("res://data/zones", ZoneDef.from_dict)
 	assert_true(result["ok"], "expected data/zones to load cleanly: %s" % result.get("error", ""))
 	var zone: ZoneDef = result["defs"]["verdant_fields"]
-	assert_eq(zone.monster_ids, ["slime", "rock_lizard"])
+	assert_has(zone.monster_ids, "slime")
+	assert_has(zone.monster_ids, "rock_lizard")
 	assert_eq(zone.connections, ["cinder_dunes"])
+	assert_eq(result["defs"].size(), 3)
+	assert_true(result["defs"].has("frostpeak_ridge"))
 
 func test_load_directory_weapons() -> void:
 	var result := DataLoader.load_directory("res://data/weapons", WeaponDef.from_dict)

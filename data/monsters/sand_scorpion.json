@@ -1,0 +1,17 @@
+{
+  "id": "sand_scorpion",
+  "name": "Sand Scorpion",
+  "level": 12,
+  "element": "earth",
+  "base_hp": 180,
+  "base_attack": 16,
+  "xp_reward": 150,
+  "zone_id": "cinder_dunes",
+  "parts": ["tail", "claws"],
+  "capturable": true,
+  "capture_hp_threshold": 0.15,
+  "drop_table": [
+    {"material_id": "scorpion_stinger", "weight": 55, "part": "tail", "guaranteed_on_break": true},
+    {"material_id": "ember_fang", "weight": 45}
+  ]
+}

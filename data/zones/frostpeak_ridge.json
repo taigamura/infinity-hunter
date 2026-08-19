@@ -1,0 +1,8 @@
+{
+  "id": "frostpeak_ridge",
+  "name": "Frostpeak Ridge",
+  "min_level": 25,
+  "max_level": 60,
+  "monster_ids": ["frost_wyrm", "thunder_stag", "glacier_troll"],
+  "connections": []
+}

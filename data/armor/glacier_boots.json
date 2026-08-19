@@ -1,0 +1,11 @@
+{
+  "id": "glacier_boots",
+  "name": "Glacier Boots",
+  "slot": "feet",
+  "base_defense": 35,
+  "skills": ["Evasion Boost"],
+  "recipe": {
+    "stag_antler": 1,
+    "frost_shard": 2
+  }
+}
