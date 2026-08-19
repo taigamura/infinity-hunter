@@ -1,0 +1,7 @@
+{
+  "id": "slime_pal",
+  "name": "Slime Pal",
+  "source_monster_id": "slime",
+  "passive_skill": "xp_boost",
+  "passive_value": 0.05
+}

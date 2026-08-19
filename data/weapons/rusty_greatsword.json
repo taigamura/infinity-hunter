@@ -1,0 +1,11 @@
+{
+  "id": "rusty_greatsword",
+  "name": "Rusty Greatsword",
+  "weapon_class": "great_sword",
+  "element": "neutral",
+  "base_damage": 15,
+  "recipe": {
+    "slime_gel": 3,
+    "lizard_scale": 1
+  }
+}

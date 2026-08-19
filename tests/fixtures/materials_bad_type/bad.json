@@ -1,0 +1,6 @@
+{
+  "id": "bad",
+  "name": "Bad Material",
+  "rarity": 123,
+  "description": "rarity should be a string, not a number"
+}

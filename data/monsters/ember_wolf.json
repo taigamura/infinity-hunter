@@ -1,0 +1,13 @@
+{
+  "id": "ember_wolf",
+  "name": "Ember Wolf",
+  "level": 9,
+  "element": "fire",
+  "base_hp": 150,
+  "base_attack": 14,
+  "xp_reward": 120,
+  "zone_id": "cinder_dunes",
+  "parts": ["head", "legs"],
+  "capturable": true,
+  "capture_hp_threshold": 0.15
+}

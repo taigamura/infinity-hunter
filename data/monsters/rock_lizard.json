@@ -1,0 +1,13 @@
+{
+  "id": "rock_lizard",
+  "name": "Rock Lizard",
+  "level": 4,
+  "element": "earth",
+  "base_hp": 60,
+  "base_attack": 6,
+  "xp_reward": 40,
+  "zone_id": "verdant_fields",
+  "parts": ["head", "tail"],
+  "capturable": true,
+  "capture_hp_threshold": 0.2
+}

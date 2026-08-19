@@ -1,0 +1,11 @@
+{
+  "id": "ember_dual_blades",
+  "name": "Ember Dual Blades",
+  "weapon_class": "dual_blades",
+  "element": "fire",
+  "base_damage": 22,
+  "recipe": {
+    "ember_fang": 2,
+    "lizard_scale": 2
+  }
+}

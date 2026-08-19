@@ -1,0 +1,13 @@
+{
+  "id": "slime",
+  "name": "Slime",
+  "level": 1,
+  "element": "water",
+  "base_hp": 20,
+  "base_attack": 2,
+  "xp_reward": 10,
+  "zone_id": "verdant_fields",
+  "parts": ["body"],
+  "capturable": true,
+  "capture_hp_threshold": 0.2
+}

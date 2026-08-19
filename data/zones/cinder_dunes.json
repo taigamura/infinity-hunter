@@ -1,0 +1,8 @@
+{
+  "id": "cinder_dunes",
+  "name": "Cinder Dunes",
+  "min_level": 8,
+  "max_level": 25,
+  "monster_ids": ["ember_wolf"],
+  "connections": []
+}

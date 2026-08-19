@@ -1,0 +1,8 @@
+{
+  "id": "verdant_fields",
+  "name": "Verdant Fields",
+  "min_level": 1,
+  "max_level": 8,
+  "monster_ids": ["slime", "rock_lizard"],
+  "connections": ["cinder_dunes"]
+}

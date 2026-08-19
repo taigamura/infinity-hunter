@@ -1,0 +1,10 @@
+{
+  "id": "scale_chestplate",
+  "name": "Scale Chestplate",
+  "slot": "chest",
+  "base_defense": 8,
+  "skills": ["Attack Boost"],
+  "recipe": {
+    "lizard_scale": 3
+  }
+}
