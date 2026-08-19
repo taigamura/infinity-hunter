@@ -57,7 +57,10 @@ func generate_node_map(zone: ZoneDef, monster_defs: Dictionary) -> void:
 #
 # `rng` is caller-supplied for deterministic drop rolls in tests; defaults to
 # a fresh RandomNumberGenerator (unseeded, real randomness) otherwise.
-func resolve_fight(monster: MonsterDef, broken_parts: Array = [], rng: RandomNumberGenerator = null) -> Dictionary:
+# `armor_skill_profile` is an optional SkillSystem.build_profile() effects
+# Dictionary from the run's equipped armor (issue #9); its "xp_mult_bonus"
+# scales the XP awarded on a win.
+func resolve_fight(monster: MonsterDef, broken_parts: Array = [], rng: RandomNumberGenerator = null, armor_skill_profile: Dictionary = {}) -> Dictionary:
 	assert(status == "active", "cannot fight after the run has ended")
 	hunts_remaining -= 1.0
 	var player_power := XpCurve.power_scaling(level)
@@ -70,7 +73,8 @@ func resolve_fight(monster: MonsterDef, broken_parts: Array = [], rng: RandomNum
 		result["died"] = true
 		return result
 
-	var xp_result := XpCurve.award_xp(level, xp_carry, monster.xp_reward)
+	var xp_mult_bonus: float = armor_skill_profile.get("xp_mult_bonus", 0.0)
+	var xp_result := XpCurve.award_xp(level, xp_carry, monster.xp_reward, xp_mult_bonus)
 	level = xp_result["level"]
 	xp_carry = xp_result["xp_carry"]
 	result["levels_gained"] = xp_result["levels_gained"]

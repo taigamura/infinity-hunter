@@ -6,5 +6,6 @@
   "skills": ["XP Boost"],
   "recipe": {
     "sprite_dust": 2
-  }
+  },
+  "set": "verdant"
 }

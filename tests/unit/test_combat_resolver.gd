@@ -93,3 +93,42 @@ func test_elemental_multiplier_applies_to_player_damage() -> void:
 	var fire_weapon := _weapon("test_sword", "fire", 100.0)
 	var result := CombatResolver.resolve(player, monster, fire_weapon, _perfect_dodges(1))
 	assert_almost_eq(100000.0 - result["monster_hp"], 100.0 * 1.5, 0.001, "fire is weak into water")
+
+func test_attack_and_crit_skills_boost_player_damage() -> void:
+	var player := {"hp_max": 10000.0, "power": 1.0}
+	var monster := {"hp_max": 100000.0, "power": 1.0, "element": "neutral"}
+	var w := _weapon("test_sword", "neutral", 100.0)
+	var skills := {"attack_mult_bonus": 0.2, "crit_bonus_mult": 0.1}
+	var result := CombatResolver.resolve(player, monster, w, _perfect_dodges(1), skills)
+	assert_almost_eq(100000.0 - result["monster_hp"], 100.0 * 1.3)
+
+func test_evasion_skill_widens_the_perfect_dodge_window() -> void:
+	var player := {"hp_max": 10000.0, "power": 1.0}
+	var monster := {"hp_max": 10000.0, "power": 100.0, "element": "neutral"}
+	var w := _weapon("test_sword")
+	# 0.15s misses the base 0.1s perfect window but lands inside a
+	# 50%-widened window (0.1 * 1.5 = 0.15).
+	var skills := {"evasion_bonus": 0.5}
+	var result := CombatResolver.resolve(player, monster, w, [{"dodge_timing": 0.15}], skills)
+	assert_almost_eq(result["player_hp"], 10000.0 - (100.0 * CombatResolver.CHIP_FLOOR_FRACTION))
+
+func test_defense_and_resist_skills_mitigate_only_the_reducible_portion() -> void:
+	var player := {"hp_max": 10000.0, "power": 1.0}
+	var monster := {"hp_max": 10000.0, "power": 100.0, "element": "fire"}
+	var w := _weapon("test_sword")
+	var skills := {"defense_mult_bonus": 0.2, "resist": {"fire": 0.5}}
+	# missed dodge: full reducible (65) mitigated by (1-0.2)*(1-0.5); chip floor (35) untouched
+	var result := CombatResolver.resolve(player, monster, w, [{}], skills)
+	var chip := 100.0 * CombatResolver.CHIP_FLOOR_FRACTION
+	var reducible := 100.0 - chip
+	var expected_damage := chip + reducible * 0.8 * 0.5
+	assert_almost_eq(result["player_hp"], 10000.0 - expected_damage)
+
+func test_chip_floor_is_unaffected_by_any_skill_bonus() -> void:
+	var player := {"hp_max": 10000.0, "power": 1.0}
+	var monster := {"hp_max": 10000.0, "power": 100.0, "element": "fire"}
+	var w := _weapon("test_sword")
+	var skills := {"defense_mult_bonus": 1.0, "resist": {"fire": 1.0}, "evasion_bonus": 5.0}
+	var result := CombatResolver.resolve(player, monster, w, [{"dodge_timing": 0.0}], skills)
+	# even with maxed-out mitigation, the perfect-dodge chip floor still lands
+	assert_almost_eq(result["player_hp"], 10000.0 - (100.0 * CombatResolver.CHIP_FLOOR_FRACTION))

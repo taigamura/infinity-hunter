@@ -42,9 +42,13 @@ const HAMMER_STUN_BONUS_MULT := 1.5
 # beats: Array of per-round Dictionaries, each optionally holding
 #   "dodge_timing" (absolute seconds offset from the perfect-dodge instant
 #   for that round's monster attack; omitted/large == a missed dodge).
+# player_skills: optional SkillSystem.build_profile() effects Dictionary
+#   (attack_mult_bonus, crit_bonus_mult, defense_mult_bonus, evasion_bonus,
+#   resist: {Element: float}) from the player's equipped armor (issue #9).
+#   Defaults to {} (no bonuses), preserving unmodified combat math.
 #
 # Returns {"won": bool, "rounds": int, "player_hp": float, "monster_hp": float}.
-static func resolve(player: Dictionary, monster: Dictionary, weapon: Dictionary, beats: Array) -> Dictionary:
+static func resolve(player: Dictionary, monster: Dictionary, weapon: Dictionary, beats: Array, player_skills: Dictionary = {}) -> Dictionary:
 	var player_hp: float = player["hp_max"]
 	var monster_hp: float = monster["hp_max"]
 	var weapon_state := {"charge_count": 0, "demon_meter": 0, "stagger": 0}
@@ -58,7 +62,8 @@ static func resolve(player: Dictionary, monster: Dictionary, weapon: Dictionary,
 
 		var atk := _weapon_attack(weapon["weapon_class"], weapon["base_damage"], weapon_state)
 		var elem_mult := Elements.multiplier(weapon["element"], monster["element"])
-		monster_hp -= atk["damage"] * elem_mult
+		var player_dmg_mult: float = 1.0 + player_skills.get("attack_mult_bonus", 0.0) + player_skills.get("crit_bonus_mult", 0.0)
+		monster_hp -= atk["damage"] * elem_mult * player_dmg_mult
 		if atk["stun"]:
 			monster_stunned = true
 
@@ -70,7 +75,7 @@ static func resolve(player: Dictionary, monster: Dictionary, weapon: Dictionary,
 			continue
 
 		var timing: float = absf(beat.get("dodge_timing", INF))
-		player_hp -= _monster_damage(monster["power"], timing)
+		player_hp -= _monster_damage(monster["power"], timing, monster.get("element", ""), player_skills)
 
 	return {
 		"won": monster_hp <= 0.0 and player_hp > 0.0,
@@ -79,16 +84,32 @@ static func resolve(player: Dictionary, monster: Dictionary, weapon: Dictionary,
 		"monster_hp": maxf(monster_hp, 0.0),
 	}
 
-static func _monster_damage(monster_power: float, dodge_timing: float) -> float:
+# Evasion Boost widens the dodge timing windows (easier to land a
+# perfect/good dodge); Defense Boost and elemental resist further mitigate
+# the *reducible* portion only. The CHIP_FLOOR_FRACTION always lands
+# untouched by any skill, preserving the "a vastly stronger monster is
+# unwinnable regardless of build" design pillar.
+static func _monster_damage(monster_power: float, dodge_timing: float, monster_element: String = "", player_skills: Dictionary = {}) -> float:
 	var raw := monster_power
 	var chip := raw * CHIP_FLOOR_FRACTION
 	var reducible := raw - chip
+
+	var evasion_bonus: float = player_skills.get("evasion_bonus", 0.0)
+	var perfect_window := DODGE_PERFECT_WINDOW * (1.0 + evasion_bonus)
+	var good_window := DODGE_GOOD_WINDOW * (1.0 + evasion_bonus)
 	var reduction := 0.0
-	if dodge_timing <= DODGE_PERFECT_WINDOW:
+	if dodge_timing <= perfect_window:
 		reduction = 1.0
-	elif dodge_timing <= DODGE_GOOD_WINDOW:
+	elif dodge_timing <= good_window:
 		reduction = DODGE_GOOD_REDUCTION
-	return chip + reducible * (1.0 - reduction)
+
+	var mitigated := reducible * (1.0 - reduction)
+	var defense_mult: float = clampf(player_skills.get("defense_mult_bonus", 0.0), 0.0, 1.0)
+	var resist: Dictionary = player_skills.get("resist", {})
+	var resist_mult: float = clampf(resist.get(monster_element, 0.0), 0.0, 1.0)
+	mitigated *= (1.0 - defense_mult) * (1.0 - resist_mult)
+
+	return chip + mitigated
 
 static func _weapon_attack(weapon_class: String, base_damage: float, state: Dictionary) -> Dictionary:
 	match weapon_class:

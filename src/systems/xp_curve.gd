@@ -25,14 +25,16 @@ static func threshold(level: float) -> float:
 	return BASE_THRESHOLD * pow(GROWTH_RATE, level - 1.0)
 
 # Awards `xp_awarded` XP to a character at `level` with `xp_carry` XP already
-# banked toward the next threshold. Crosses as many thresholds as the award
-# allows in one call. Returns a Dictionary:
+# banked toward the next threshold. `xp_mult_bonus` (e.g. SkillSystem's
+# "xp_mult_bonus" effect from an XP Boost armor build, issue #9) scales the
+# award before it's applied. Crosses as many thresholds as the award allows
+# in one call. Returns a Dictionary:
 #   "level": the new level after all level-ups
 #   "levels_gained": how many thresholds were crossed
 #   "xp_carry": leftover XP toward the next threshold (< threshold(new level))
-static func award_xp(level: float, xp_carry: float, xp_awarded: float) -> Dictionary:
+static func award_xp(level: float, xp_carry: float, xp_awarded: float, xp_mult_bonus: float = 0.0) -> Dictionary:
 	var new_level := level
-	var carry := xp_carry + xp_awarded
+	var carry := xp_carry + xp_awarded * (1.0 + xp_mult_bonus)
 	var levels_gained := 0
 	while carry >= threshold(new_level):
 		carry -= threshold(new_level)

@@ -1,0 +1,8 @@
+{
+  "id": "ember",
+  "name": "Ember Set",
+  "thresholds": [
+    {"pieces": 2, "skill": "Fire Resist", "points": 2},
+    {"pieces": 4, "skill": "Attack Boost", "points": 3}
+  ]
+}

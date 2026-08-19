@@ -6,5 +6,6 @@
   "skills": ["Ice Resist"],
   "recipe": {
     "frost_shard": 3
-  }
+  },
+  "set": "glacier"
 }

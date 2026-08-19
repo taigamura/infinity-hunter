@@ -17,6 +17,7 @@ var slot: String
 var base_defense: float # Big
 var skills: Array = []
 var recipe: Dictionary = {}
+var set_id: String = ""
 
 static func from_dict(data: Dictionary, source_path: String) -> Variant:
 	var err := DataLoader.validate(data, SCHEMA, source_path)
@@ -29,4 +30,5 @@ static func from_dict(data: Dictionary, source_path: String) -> Variant:
 	def.base_defense = float(data["base_defense"])
 	def.skills = data["skills"]
 	def.recipe = data["recipe"]
+	def.set_id = data.get("set", "") # optional — armor_sets/*.json id, "" if none
 	return def

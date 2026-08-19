@@ -6,5 +6,6 @@
   "skills": ["Fire Resist"],
   "recipe": {
     "ember_fang": 2
-  }
+  },
+  "set": "ember"
 }

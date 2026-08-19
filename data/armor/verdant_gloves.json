@@ -7,5 +7,6 @@
   "recipe": {
     "slime_gel": 2,
     "sprite_dust": 1
-  }
+  },
+  "set": "verdant"
 }

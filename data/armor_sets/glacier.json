@@ -1,0 +1,8 @@
+{
+  "id": "glacier",
+  "name": "Glacier Set",
+  "thresholds": [
+    {"pieces": 2, "skill": "Ice Resist", "points": 2},
+    {"pieces": 4, "skill": "Defense Boost", "points": 3}
+  ]
+}

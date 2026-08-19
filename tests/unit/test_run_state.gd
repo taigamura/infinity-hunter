@@ -113,6 +113,15 @@ func test_death_forfeits_materials_dropped_this_call() -> void:
 	assert_true(result["materials_dropped"].is_empty(), "no drops are rolled on a loss")
 	assert_true(run.materials_unbanked.is_empty(), "death must forfeit the whole unbanked haul")
 
+func test_resolve_fight_applies_armor_skill_profile_xp_bonus() -> void:
+	var baseline := RunState.start("verdant_fields")
+	baseline.resolve_fight(_slime)
+
+	var boosted := RunState.start("verdant_fields")
+	boosted.resolve_fight(_slime, [], null, {"xp_mult_bonus": 0.5})
+
+	assert_gt(boosted.xp_carry, baseline.xp_carry, "an XP Boost skill profile should grant more effective XP")
+
 func test_unlock_zone_records_new_zone_and_moves_run() -> void:
 	var run := RunState.start("verdant_fields")
 	assert_false(run.unlocked_zone_ids.has("cinder_dunes"))

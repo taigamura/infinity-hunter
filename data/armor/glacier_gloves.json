@@ -6,5 +6,6 @@
   "skills": ["Crit"],
   "recipe": {
     "stag_antler": 2
-  }
+  },
+  "set": "glacier"
 }

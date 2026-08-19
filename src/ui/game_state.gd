@@ -8,6 +8,7 @@ extends Node
 var monsters: Dictionary = {} # id -> MonsterDef
 var weapons: Dictionary = {} # id -> WeaponDef
 var armors: Dictionary = {} # id -> ArmorDef
+var armor_sets: Dictionary = {} # id -> ArmorSetDef
 var zones: Dictionary = {} # id -> ZoneDef
 var companions: Dictionary = {} # id -> CompanionDef
 var materials: Dictionary = {} # id -> MaterialDef
@@ -29,6 +30,7 @@ func _load_data() -> void:
 	monsters = _load_dir("res://data/monsters", MonsterDef.from_dict)
 	weapons = _load_dir("res://data/weapons", WeaponDef.from_dict)
 	armors = _load_dir("res://data/armor", ArmorDef.from_dict)
+	armor_sets = _load_dir("res://data/armor_sets", ArmorSetDef.from_dict)
 	zones = _load_dir("res://data/zones", ZoneDef.from_dict)
 	companions = _load_dir("res://data/companions", CompanionDef.from_dict)
 	materials = _load_dir("res://data/materials", MaterialDef.from_dict)
@@ -39,6 +41,22 @@ func _load_dir(path: String, from_dict_fn: Callable) -> Dictionary:
 		push_error("GameState: failed loading %s: %s" % [path, result["error"]])
 		return {}
 	return result["defs"]
+
+# Resolves `armor_ids` (slot -> ArmorDef id, e.g. RunState.equipped_armor_ids)
+# into the equipped ArmorDef instances.
+func equipped_armor_defs(armor_ids: Dictionary) -> Array:
+	var defs: Array = []
+	for slot in armor_ids:
+		var armor_id: String = armor_ids[slot]
+		if armors.has(armor_id):
+			defs.append(armors[armor_id])
+	return defs
+
+# The SkillSystem effects profile (issue #9) for `armor_ids`'s equipped
+# pieces + any set bonuses, ready to pass into CombatResolver.resolve /
+# RunState.resolve_fight.
+func skill_profile_for(armor_ids: Dictionary) -> Dictionary:
+	return SkillSystem.build_profile(equipped_armor_defs(armor_ids), armor_sets)
 
 func persist() -> void:
 	inventory.to_state(save_state)

@@ -6,5 +6,6 @@
   "skills": ["Evasion Boost"],
   "recipe": {
     "moss_shell": 2
-  }
+  },
+  "set": "verdant"
 }

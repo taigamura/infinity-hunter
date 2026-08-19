@@ -7,5 +7,6 @@
   "recipe": {
     "magma_core": 1,
     "ember_fang": 2
-  }
+  },
+  "set": "ember"
 }

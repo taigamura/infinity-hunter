@@ -6,5 +6,6 @@
   "skills": ["Defense Boost"],
   "recipe": {
     "troll_hide": 2
-  }
+  },
+  "set": "glacier"
 }

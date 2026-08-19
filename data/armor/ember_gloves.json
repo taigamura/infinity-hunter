@@ -7,5 +7,6 @@
   "recipe": {
     "scorpion_stinger": 2,
     "ember_fang": 1
-  }
+  },
+  "set": "ember"
 }

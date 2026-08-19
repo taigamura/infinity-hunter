@@ -1,0 +1,8 @@
+{
+  "id": "verdant",
+  "name": "Verdant Set",
+  "thresholds": [
+    {"pieces": 2, "skill": "XP Boost", "points": 2},
+    {"pieces": 4, "skill": "Crit", "points": 3}
+  ]
+}

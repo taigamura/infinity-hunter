@@ -42,6 +42,12 @@ func test_award_xp_multi_level_lump_with_carry() -> void:
 	assert_eq(result["level"], 10.0)
 	assert_almost_eq(result["xp_carry"], remainder)
 
+func test_award_xp_applies_xp_mult_bonus() -> void:
+	# an XP Boost skill build (SkillSystem "xp_mult_bonus") scales the award
+	# before it's applied to the carry/threshold math.
+	var result := XpCurve.award_xp(1.0, 0.0, XpCurve.BASE_THRESHOLD * 0.5, 0.5)
+	assert_almost_eq(result["xp_carry"], XpCurve.BASE_THRESHOLD * 0.75)
+
 func test_award_xp_carry_always_below_next_threshold() -> void:
 	var result := XpCurve.award_xp(1.0, 0.0, 5000.0)
 	assert_lt(result["xp_carry"], XpCurve.threshold(result["level"]))

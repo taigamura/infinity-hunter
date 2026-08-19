@@ -22,6 +22,7 @@ var monster: MonsterDef
 var player_stats: Dictionary
 var monster_stats: Dictionary
 var weapon_stats: Dictionary
+var skill_profile: Dictionary = {}
 var beats: Array = []
 
 var _round_start_ms: int = 0
@@ -35,6 +36,7 @@ func _ready() -> void:
 	player_stats = {"hp_max": XpCurve.power_scaling(run.level) * 5.0, "power": XpCurve.power_scaling(run.level)}
 	monster_stats = {"hp_max": monster.base_hp, "power": monster.base_attack, "element": monster.element}
 	weapon_stats = _weapon_stats(run.equipped_weapon_id)
+	skill_profile = GameState.skill_profile_for(run.equipped_armor_ids)
 
 	player_hp_bar.max_value = player_stats["hp_max"]
 	player_hp_bar.value = player_stats["hp_max"]
@@ -84,7 +86,7 @@ func _on_round_timeout() -> void:
 	if not _dodge_tapped_this_round:
 		beats.append({"dodge_timing": INF})
 
-	var outcome := CombatResolver.resolve(player_stats, monster_stats, weapon_stats, beats)
+	var outcome := CombatResolver.resolve(player_stats, monster_stats, weapon_stats, beats, skill_profile)
 	player_hp_bar.value = outcome["player_hp"]
 	monster_hp_bar.value = outcome["monster_hp"]
 
@@ -98,7 +100,7 @@ func _end_reflex_phase() -> void:
 	dodge_button.visible = false
 
 	var run: RunState = GameState.current_run
-	var result := run.resolve_fight(monster)
+	var result := run.resolve_fight(monster, [], null, skill_profile)
 	if result["died"]:
 		GameState.mark_bestiary_seen(monster.id)
 		result_label.text = "Defeated... the run's haul is forfeited."

@@ -6,5 +6,6 @@
   "skills": ["Defense Boost"],
   "recipe": {
     "scorpion_stinger": 3
-  }
+  },
+  "set": "ember"
 }
