@@ -1,0 +1,107 @@
+# RunState — drives one expedition: start at Lv.1 in a chosen zone with
+# equipped gear, resolve fights from the NodeMap (spending hunts, awarding
+# XP), and end the run by banking (retreat / hunt exhaustion) or dying
+# (forfeit unbanked haul; crafted/equipped gear is never touched here since
+# it isn't part of the run's haul state).
+#
+# Combat resolution here is an explicit stub (power_scaling comparison) per
+# issue #4 — real combat lands in #2 and will replace resolve_fight's guts
+# without touching the run/bank/death bookkeeping.
+class_name RunState
+extends RefCounted
+
+const DEFAULT_HUNTS := 10.0
+# Stub haul rule: essence earned per XP awarded this run. Tunable.
+const ESSENCE_PER_XP := 0.5
+
+var level: float = 1.0 # Big
+var xp_carry: float = 0.0 # Big
+var hunts_max: float = DEFAULT_HUNTS # Big
+var hunts_remaining: float = DEFAULT_HUNTS # Big
+var zone_id: String = ""
+var equipped_weapon_id: String = ""
+var equipped_armor_ids: Dictionary = {} # slot -> armor id
+var unlocked_zone_ids: Array = []
+var node_map: Array = []
+
+var status: String = "active" # active | banked | dead
+var end_reason: String = "" # "" | retreat | hunt_exhaustion | death
+
+var essence_unbanked: float = 0.0 # Big
+var essence_banked: float = 0.0 # Big
+var materials_unbanked: Dictionary = {} # material_id -> int count
+var materials_banked: Dictionary = {} # material_id -> int count
+
+static func start(zone_id: String, equipped_weapon_id: String = "", equipped_armor_ids: Dictionary = {}, hunts_max: float = DEFAULT_HUNTS) -> RunState:
+	var run := RunState.new()
+	run.level = 1.0
+	run.xp_carry = 0.0
+	run.hunts_max = hunts_max
+	run.hunts_remaining = hunts_max
+	run.zone_id = zone_id
+	run.equipped_weapon_id = equipped_weapon_id
+	run.equipped_armor_ids = equipped_armor_ids
+	run.unlocked_zone_ids = [zone_id]
+	run.status = "active"
+	return run
+
+func generate_node_map(zone: ZoneDef, monster_defs: Dictionary) -> void:
+	node_map = NodeMap.generate(zone, monster_defs)
+
+# Resolves a fight against `monster`. Spends 1 hunt. On win, awards XP
+# (possibly crossing several level thresholds) and adds to the unbanked
+# haul. On loss the run ends in death and the unbanked haul is forfeited.
+# Auto-banks on hunt exhaustion. Returns a result Dictionary.
+func resolve_fight(monster: MonsterDef) -> Dictionary:
+	assert(status == "active", "cannot fight after the run has ended")
+	hunts_remaining -= 1.0
+	var player_power := XpCurve.power_scaling(level)
+	var monster_power := XpCurve.power_scaling(monster.level)
+	var won := player_power >= monster_power
+	var result := {"won": won, "died": false, "levels_gained": 0, "xp_awarded": 0.0}
+
+	if not won:
+		_end_run("death")
+		result["died"] = true
+		return result
+
+	var xp_result := XpCurve.award_xp(level, xp_carry, monster.xp_reward)
+	level = xp_result["level"]
+	xp_carry = xp_result["xp_carry"]
+	result["levels_gained"] = xp_result["levels_gained"]
+	result["xp_awarded"] = monster.xp_reward
+	essence_unbanked += monster.xp_reward * ESSENCE_PER_XP
+
+	if hunts_remaining <= 0.0:
+		_end_run("hunt_exhaustion")
+	return result
+
+# Adds `count` of `material_id` to this run's unbanked haul (capture/loot
+# systems call this; kept generic since drop tables aren't this issue's scope).
+func add_material_haul(material_id: String, count: int) -> void:
+	materials_unbanked[material_id] = materials_unbanked.get(material_id, 0) + count
+
+func retreat() -> void:
+	assert(status == "active", "cannot retreat after the run has ended")
+	_end_run("retreat")
+
+# Marks `target_zone_id` unlocked as a future launch option and moves the
+# run there (travel-deeper node resolution).
+func unlock_zone(target_zone_id: String) -> void:
+	if not unlocked_zone_ids.has(target_zone_id):
+		unlocked_zone_ids.append(target_zone_id)
+	zone_id = target_zone_id
+
+func _end_run(reason: String) -> void:
+	end_reason = reason
+	if reason == "death":
+		status = "dead"
+		essence_unbanked = 0.0
+		materials_unbanked.clear()
+		return
+	status = "banked"
+	essence_banked += essence_unbanked
+	essence_unbanked = 0.0
+	for material_id in materials_unbanked:
+		materials_banked[material_id] = materials_banked.get(material_id, 0) + materials_unbanked[material_id]
+	materials_unbanked.clear()
