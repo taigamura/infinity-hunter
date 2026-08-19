@@ -1,23 +1,5 @@
-# Ralph Fix Plan
+# Ralph Fix Plan (queue item)
 
-## High Priority
-- [ ] Review codebase and understand architecture
-- [ ] Identify and document key components
-- [ ] Set up development environment
-
-## Medium Priority
-- [ ] Implement core features
-- [ ] Add test coverage
-- [ ] Update documentation
-
-## Low Priority
-- [ ] Performance optimization
-- [ ] Code cleanup and refactoring
-
-## Completed
-- [x] Project enabled for Ralph
-
-## Notes
-- Focus on MVP functionality first
-- Ensure each feature is properly tested
-- Update this file after each major milestone
+## Current Task
+- [x] Implement GitHub issue #3
+  - Spec: .ralph/specs/issue-3.md
