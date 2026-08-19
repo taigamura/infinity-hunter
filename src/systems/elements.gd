@@ -31,3 +31,12 @@ static func multiplier(attacker_element: String, defender_element: String) -> fl
 	if defender_index == (attacker_index - 1 + RING.size()) % RING.size():
 		return RESIST_MULT
 	return NEUTRAL_MULT
+
+# The single ring element that deals WEAK_MULT damage against
+# `defender_element` (the element immediately before it in the ring).
+# Neutral/dragon/unknown elements have no ring weakness; returns "".
+static func weakness_of(defender_element: String) -> String:
+	var defender_index := RING.find(defender_element)
+	if defender_index == -1:
+		return ""
+	return RING[(defender_index - 1 + RING.size()) % RING.size()]

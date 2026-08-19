@@ -63,20 +63,25 @@ func persist() -> void:
 	SaveManager.save_game(save_state)
 
 func mark_bestiary_seen(monster_id: String) -> void:
-	_bestiary_entry(monster_id)["seen"] = true
+	var monster: MonsterDef = monsters.get(monster_id)
+	if monster != null:
+		Bestiary.record_encounter(save_state, monster)
 
-func mark_bestiary_defeated(monster_id: String) -> void:
-	var entry := _bestiary_entry(monster_id)
-	entry["seen"] = true
-	entry["defeated"] = true
+# Records a kill plus any materials/parts learned from that fight.
+func mark_bestiary_defeated(monster_id: String, dropped_materials: Array = [], broken_parts: Array = []) -> void:
+	var monster: MonsterDef = monsters.get(monster_id)
+	if monster == null:
+		return
+	Bestiary.record_kill(save_state, monster)
+	if not dropped_materials.is_empty():
+		Bestiary.record_drops(save_state, monster_id, dropped_materials)
+	if not broken_parts.is_empty():
+		Bestiary.record_broken_parts(save_state, monster_id, broken_parts)
 
-func _bestiary_entry(monster_id: String) -> Dictionary:
-	if not save_state.has("bestiary"):
-		save_state["bestiary"] = {}
-	var bestiary: Dictionary = save_state["bestiary"]
-	if not bestiary.has(monster_id):
-		bestiary[monster_id] = {"seen": false, "defeated": false}
-	return bestiary[monster_id]
+func mark_bestiary_captured(monster_id: String) -> void:
+	var monster: MonsterDef = monsters.get(monster_id)
+	if monster != null:
+		Bestiary.record_capture(save_state, monster)
 
 # Merges a finished run's banked haul into the durable inventory/essence and
 # saves. No-op for materials/essence if the run ended in death (RunState

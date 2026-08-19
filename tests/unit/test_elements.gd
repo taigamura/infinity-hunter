@@ -36,3 +36,15 @@ func test_dragon_attacker_is_strong_vs_all() -> void:
 func test_dragon_defender_has_no_ring_weakness() -> void:
 	assert_almost_eq(Elements.multiplier("fire", "dragon"), 1.0)
 	assert_almost_eq(Elements.multiplier("water", "dragon"), 1.0)
+
+func test_weakness_of_returns_preceding_ring_element() -> void:
+	assert_eq(Elements.weakness_of("water"), "fire")
+	assert_eq(Elements.weakness_of("earth"), "water")
+	assert_eq(Elements.weakness_of("thunder"), "earth")
+	assert_eq(Elements.weakness_of("ice"), "thunder")
+	assert_eq(Elements.weakness_of("fire"), "ice")
+
+func test_weakness_of_non_ring_element_is_empty() -> void:
+	assert_eq(Elements.weakness_of("neutral"), "")
+	assert_eq(Elements.weakness_of("dragon"), "")
+	assert_eq(Elements.weakness_of("unknown"), "")

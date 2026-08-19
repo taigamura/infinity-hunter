@@ -122,7 +122,7 @@ func _end_reflex_phase() -> void:
 		GameState.mark_bestiary_seen(monster.id)
 		result_label.text = "Defeated... the run's haul is forfeited."
 	else:
-		GameState.mark_bestiary_defeated(monster.id)
+		GameState.mark_bestiary_defeated(monster.id, result["materials_dropped"])
 		result_label.text = "Victory! +%s XP, %d level(s) gained. Dropped: %s" % [
 			Big.fmt(result["xp_awarded"]), result["levels_gained"], ", ".join(result["materials_dropped"])
 		]
