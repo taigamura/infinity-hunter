@@ -24,6 +24,7 @@ var zone_id: String
 var parts: Array = [] # Array[String] — breakable part names
 var capturable: bool = false
 var capture_hp_threshold: float = 0.0 # Big — fraction of base_hp, e.g. 0.2
+var capture_only_materials: Array = [] # Array[String] — granted only on a successful capture, in addition to drop_table
 # Array[Dictionary]: {material_id, weight, part? (String), break_boost?
 # (float, multiplies weight when `part` is broken), guaranteed_on_break?
 # (bool, grants the material outright when `part` is broken instead of
@@ -47,5 +48,6 @@ static func from_dict(data: Dictionary, source_path: String) -> Variant:
 	def.parts = data.get("parts", [])
 	def.capturable = data.get("capturable", false)
 	def.capture_hp_threshold = float(data.get("capture_hp_threshold", 0.0))
+	def.capture_only_materials = data.get("capture_only_materials", [])
 	def.drop_table = data.get("drop_table", [])
 	return def
