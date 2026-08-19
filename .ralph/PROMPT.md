@@ -16,6 +16,16 @@ pixel hunting RPG in **Godot 4.7 (GDScript)**.
 - Add tests for new logic in `tests/unit/test_*.gd` (`extends "res://tests/test_case.gd"`, `test_*`
   methods, `assert_*` helpers). Do NOT rely on global `class_name` in tests — extend by path.
 
+## Completing an issue (REQUIRED order — do ALL of these)
+1. Implement the cited issue.
+2. Run `./scripts/test.sh` and confirm it exits 0 (green gate).
+3. Commit your work with a message citing the issue (e.g. `... (#5)`).
+4. **Check off your task box in `.ralph/fix_plan.md`: change `- [ ]` to `- [x]`.** If you skip
+   this, the queue marks the issue FAILED even though your code is done and committed. This is the
+   single most common failure — do not forget it.
+If the issue is already fully implemented and committed from a prior loop, still perform step 4
+(check the box) so the queue can advance; do not re-implement.
+
 ## Key Principles
 - ONE issue per loop - implement the single highest-priority READY item, end to end.
 - Search the codebase before assuming something isn't implemented.
@@ -28,10 +38,16 @@ pixel hunting RPG in **Godot 4.7 (GDScript)**.
 
 ## Protected Files (DO NOT MODIFY)
 NEVER delete, move, rename, or overwrite:
-- `.ralph/` (entire directory and all contents)
+- `.ralph/` (entire directory and all contents) — **with ONE exception below**
 - `.ralphrc` (project configuration)
 
 These are Ralph's control files. They are NOT project code; deleting them breaks the loop.
+
+**The one allowed edit:** you MUST check off your current task's checkbox in
+`.ralph/fix_plan.md` — change its `- [ ]` to `- [x]` — as the FINAL step of the loop, once the
+issue is implemented, the gate is green, and your work is committed. This is REQUIRED: the queue
+marks the issue **failed** if the box is left unchecked (see below). Change nothing else in
+`.ralph/` — only that single checkbox on your current item.
 
 ## Testing Guidelines
 - Tests are the gate, but keep test-writing proportionate: PRIORITIZE Implementation > Docs.
