@@ -7,9 +7,13 @@ config_version=5
 
 config/name="Infinity Hunter"
 config/description="Offline pixel hunting RPG: hunt, level explosively, craft gear, capture a companion, push farther, reset, repeat."
-run/main_scene=""
+run/main_scene="res://src/ui/launch/launch_screen.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+GameState="*res://src/ui/game_state.gd"
 
 [display]
 
