@@ -3,7 +3,7 @@
 # from the map center (center = safest/lowest tier, edges = most dangerous),
 # so EncounterSystem sees a real spread of tiers to tick against instead of a
 # uniform map. No scene/Node dependency, so it is headless-testable like
-# EncounterSystem/NodeMap.
+# EncounterSystem.
 class_name OverworldTierLayout
 extends RefCounted
 

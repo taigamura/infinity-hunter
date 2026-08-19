@@ -1,7 +1,7 @@
 # EncounterSystem — pure overworld encounter logic (PRD issue #17). Advances
 # the per-tile danger gauge and picks the monster that ambushes the player
-# when it fires. No scene, no side effects; mirrors the NodeMap/DropSystem
-# precedent (static methods, caller-supplied rng for deterministic tests).
+# when it fires. No scene, no side effects; mirrors the DropSystem precedent
+# (static methods, caller-supplied rng for deterministic tests).
 class_name EncounterSystem
 extends RefCounted
 
@@ -28,7 +28,7 @@ static func tick(tier_params: Dictionary, gauge: float, rng: RandomNumberGenerat
 # Picks a monster id from `zone.monster_ids`, filtered to MonsterDef.level in
 # [level_min, level_max] from tier_params, weighted-random via `rng`. Falls
 # back to the nearest-level monster in the full roster when the band matches
-# nothing (mirrors NodeMap.generate skipping missing ids rather than failing).
+# nothing rather than failing.
 # Returns "" if the zone has no known monsters at all.
 static func pick_monster(zone: ZoneDef, tier_params: Dictionary, monster_defs: Dictionary, rng: RandomNumberGenerator) -> String:
 	var level_min: float = tier_params.get("level_min", -INF)
