@@ -1,7 +1,7 @@
 # Tests for the Big numeric helper. Also serves as the reference example for
 # how Sonnet loop-workers should write tests: extend TestCase, name methods
 # test_*, use assert_* helpers.
-extends TestCase
+extends "res://tests/test_case.gd"
 
 func test_fmt_small_integer() -> void:
 	assert_eq(Big.fmt(42.0), "42")

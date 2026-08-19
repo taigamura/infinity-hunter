@@ -10,7 +10,10 @@ extends SceneTree
 
 const UNIT_DIR := "res://tests/unit"
 
-func _init() -> void:
+# _initialize() is the SceneTree/MainLoop entry point in Godot 4 (NOT _init()).
+# quit() called from _init() runs before the main loop starts and is ignored,
+# leaving the process hanging forever headlessly — so all logic lives here.
+func _initialize() -> void:
 	var total := 0
 	var passed := 0
 	var failed := 0
@@ -28,15 +31,16 @@ func _init() -> void:
 			failed_names.append(path)
 			continue
 		var instance = script.new()
-		if not (instance is TestCase):
-			# Skip non-TestCase scripts silently (e.g. helpers).
+		# Duck-type instead of `is TestCase` (no global class_name — see test_case.gd).
+		# A real test case exposes the assert helpers and the _failures array.
+		if not instance.has_method("assert_eq"):
 			continue
 		for method in instance.get_method_list():
 			var mname: String = method.get("name", "")
 			if not mname.begins_with("test_"):
 				continue
 			total += 1
-			instance._failures = []
+			instance._failures.clear()
 			instance.before_each()
 			instance.call(mname)
 			instance.after_each()

@@ -32,7 +32,8 @@ static func fmt(v: float) -> String:
 		var tier := int(floor(log(a) / log(1000.0)))
 		tier = clampi(tier, 0, suffixes.size() - 1)
 		var scaled := a / pow(1000.0, tier)
-		s = "%s%s" % [String.num(scaled, 2), suffixes[tier]]
+		# Fixed 2 decimals (1.50K, not 1.5K) — reads cleaner in a rolling counter.
+		s = "%.2f%s" % [scaled, suffixes[tier]]
 	return ("-" + s) if neg else s
 
 # True if a value is still within safe float-integer precision.

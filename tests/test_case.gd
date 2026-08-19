@@ -3,8 +3,13 @@
 # discovers and executes every test_* method and reports pass/fail.
 #
 # No external addon required. Keep this dependency-free.
+#
+# NOTE: intentionally NO `class_name`. Global class names require Godot's editor
+# import pass to build the class cache; a headless `--script` run that parses
+# before that cache exists fails and falls back to project-run (which hangs with
+# "no main scene"). Test files extend this BY PATH instead:
+#     extends "res://tests/test_case.gd"
 extends RefCounted
-class_name TestCase
 
 var _failures: Array[String] = []
 var _assert_count: int = 0
