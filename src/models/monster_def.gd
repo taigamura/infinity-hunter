@@ -24,6 +24,11 @@ var zone_id: String
 var parts: Array = [] # Array[String] — breakable part names
 var capturable: bool = false
 var capture_hp_threshold: float = 0.0 # Big — fraction of base_hp, e.g. 0.2
+# Array[Dictionary]: {material_id, weight, part? (String), break_boost?
+# (float, multiplies weight when `part` is broken), guaranteed_on_break?
+# (bool, grants the material outright when `part` is broken instead of
+# entering the weighted roll)}. See DropSystem.
+var drop_table: Array = []
 
 # Returns a MonsterDef on success, or a String error naming source_path + field.
 static func from_dict(data: Dictionary, source_path: String) -> Variant:
@@ -42,4 +47,5 @@ static func from_dict(data: Dictionary, source_path: String) -> Variant:
 	def.parts = data.get("parts", [])
 	def.capturable = data.get("capturable", false)
 	def.capture_hp_threshold = float(data.get("capture_hp_threshold", 0.0))
+	def.drop_table = data.get("drop_table", [])
 	return def

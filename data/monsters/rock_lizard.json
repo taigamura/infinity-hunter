@@ -9,5 +9,9 @@
   "zone_id": "verdant_fields",
   "parts": ["head", "tail"],
   "capturable": true,
-  "capture_hp_threshold": 0.2
+  "capture_hp_threshold": 0.2,
+  "drop_table": [
+    {"material_id": "lizard_scale", "weight": 60, "part": "head", "break_boost": 4.0},
+    {"material_id": "slime_gel", "weight": 40}
+  ]
 }

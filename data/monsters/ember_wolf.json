@@ -9,5 +9,9 @@
   "zone_id": "cinder_dunes",
   "parts": ["head", "legs"],
   "capturable": true,
-  "capture_hp_threshold": 0.15
+  "capture_hp_threshold": 0.15,
+  "drop_table": [
+    {"material_id": "ember_fang", "weight": 50, "part": "head", "guaranteed_on_break": true},
+    {"material_id": "slime_gel", "weight": 50}
+  ]
 }

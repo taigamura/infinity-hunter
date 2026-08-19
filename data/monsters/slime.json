@@ -9,5 +9,8 @@
   "zone_id": "verdant_fields",
   "parts": ["body"],
   "capturable": true,
-  "capture_hp_threshold": 0.2
+  "capture_hp_threshold": 0.2,
+  "drop_table": [
+    {"material_id": "slime_gel", "weight": 100, "part": "body", "break_boost": 3.0}
+  ]
 }

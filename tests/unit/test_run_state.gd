@@ -65,13 +65,14 @@ func test_retreat_banks_unbanked_haul() -> void:
 	var run := RunState.start("verdant_fields")
 	run.resolve_fight(_slime)
 	var unbanked_before := run.essence_unbanked
+	var slime_gel_before: int = run.materials_unbanked.get("slime_gel", 0)
 	run.add_material_haul("slime_gel", 2)
 	run.retreat()
 	assert_eq(run.status, "banked")
 	assert_eq(run.end_reason, "retreat")
 	assert_almost_eq(run.essence_banked, unbanked_before)
 	assert_almost_eq(run.essence_unbanked, 0.0)
-	assert_eq(run.materials_banked.get("slime_gel", 0), 2)
+	assert_eq(run.materials_banked.get("slime_gel", 0), slime_gel_before + 2)
 	assert_true(run.materials_unbanked.is_empty())
 
 func test_hunt_exhaustion_auto_banks_on_last_hunt() -> void:
@@ -82,6 +83,35 @@ func test_hunt_exhaustion_auto_banks_on_last_hunt() -> void:
 	assert_eq(run.status, "banked")
 	assert_eq(run.end_reason, "hunt_exhaustion")
 	assert_gt(run.essence_banked, 0.0)
+
+func test_winning_fight_rolls_drops_into_unbanked_haul() -> void:
+	var run := RunState.start("verdant_fields")
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 1
+	var result := run.resolve_fight(_slime, [], rng)
+	assert_false(result["materials_dropped"].is_empty())
+	var dropped_id: String = result["materials_dropped"][0]
+	assert_eq(run.materials_unbanked.get(dropped_id, 0), 1)
+
+func test_breaking_tied_part_guarantees_that_materials_drop() -> void:
+	var run := RunState.start("cinder_dunes")
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 2
+	# _ember_wolf's drop table guarantees ember_fang when "head" is broken;
+	# beat its level-9 defense first by pre-leveling the run so it's a win.
+	run.level = 20.0
+	var result := run.resolve_fight(_ember_wolf, ["head"], rng)
+	assert_true(result["won"])
+	assert_has(result["materials_dropped"], "ember_fang")
+	assert_eq(run.materials_unbanked.get("ember_fang", 0), 1)
+
+func test_death_forfeits_materials_dropped_this_call() -> void:
+	var run := RunState.start("verdant_fields")
+	run.resolve_fight(_slime) # some unbanked haul exists
+	var result := run.resolve_fight(_ember_wolf) # a loss at level 1
+	assert_true(result["died"])
+	assert_true(result["materials_dropped"].is_empty(), "no drops are rolled on a loss")
+	assert_true(run.materials_unbanked.is_empty(), "death must forfeit the whole unbanked haul")
 
 func test_unlock_zone_records_new_zone_and_moves_run() -> void:
 	var run := RunState.start("verdant_fields")

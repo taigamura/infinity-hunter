@@ -49,16 +49,21 @@ func generate_node_map(zone: ZoneDef, monster_defs: Dictionary) -> void:
 	node_map = NodeMap.generate(zone, monster_defs)
 
 # Resolves a fight against `monster`. Spends 1 hunt. On win, awards XP
-# (possibly crossing several level thresholds) and adds to the unbanked
-# haul. On loss the run ends in death and the unbanked haul is forfeited.
+# (possibly crossing several level thresholds), rolls `monster`'s drop table
+# (boosted/guaranteed per `broken_parts`, see DropSystem) and adds the
+# result to the unbanked haul. On loss the run ends in death and the
+# unbanked haul (including any materials from this call) is forfeited.
 # Auto-banks on hunt exhaustion. Returns a result Dictionary.
-func resolve_fight(monster: MonsterDef) -> Dictionary:
+#
+# `rng` is caller-supplied for deterministic drop rolls in tests; defaults to
+# a fresh RandomNumberGenerator (unseeded, real randomness) otherwise.
+func resolve_fight(monster: MonsterDef, broken_parts: Array = [], rng: RandomNumberGenerator = null) -> Dictionary:
 	assert(status == "active", "cannot fight after the run has ended")
 	hunts_remaining -= 1.0
 	var player_power := XpCurve.power_scaling(level)
 	var monster_power := XpCurve.power_scaling(monster.level)
 	var won := player_power >= monster_power
-	var result := {"won": won, "died": false, "levels_gained": 0, "xp_awarded": 0.0}
+	var result := {"won": won, "died": false, "levels_gained": 0, "xp_awarded": 0.0, "materials_dropped": []}
 
 	if not won:
 		_end_run("death")
@@ -71,6 +76,12 @@ func resolve_fight(monster: MonsterDef) -> Dictionary:
 	result["levels_gained"] = xp_result["levels_gained"]
 	result["xp_awarded"] = monster.xp_reward
 	essence_unbanked += monster.xp_reward * ESSENCE_PER_XP
+
+	var roll_rng := rng if rng != null else RandomNumberGenerator.new()
+	var drops := DropSystem.roll(monster, broken_parts, roll_rng)
+	for material_id in drops:
+		add_material_haul(material_id, 1)
+	result["materials_dropped"] = drops
 
 	if hunts_remaining <= 0.0:
 		_end_run("hunt_exhaustion")
