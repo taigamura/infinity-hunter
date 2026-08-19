@@ -1,14 +1,17 @@
-# OverworldScreen — walkable Verdant Fields: a TileMap for the zone, a
-# character body driven by joystick + keyboard input (OverworldMovement), and
-# a following Camera2D. Retreat banks the run via the existing
-# RunState.retreat() -> GameState.settle_run path and returns to launch, same
-# as the old node-map. No encounters/combat yet (issue #19); the gauge-driven
-# encounter overlay lands in a later slice without touching this scene's
-# movement/retreat wiring.
+# OverworldScreen — walkable Verdant Fields: a TileMap painted with danger
+# tiers (OverworldTierLayout), a character body driven by joystick + keyboard
+# input (OverworldMovement), a following Camera2D, and the encounter gauge
+# HUD. Every physics frame reads the tier under the character, ticks
+# EncounterSystem, and updates the gauge bar; on fire it band-picks a monster
+# via EncounterSystem.pick_monster (issue #20 — stub hand-off only, combat
+# overlay lands in #21). Retreat still banks the run via the existing
+# RunState.retreat() -> GameState.settle_run path and returns to launch.
 extends Node2D
 
 const OverworldMovement = preload("res://src/systems/overworld_movement.gd")
 const OverworldTileset = preload("res://src/ui/overworld/overworld_tileset.gd")
+const OverworldTierLayout = preload("res://src/systems/overworld_tier_layout.gd")
+const EncounterSystem = preload("res://src/systems/encounter_system.gd")
 
 const TILE_SIZE := 64
 const MAP_COLS := 30
@@ -20,8 +23,13 @@ const MAP_ROWS := 40
 @onready var camera: Camera2D = %Camera
 @onready var joystick: Control = %Joystick
 @onready var retreat_button: Button = %RetreatButton
+@onready var gauge_bar: ProgressBar = %GaugeBar
 
 var _map_size: Vector2
+var _tier_ids: Array = [0]
+var _tier_table: TierTableDef = null
+var _gauge := 0.0
+var _rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
 	var run: RunState = GameState.current_run
@@ -29,6 +37,8 @@ func _ready() -> void:
 		get_tree().change_scene_to_file("res://src/ui/launch/launch_screen.tscn")
 		return
 
+	_rng.randomize()
+	_tier_table = GameState.tier_tables.get(run.zone_id)
 	_build_tilemap()
 	_build_character_sprite()
 	_map_size = Vector2(MAP_COLS * TILE_SIZE, MAP_ROWS * TILE_SIZE)
@@ -38,12 +48,22 @@ func _ready() -> void:
 	camera.limit_right = int(_map_size.x)
 	camera.limit_bottom = int(_map_size.y)
 	retreat_button.pressed.connect(_on_retreat_pressed)
+	gauge_bar.min_value = 0.0
+	gauge_bar.max_value = EncounterSystem.GAUGE_THRESHOLD
+	gauge_bar.value = 0.0
 
 func _build_tilemap() -> void:
-	tile_map.tile_set = OverworldTileset.build(TILE_SIZE)
+	if _tier_table != null:
+		_tier_ids = _tier_table.tiers.keys().map(func(k): return int(k))
+		_tier_ids.sort()
+	else:
+		_tier_ids = [0]
+	tile_map.tile_set = OverworldTileset.build(TILE_SIZE, _tier_ids)
 	for x in range(MAP_COLS):
 		for y in range(MAP_ROWS):
-			tile_map.set_cell(0, Vector2i(x, y), 0, Vector2i.ZERO)
+			var cell := Vector2i(x, y)
+			var tier_id := OverworldTierLayout.tier_for_cell(cell, MAP_COLS, MAP_ROWS, _tier_ids)
+			tile_map.set_cell(0, cell, tier_id, Vector2i.ZERO)
 
 # Placeholder programmer-art marker (solid square) so the character reads
 # against the tilemap without a hand-authored sprite asset.
@@ -59,6 +79,26 @@ func _physics_process(delta: float) -> void:
 	var joystick_vector: Vector2 = joystick.output_vector if joystick != null else Vector2.ZERO
 	var direction := OverworldMovement.combine_input(keyboard_vector, joystick_vector)
 	character.position = OverworldMovement.step(character.position, direction, delta, _map_size)
+	if direction != Vector2.ZERO:
+		_tick_encounter()
+
+func _tick_encounter() -> void:
+	var cell := tile_map.local_to_map(character.position)
+	var tier_id := tile_map.get_cell_source_id(0, cell)
+	var tier_params: Dictionary = _tier_table.tier_params(tier_id) if _tier_table != null else {}
+
+	var result := EncounterSystem.tick(tier_params, _gauge, _rng)
+	_gauge = result["gauge"]
+	gauge_bar.value = _gauge
+
+	if result["fired"]:
+		var run: RunState = GameState.current_run
+		var zone: ZoneDef = GameState.zones.get(run.zone_id)
+		var monster_id := EncounterSystem.pick_monster(zone, tier_params, GameState.monsters, _rng)
+		if monster_id != "":
+			GameState.pending_monster = GameState.monsters[monster_id]
+			GameState.mark_bestiary_seen(monster_id)
+			print("Overworld encounter fired: ", monster_id)
 
 func _on_retreat_pressed() -> void:
 	var run: RunState = GameState.current_run
