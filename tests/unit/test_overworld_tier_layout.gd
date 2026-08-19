@@ -28,3 +28,9 @@ func test_non_sequential_tier_ids_are_respected() -> void:
 func test_empty_tier_ids_falls_back_to_zero() -> void:
 	var tier_id := OverworldTierLayout.tier_for_cell(Vector2i(0, 0), 30, 40, [])
 	assert_eq(tier_id, 0)
+
+func test_exit_cell_sits_in_the_highest_tier() -> void:
+	var tiers := [0, 1, 2]
+	var exit_cell := OverworldTierLayout.exit_cell(30, 40)
+	var tier_id := OverworldTierLayout.tier_for_cell(exit_cell, 30, 40, tiers)
+	assert_eq(tier_id, 2)

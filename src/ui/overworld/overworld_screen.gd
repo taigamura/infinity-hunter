@@ -36,6 +36,8 @@ var _gauge := 0.0
 var _rng := RandomNumberGenerator.new()
 var _combat_active := false
 var _combat_overlay: Control = null
+var _exit_cell: Vector2i
+var _travel_target_zone_id := ""
 
 func _ready() -> void:
 	var run: RunState = GameState.current_run
@@ -47,6 +49,9 @@ func _ready() -> void:
 	_tier_table = GameState.tier_tables.get(run.zone_id)
 	_build_tilemap()
 	_build_character_sprite()
+	_exit_cell = OverworldTierLayout.exit_cell(MAP_COLS, MAP_ROWS)
+	var zone: ZoneDef = GameState.zones.get(run.zone_id)
+	_travel_target_zone_id = zone.connections[0] if zone != null and not zone.connections.is_empty() else ""
 	_map_size = Vector2(MAP_COLS * TILE_SIZE, MAP_ROWS * TILE_SIZE)
 	character.position = _map_size / 2.0
 	camera.limit_left = 0
@@ -85,8 +90,12 @@ func _physics_process(delta: float) -> void:
 	var joystick_vector: Vector2 = joystick.output_vector if joystick != null else Vector2.ZERO
 	var direction := OverworldMovement.combine_input(keyboard_vector, joystick_vector)
 	character.position = OverworldMovement.step(character.position, direction, delta, _map_size)
-	if direction != Vector2.ZERO:
-		_tick_encounter()
+	if direction == Vector2.ZERO:
+		return
+	if _travel_target_zone_id != "" and tile_map.local_to_map(character.position) == _exit_cell:
+		_travel_deeper()
+		return
+	_tick_encounter()
 
 func _tick_encounter() -> void:
 	var cell := tile_map.local_to_map(character.position)
@@ -138,6 +147,15 @@ func _on_combat_finished(_result: Dictionary) -> void:
 		GameState.settle_run(run)
 	GameState.current_run = null
 	get_tree().change_scene_to_file("res://src/ui/launch/launch_screen.tscn")
+
+# Exit-tile travel (issue #22): reaching the exit cell unlocks the connected
+# zone and moves the run there, then reloads this scene so it rebuilds the
+# tilemap/tier table for the new zone_id. RunState itself (level, hunts,
+# haul) is untouched by the reload.
+func _travel_deeper() -> void:
+	var run: RunState = GameState.current_run
+	run.unlock_zone(_travel_target_zone_id)
+	get_tree().reload_current_scene()
 
 func _on_retreat_pressed() -> void:
 	var run: RunState = GameState.current_run

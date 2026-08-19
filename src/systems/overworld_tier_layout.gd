@@ -25,3 +25,10 @@ static func tier_for_cell(cell: Vector2i, map_cols: int, map_rows: int, sorted_t
 	var bucket := int(normalized * sorted_tier_ids.size())
 	bucket = clampi(bucket, 0, sorted_tier_ids.size() - 1)
 	return sorted_tier_ids[bucket]
+
+# The map-corner cell (issue #22): always the highest-danger tier under
+# `tier_for_cell`'s distance-from-center bucketing, so an exit placed here
+# sits inside a hot region and the route to it crosses hotter terrain than
+# the spawn point at map center.
+static func exit_cell(map_cols: int, map_rows: int) -> Vector2i:
+	return Vector2i(map_cols - 1, 0)
