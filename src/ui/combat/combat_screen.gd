@@ -5,6 +5,8 @@
 # logic is reimplemented here, only round timing/animation bookkeeping.
 extends Control
 
+const MonsterSpriteSheet = preload("res://src/ui/combat/monster_sprite_sheet.gd")
+
 const ROUND_DURATION := 1.2
 const PERFECT_OFFSET := 0.7 # seconds into the round considered a "perfect" dodge
 const MAX_ROUNDS := 12
@@ -17,6 +19,7 @@ const MAX_ROUNDS := 12
 @onready var monster_hp_bar: ProgressBar = %MonsterHpBar
 @onready var info_label: Label = %InfoLabel
 @onready var result_label: Label = %ResultLabel
+@onready var monster_sprite: AnimatedSprite2D = %MonsterSprite
 
 var monster: MonsterDef
 var player_stats: Dictionary
@@ -43,6 +46,10 @@ func _ready() -> void:
 	monster_hp_bar.max_value = monster_stats["hp_max"]
 	monster_hp_bar.value = monster_stats["hp_max"]
 	info_label.text = "%s (Lv %s)" % [monster.name, Big.fmt(monster.level)]
+
+	monster_sprite.sprite_frames = MonsterSpriteSheet.build(monster.id)
+	monster_sprite.animation_finished.connect(_on_monster_anim_finished)
+	monster_sprite.play("idle")
 
 	start_button.pressed.connect(_on_start_pressed)
 	dodge_button.pressed.connect(_on_dodge_pressed)
@@ -86,14 +93,24 @@ func _on_round_timeout() -> void:
 	if not _dodge_tapped_this_round:
 		beats.append({"dodge_timing": INF})
 
+	var monster_hp_before := monster_hp_bar.value
 	var outcome := CombatResolver.resolve(player_stats, monster_stats, weapon_stats, beats, skill_profile)
 	player_hp_bar.value = outcome["player_hp"]
 	monster_hp_bar.value = outcome["monster_hp"]
+
+	if outcome["monster_hp"] < monster_hp_before:
+		monster_sprite.play("hit")
+	else:
+		monster_sprite.play("attack")
 
 	if outcome["monster_hp"] <= 0.0 or outcome["player_hp"] <= 0.0 or beats.size() >= MAX_ROUNDS:
 		_end_reflex_phase()
 	else:
 		_start_round()
+
+func _on_monster_anim_finished() -> void:
+	if monster_sprite.animation != "idle":
+		monster_sprite.play("idle")
 
 func _end_reflex_phase() -> void:
 	_fight_over = true
