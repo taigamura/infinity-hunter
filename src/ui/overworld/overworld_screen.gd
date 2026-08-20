@@ -20,6 +20,13 @@ const TILE_SIZE := 64
 const MAP_COLS := 30
 const MAP_ROWS := 40
 
+# Presentation-only: a tier is a "hot region" once it's in the upper half of
+# the zone's danger tiers, driving the warning strip. Purely cosmetic — the
+# gauge/encounter math it decorates is untouched (EncounterSystem.tick).
+const GAUGE_COLOR_LOW := Color(0.35, 0.85, 0.45, 1)
+const GAUGE_COLOR_HIGH := Color(0.95, 0.25, 0.25, 1)
+const EXIT_PULSE_PERIOD := 1.1
+
 @onready var tile_map: TileMap = %TileMap
 @onready var character: CharacterBody2D = %Character
 @onready var character_sprite: Sprite2D = %CharacterSprite
@@ -27,6 +34,9 @@ const MAP_ROWS := 40
 @onready var joystick: Control = %Joystick
 @onready var retreat_button: Button = %RetreatButton
 @onready var gauge_bar: ProgressBar = %GaugeBar
+@onready var hot_strip_label: Label = %HotStripLabel
+@onready var exit_marker: Control = %ExitMarker
+@onready var exit_marker_label: Label = %ExitMarkerLabel
 @onready var ui_layer: CanvasLayer = %UI
 
 var _map_size: Vector2
@@ -62,6 +72,12 @@ func _ready() -> void:
 	gauge_bar.min_value = 0.0
 	gauge_bar.max_value = EncounterSystem.GAUGE_THRESHOLD
 	gauge_bar.value = 0.0
+	_update_gauge_style()
+	hot_strip_label.visible = false
+	var exit_zone: ZoneDef = GameState.zones.get(_travel_target_zone_id)
+	exit_marker_label.text = "EXIT\n%s" % (exit_zone.name if exit_zone != null else "???")
+	_start_exit_pulse()
+	_update_hot_strip(OverworldTierLayout.tier_for_cell(tile_map.local_to_map(character.position), MAP_COLS, MAP_ROWS, _tier_ids))
 
 func _build_tilemap() -> void:
 	if _tier_table != null:
@@ -70,17 +86,65 @@ func _build_tilemap() -> void:
 	else:
 		_tier_ids = [0]
 	tile_map.tile_set = OverworldTileset.build(TILE_SIZE, _tier_ids)
+	var variant_count := OverworldTileset.variant_count()
 	for x in range(MAP_COLS):
 		for y in range(MAP_ROWS):
 			var cell := Vector2i(x, y)
 			var tier_id := OverworldTierLayout.tier_for_cell(cell, MAP_COLS, MAP_ROWS, _tier_ids)
-			tile_map.set_cell(0, cell, tier_id, Vector2i.ZERO)
+			var variant := _rng.randi_range(0, variant_count - 1)
+			tile_map.set_cell(0, cell, tier_id, Vector2i(variant, 0))
 
-# Placeholder programmer-art marker (solid square) so the character reads
-# against the tilemap without a hand-authored sprite asset.
+# Screen-space pulse (fade in/out) toward the map's hot corner; the marker
+# itself sits anchored top-right in the HUD rather than tracking the exit
+# cell's world position, matching the mockup without a camera-to-UI
+# projection.
+func _start_exit_pulse() -> void:
+	var tween := create_tween()
+	tween.set_loops()
+	tween.tween_property(exit_marker, "modulate:a", 0.45, EXIT_PULSE_PERIOD / 2.0)
+	tween.tween_property(exit_marker, "modulate:a", 1.0, EXIT_PULSE_PERIOD / 2.0)
+
+func _update_gauge_style() -> void:
+	var ratio := clampf(_gauge / EncounterSystem.GAUGE_THRESHOLD, 0.0, 1.0)
+	var fill := StyleBoxFlat.new()
+	fill.bg_color = GAUGE_COLOR_LOW.lerp(GAUGE_COLOR_HIGH, ratio)
+	fill.corner_radius_top_left = 4
+	fill.corner_radius_top_right = 4
+	fill.corner_radius_bottom_right = 4
+	fill.corner_radius_bottom_left = 4
+	gauge_bar.add_theme_stylebox_override("fill", fill)
+
+func _update_hot_strip(tier_id: int) -> void:
+	var index := _tier_ids.find(tier_id)
+	if index == -1:
+		hot_strip_label.visible = false
+		return
+	hot_strip_label.visible = index >= int(ceili(_tier_ids.size() / 2.0))
+
+# Placeholder programmer-art marker (bordered square + drop shadow, both
+# baked into the texture) so the character reads against the tilemap without
+# a hand-authored sprite asset.
 func _build_character_sprite() -> void:
-	var img := Image.create(32, 32, false, Image.FORMAT_RGBA8)
-	img.fill(Color(0.9, 0.85, 0.2))
+	const BODY_SIZE := 32
+	const PAD := 8
+	const SHADOW_OFFSET := 4
+	const BORDER := 2
+	var canvas := BODY_SIZE + PAD * 2
+	var img := Image.create(canvas, canvas, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+
+	var body_color := Color(0.9, 0.85, 0.2)
+	var border_color := body_color.darkened(0.45)
+	var shadow_color := Color(0, 0, 0, 0.35)
+
+	for x in range(BODY_SIZE):
+		for y in range(BODY_SIZE):
+			img.set_pixel(PAD + SHADOW_OFFSET + x, PAD + SHADOW_OFFSET + y, shadow_color)
+	for x in range(BODY_SIZE):
+		for y in range(BODY_SIZE):
+			var is_border := x < BORDER or y < BORDER or x >= BODY_SIZE - BORDER or y >= BODY_SIZE - BORDER
+			img.set_pixel(PAD + x, PAD + y, border_color if is_border else body_color)
+
 	character_sprite.texture = ImageTexture.create_from_image(img)
 
 func _physics_process(delta: float) -> void:
@@ -105,6 +169,8 @@ func _tick_encounter() -> void:
 	var result := EncounterSystem.tick(tier_params, _gauge, _rng)
 	_gauge = result["gauge"]
 	gauge_bar.value = _gauge
+	_update_gauge_style()
+	_update_hot_strip(tier_id)
 
 	if result["fired"]:
 		var run: RunState = GameState.current_run
@@ -138,6 +204,7 @@ func _on_combat_finished(_result: Dictionary) -> void:
 		_combat_active = false
 		_gauge = 0.0
 		gauge_bar.value = 0.0
+		_update_gauge_style()
 		retreat_button.visible = true
 		if joystick != null:
 			joystick.visible = true

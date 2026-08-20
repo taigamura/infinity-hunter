@@ -1,10 +1,46 @@
-[gd_scene load_steps=4 format=3 uid="uid://ihoverworld01"]
+[gd_scene load_steps=8 format=3 uid="uid://ihoverworld01"]
 
 [ext_resource type="Script" path="res://src/ui/overworld/overworld_screen.gd" id="1"]
 [ext_resource type="Script" path="res://src/ui/overworld/virtual_joystick.gd" id="2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
 radius = 16.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hotstrip"]
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+bg_color = Color(0.3529412, 0.078431375, 0.078431375, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.34, 0.24, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_joystick_base"]
+bg_color = Color(1, 1, 1, 0.15)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.35)
+corner_radius_top_left = 80
+corner_radius_top_right = 80
+corner_radius_bottom_right = 80
+corner_radius_bottom_left = 80
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_joystick_knob"]
+bg_color = Color(0.9607843, 0.77254903, 0.25882354, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.78039217, 0.6039216, 0.18039216, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
 
 [node name="OverworldScreen" type="Node2D"]
 script = ExtResource("1")
@@ -29,21 +65,74 @@ position_smoothing_speed = 5.0
 [node name="UI" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
 
-[node name="RetreatButton" type="Button" parent="UI"]
+[node name="TopPanel" type="PanelContainer" parent="UI"]
 unique_name_in_owner = true
-offset_left = 32.0
-offset_top = 48.0
-offset_right = 280.0
-offset_bottom = 96.0
+offset_left = 24.0
+offset_top = 40.0
+offset_right = 296.0
+offset_bottom = 140.0
+
+[node name="TopVBox" type="VBoxContainer" parent="UI/TopPanel"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="GaugeRow" type="HBoxContainer" parent="UI/TopPanel/TopVBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="GaugeLabel" type="Label" parent="UI/TopPanel/TopVBox/GaugeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "ENCOUNTER"
+
+[node name="GaugeBar" type="ProgressBar" parent="UI/TopPanel/TopVBox/GaugeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 18)
+show_percentage = false
+
+[node name="RetreatButton" type="Button" parent="UI/TopPanel/TopVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 36)
 text = "Retreat and Bank Haul"
 
-[node name="GaugeBar" type="ProgressBar" parent="UI"]
+[node name="HotStripLabel" type="Label" parent="UI"]
 unique_name_in_owner = true
-offset_left = 32.0
-offset_top = 108.0
-offset_right = 280.0
-offset_bottom = 132.0
-show_percentage = false
+visible = false
+offset_left = 24.0
+offset_top = 148.0
+offset_right = 296.0
+offset_bottom = 176.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_hotstrip")
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(1, 0.7, 0.65, 1)
+horizontal_alignment = 1
+vertical_alignment = 1
+text = "DANGER — HOT REGION"
+
+[node name="ExitMarker" type="PanelContainer" parent="UI"]
+unique_name_in_owner = true
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -180.0
+offset_top = 40.0
+offset_right = -24.0
+offset_bottom = 76.0
+grow_horizontal = 0
+
+[node name="ExitMarkerLabel" type="Label" parent="UI/ExitMarker"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.9607843, 0.77254903, 0.25882354, 1)
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+text = "EXIT"
 
 [node name="Joystick" type="Control" parent="UI"]
 unique_name_in_owner = true
@@ -57,18 +146,18 @@ offset_bottom = -60.0
 mouse_filter = 1
 script = ExtResource("2")
 
-[node name="Base" type="ColorRect" parent="UI/Joystick"]
+[node name="Base" type="Panel" parent="UI/Joystick"]
 unique_name_in_owner = true
 mouse_filter = 2
 offset_right = 160.0
 offset_bottom = 160.0
-color = Color(1, 1, 1, 0.15)
+theme_override_styles/panel = SubResource("StyleBoxFlat_joystick_base")
 
-[node name="Knob" type="ColorRect" parent="UI/Joystick"]
+[node name="Knob" type="Panel" parent="UI/Joystick"]
 unique_name_in_owner = true
 mouse_filter = 2
 offset_left = 60.0
 offset_top = 60.0
 offset_right = 100.0
 offset_bottom = 100.0
-color = Color(1, 1, 1, 0.4)
+theme_override_styles/panel = SubResource("StyleBoxFlat_joystick_knob")
