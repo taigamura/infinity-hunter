@@ -1,5 +1,12 @@
 # CLAUDE.md
 
+## Orientation (read first)
+
+Before working, read **`CONTEXT.md`** at the repo root: the central design doc
+(game identity, architecture, module map, run loop, content, current-state deltas).
+It is the fast path to context: prefer it over re-scanning the codebase each session.
+When your work makes it stale, update `CONTEXT.md` in the same change.
+
 ## Agent skills
 
 ### Issue tracker
