@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://ihcombat01"]
+[gd_scene load_steps=5 format=3 uid="uid://ihcombat01"]
 
 [ext_resource type="Script" path="res://src/ui/combat/combat_screen.gd" id="1"]
 [ext_resource type="Script" path="res://src/ui/common/screen_background.gd" id="3"]
+[ext_resource type="FontFile" path="res://assets/fonts/vt323/VT323-Regular.woff2" id="2_vt323"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ring"]
 draw_center = false
@@ -9,11 +10,27 @@ border_width_left = 4
 border_width_top = 4
 border_width_right = 4
 border_width_bottom = 4
-border_color = Color(1, 0.34, 0.24, 0.85)
+border_color = Color(1, 0.8235294, 0.2901961, 0.85)
 corner_radius_top_left = 100
 corner_radius_top_right = 100
 corner_radius_bottom_right = 100
 corner_radius_bottom_left = 100
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_banner"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0.16470589, 0.06666667, 0.07450981, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.8235294, 0.2901961, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [node name="CombatScreen" type="Control"]
 layout_mode = 3
@@ -62,13 +79,6 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
 text = "Monster"
 
-[node name="MonsterElementChip" type="ColorRect" parent="TopPanel/TopVBox/InfoRow"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(16, 16)
-layout_mode = 2
-size_flags_vertical = 4
-color = Color(0.6039216, 0.6392157, 0.72156864, 1)
-
 [node name="MonsterWeaknessLabel" type="Label" parent="TopPanel/TopVBox/InfoRow"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -77,8 +87,36 @@ theme_override_colors/font_color = Color(0.9607843, 0.77254903, 0.25882354, 1)
 vertical_alignment = 1
 text = ""
 
+[node name="MonsterElementChip" type="ColorRect" parent="TopPanel/TopVBox/InfoRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+size_flags_vertical = 4
+pivot_offset = Vector2(6, 6)
+rotation_degrees = 45.0
+color = Color(0.6039216, 0.6392157, 0.72156864, 1)
+
+[node name="MonsterElementLabel" type="Label" parent="TopPanel/TopVBox/InfoRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vt323")
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.6039216, 0.6392157, 0.72156864, 1)
+vertical_alignment = 1
+text = ""
+
+[node name="MonsterPartLabel" type="Label" parent="TopPanel/TopVBox/InfoRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vt323")
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.6039216, 0.6392157, 0.72156864, 1)
+vertical_alignment = 1
+text = ""
+
 [node name="MonsterHpBar" type="ProgressBar" parent="TopPanel/TopVBox"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_type_variation = &"MonsterHpBar"
 show_percentage = false
@@ -91,10 +129,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -90.0
-offset_top = -130.0
-offset_right = 90.0
-offset_bottom = 50.0
+offset_left = -150.0
+offset_top = -190.0
+offset_right = 150.0
+offset_bottom = 110.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -109,10 +147,10 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_ring")
 
 [node name="MonsterSprite" type="AnimatedSprite2D" parent="SpriteAnchor"]
 unique_name_in_owner = true
-position = Vector2(90, 90)
-scale = Vector2(3, 3)
+position = Vector2(150, 150)
+scale = Vector2(5, 5)
 
-[node name="TelegraphBanner" type="Label" parent="."]
+[node name="TelegraphBanner" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -122,22 +160,29 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -160.0
-offset_top = -170.0
+offset_top = -230.0
 offset_right = 160.0
-offset_bottom = -140.0
+offset_bottom = -196.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_banner")
+
+[node name="TelegraphBannerLabel" type="Label" parent="TelegraphBanner"]
+unique_name_in_owner = true
 theme_override_font_sizes/font_size = 12
-theme_override_colors/font_color = Color(1, 0.34, 0.24, 1)
+theme_override_colors/font_color = Color(1, 0.8235294, 0.2901961, 1)
 horizontal_alignment = 1
-text = "INCOMING — TAP TO DODGE"
+text = "INCOMING - TAP TO DODGE"
 
 [node name="DamageNumberLabel" type="Label" parent="."]
 unique_name_in_owner = true
 visible = false
 layout_mode = 0
 theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.9607843, 0.77254903, 0.25882354, 1)
+theme_override_colors/font_color = Color(1, 0.8784314, 0.5411765, 1)
+theme_override_colors/font_shadow_color = Color(0.5686275, 0.35686275, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
 text = ""
 
 [node name="BottomHud" type="VBoxContainer" parent="."]
@@ -170,6 +215,7 @@ text = "Your HP"
 
 [node name="PlayerHpBar" type="ProgressBar" parent="BottomHud"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_type_variation = &"PlayerHpBar"
 show_percentage = false
@@ -178,6 +224,7 @@ show_percentage = false
 unique_name_in_owner = true
 layout_mode = 2
 custom_minimum_size = Vector2(0, 88)
+theme_type_variation = &"DodgeButton"
 theme_override_font_sizes/font_size = 16
 text = "DODGE"
 

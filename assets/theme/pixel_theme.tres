@@ -107,10 +107,10 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.28627452, 0.31764707, 0.40784314, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
 
 [sub_resource type="Gradient" id="Gradient_jw3j0"]
 colors = PackedColorArray(1, 0.3529412, 0.23529412, 1, 0.8, 0.2, 0.101960786, 1)
@@ -231,6 +231,40 @@ modulate_color = Color(0.85, 0.85, 0.85, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b87js"]
 bg_color = Color(0.05490196, 0.07058824, 0.1254902, 1)
 
+[sub_resource type="Gradient" id="Gradient_dodge"]
+offsets = PackedFloat32Array(0, 0.82, 1)
+colors = PackedColorArray(0.5607843, 0.84313726, 1, 1, 0.2901961, 0.6509804, 0.8784314, 1, 0.18431373, 0.4823529, 0.6784314, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_dodge"]
+gradient = SubResource("Gradient_dodge")
+width = 4
+height = 32
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dodge_normal"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+texture = SubResource("GradientTexture2D_dodge")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dodge_hover"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+texture = SubResource("GradientTexture2D_dodge")
+modulate_color = Color(1.08, 1.08, 1.08, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dodge_pressed"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+texture = SubResource("GradientTexture2D_dodge")
+modulate_color = Color(0.85, 0.85, 0.85, 1)
+
 [resource]
 default_font = ExtResource("1_8tstd")
 default_font_size = 12
@@ -245,6 +279,17 @@ Button/styles/focus = SubResource("StyleBoxFlat_83ckq")
 Button/styles/hover = SubResource("StyleBoxFlat_1lcdb")
 Button/styles/normal = SubResource("StyleBoxFlat_eytb6")
 Button/styles/pressed = SubResource("StyleBoxFlat_d3v4g")
+DodgeButton/base_type = &"Button"
+DodgeButton/colors/font_color = Color(0.05882353, 0.09411765, 0.14901961, 1)
+DodgeButton/colors/font_hover_color = Color(0.05882353, 0.09411765, 0.14901961, 1)
+DodgeButton/colors/font_pressed_color = Color(0.05882353, 0.09411765, 0.14901961, 1)
+DodgeButton/font_sizes/font_size = 16
+DodgeButton/fonts/font = ExtResource("1_8tstd")
+DodgeButton/styles/disabled = SubResource("StyleBoxTexture_dodge_pressed")
+DodgeButton/styles/focus = SubResource("StyleBoxTexture_dodge_hover")
+DodgeButton/styles/hover = SubResource("StyleBoxTexture_dodge_hover")
+DodgeButton/styles/normal = SubResource("StyleBoxTexture_dodge_normal")
+DodgeButton/styles/pressed = SubResource("StyleBoxTexture_dodge_pressed")
 EssencePill/base_type = &"PanelContainer"
 EssencePill/styles/panel = SubResource("StyleBoxFlat_vhj4d")
 Label/colors/font_color = Color(0.90588236, 0.9137255, 0.9411765, 1)

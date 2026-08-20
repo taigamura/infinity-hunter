@@ -13,6 +13,7 @@ func _initialize() -> void:
 		return
 	var ok := _check_navy_corners(args[0], "launch")
 	ok = _check_navy_corners(args[1], "combat") and ok
+	ok = _check_combat_bars(args[1]) and ok
 	quit(0 if ok else 1)
 
 # Coarse band check: dark AND blue-leaning (b clearly above r). Distinguishes
@@ -22,6 +23,42 @@ func _is_navy(c: Color) -> bool:
 	var is_dark := c.v < 0.4
 	var is_blue_leaning := c.b > c.r + 0.02
 	return is_dark and is_blue_leaning
+
+# Coarse "reddish"/"greenish" checks for the filled monster/player HP bars
+# (issue #33): dominant channel clearly above the other two, so a rendered
+# gradient fill hits this even if antialiasing shifts the exact hex.
+func _is_reddish(c: Color) -> bool:
+	return c.r > 0.5 and c.r > c.g + 0.15 and c.r > c.b + 0.15
+
+func _is_greenish(c: Color) -> bool:
+	return c.g > 0.4 and c.g > c.r + 0.1 and c.g > c.b + 0.1
+
+func _check_combat_bars(path: String) -> bool:
+	var img := Image.new()
+	if img.load(path) != OK:
+		push_error("combat: could not load rendered frame %s" % path)
+		return false
+	var w := img.get_width()
+	var h := img.get_height()
+	var found_red := false
+	var found_green := false
+	var step := 3
+	var y := 0
+	while y < h and not (found_red and found_green):
+		var x := 0
+		while x < w:
+			var px: Color = img.get_pixel(x, y)
+			if not found_red and _is_reddish(px):
+				found_red = true
+			if not found_green and _is_greenish(px):
+				found_green = true
+			x += step
+		y += step
+	if not found_red:
+		push_error("combat: no reddish pixel found (monster HP bar must render filled red)")
+	if not found_green:
+		push_error("combat: no greenish pixel found (player HP bar must render filled green)")
+	return found_red and found_green
 
 func _check_navy_corners(path: String, label: String) -> bool:
 	var img := Image.new()

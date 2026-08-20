@@ -37,9 +37,9 @@ const ELEMENT_COLORS := {
 	"neutral": Color("#8a93a8"),
 }
 
-const DOT_PENDING_COLOR := Color(0.2, 0.25490198, 0.36862746, 1)
-const DOT_RESOLVED_COLOR := Color(0.6039216, 0.6392157, 0.72156864, 1)
-const DOT_ACTIVE_COLOR := Color(0.9607843, 0.77254903, 0.25882354, 1)
+const DOT_PENDING_COLOR := Color(0.16470589, 0.19215687, 0.27058825, 1)
+const DOT_RESOLVED_COLOR := Color(0.27450982, 0.7019608, 0.34117648, 1)
+const DOT_ACTIVE_COLOR := Color(1, 0.8235294, 0.2901961, 1)
 
 @onready var timer: Timer = %RoundTimer
 @onready var dodge_button: Button = %DodgeButton
@@ -48,10 +48,12 @@ const DOT_ACTIVE_COLOR := Color(0.9607843, 0.77254903, 0.25882354, 1)
 @onready var monster_hp_bar: ProgressBar = %MonsterHpBar
 @onready var monster_info_label: Label = %MonsterInfoLabel
 @onready var monster_element_chip: ColorRect = %MonsterElementChip
+@onready var monster_element_label: Label = %MonsterElementLabel
+@onready var monster_part_label: Label = %MonsterPartLabel
 @onready var monster_weakness_label: Label = %MonsterWeaknessLabel
 @onready var monster_sprite: AnimatedSprite2D = %MonsterSprite
 @onready var telegraph_ring: Control = %TelegraphRing
-@onready var telegraph_banner: Label = %TelegraphBanner
+@onready var telegraph_banner: Control = %TelegraphBanner
 @onready var damage_number_label: Label = %DamageNumberLabel
 @onready var round_dots_row: HBoxContainer = %RoundDotsRow
 @onready var result_overlay: Control = %ResultOverlay
@@ -93,8 +95,10 @@ func _ready() -> void:
 
 	monster_info_label.text = "%s   Lv %s" % [monster.name, Big.fmt(monster.level)]
 	monster_element_chip.color = ELEMENT_COLORS.get(monster.element, ELEMENT_COLORS["neutral"])
+	monster_element_label.text = monster.element.capitalize()
+	monster_part_label.text = "part: %s" % _targeted_part()
 	var weakness := Elements.weakness_of(monster.element)
-	monster_weakness_label.text = ("Weak: %s" % weakness.to_upper()) if weakness != "" else ""
+	monster_weakness_label.text = "WEAK" if weakness != "" else ""
 
 	monster_sprite.sprite_frames = MonsterSpriteSheet.build(monster.id)
 	monster_sprite.animation_finished.connect(_on_monster_anim_finished)
@@ -121,6 +125,15 @@ func _ready() -> void:
 	beats.clear()
 	_fight_over = false
 	_start_round()
+
+func _targeted_part() -> String:
+	if not monster.drop_table.is_empty():
+		var part: String = monster.drop_table[0].get("part", "")
+		if part != "":
+			return part
+	if not monster.parts.is_empty():
+		return monster.parts[0]
+	return "body"
 
 func _weapon_stats(weapon_id: String) -> Dictionary:
 	if weapon_id != "" and GameState.weapons.has(weapon_id):
@@ -156,7 +169,10 @@ func _start_round() -> void:
 	telegraph_banner.visible = false
 	telegraph_ring.visible = false
 	_update_round_dots()
-	timer.start()
+	if timer.is_inside_tree():
+		timer.start()
+	else:
+		timer.start.call_deferred()
 
 func _process(delta: float) -> void:
 	_elapsed_time += delta

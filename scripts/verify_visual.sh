@@ -3,8 +3,10 @@
 #
 # Renders the launch + combat screens via xvfb-run (gl_compatibility, same
 # technique as scripts/screenshot.sh) and asserts coarse background-color
-# invariants, so the autonomous loop can verify the *look* of a screen, not
-# just its structure (tests/unit/test_scenes_smoke.gd).
+# invariants plus (for combat, issue #33) that the rendered frame contains
+# both red (monster HP bar) and green (player HP bar) pixels, so the
+# autonomous loop can verify the *look* of a screen, not just its structure
+# (tests/unit/test_scenes_smoke.gd).
 #
 # Infra-safe by design: if a display/driver isn't available and no frame can
 # be rendered at all, this SKIPS with a warning and exits 0 -- it must never

@@ -145,7 +145,7 @@ func test_combat_screen_smoke() -> void:
 	var dodge_button: Button = screen.get_node("%DodgeButton")
 	assert_not_null(dodge_button, "combat %DodgeButton must exist")
 	assert_true(dodge_button.visible, "dodge button must be visible once the fight auto-starts")
-	var telegraph_banner: Label = screen.get_node("%TelegraphBanner")
+	var telegraph_banner: Control = screen.get_node("%TelegraphBanner")
 	assert_not_null(telegraph_banner, "combat %TelegraphBanner must exist")
 	var telegraph_ring: Control = screen.get_node("%TelegraphRing")
 	assert_not_null(telegraph_ring, "combat %TelegraphRing must exist")
