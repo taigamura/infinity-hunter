@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://ihcombat01"]
+[gd_scene load_steps=4 format=3 uid="uid://ihcombat01"]
 
 [ext_resource type="Script" path="res://src/ui/combat/combat_screen.gd" id="1"]
+[ext_resource type="Script" path="res://src/ui/common/screen_background.gd" id="3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ring"]
 draw_center = false
@@ -23,6 +24,17 @@ script = ExtResource("1")
 
 [node name="RoundTimer" type="Timer" parent="."]
 unique_name_in_owner = true
+
+[node name="Background" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("3")
+mode = 1
+top_color = Color(0.16470589, 0.20784314, 0.3137255, 1)
+bottom_color = Color(0.07058824, 0.08235294, 0.12156863, 1)
 
 [node name="TopPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
@@ -68,6 +80,7 @@ text = ""
 [node name="MonsterHpBar" type="ProgressBar" parent="TopPanel/TopVBox"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"MonsterHpBar"
 show_percentage = false
 
 [node name="SpriteAnchor" type="Control" parent="."]
@@ -158,6 +171,7 @@ text = "Your HP"
 [node name="PlayerHpBar" type="ProgressBar" parent="BottomHud"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"PlayerHpBar"
 show_percentage = false
 
 [node name="DodgeButton" type="Button" parent="BottomHud"]

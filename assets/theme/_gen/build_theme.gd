@@ -24,6 +24,41 @@ const COLOR_BUTTON_HOVER := Color("#26355a")
 const COLOR_BUTTON_PRESSED := Color("#0f1626")
 const COLOR_BUTTON_DISABLED := Color("#161d2e")
 
+# Card family (issue #32 fidelity pass) — bg/border shared by all
+# Panel/PanelContainer instances (zone/weapon cards, combat top panel,
+# result overlay, etc).
+const COLOR_CARD_BG := Color("#1b2030")
+const COLOR_CARD_BORDER := Color("#39415a")
+
+# Essence pill (issue #32).
+const COLOR_PILL_BG := Color("#1c2130")
+const COLOR_PILL_BORDER := Color("#39415a")
+
+# HP bar track (issue #32) — shared by the monster/player gradient fills.
+const COLOR_HP_TRACK_BG := Color("#0c0f16")
+const COLOR_HP_TRACK_BORDER := Color("#495168")
+
+# Builds a two/three-stop vertical (or custom-direction) gradient texture,
+# used where StyleBoxFlat's flat bg_color can't express a gradient fill
+# (START button, HP bars).
+static func _gradient_texture(stops: Array, tex_size: Vector2i, fill_from: Vector2, fill_to: Vector2) -> GradientTexture2D:
+	var grad := Gradient.new()
+	var colors := PackedColorArray()
+	var offsets := PackedFloat32Array()
+	for stop in stops:
+		offsets.append(stop[0])
+		colors.append(stop[1])
+	grad.offsets = offsets
+	grad.colors = colors
+	var tex := GradientTexture2D.new()
+	tex.gradient = grad
+	tex.width = tex_size.x
+	tex.height = tex_size.y
+	tex.fill = GradientTexture2D.FILL_LINEAR
+	tex.fill_from = fill_from
+	tex.fill_to = fill_to
+	return tex
+
 func _initialize() -> void:
 	var theme := Theme.new()
 
@@ -63,12 +98,12 @@ func _initialize() -> void:
 	theme.set_font_size("font_size", "LineEdit", 18)
 	theme.set_color("font_color", "LineEdit", COLOR_TEXT)
 
-	# --- Panel: navy fill, lighter border, rounded corners. ---
+	# --- Panel: card-navy fill, lighter border, rounded corners. ---
 	var panel_box := StyleBoxFlat.new()
-	panel_box.bg_color = COLOR_PANEL
-	panel_box.border_color = COLOR_PANEL_BORDER
+	panel_box.bg_color = COLOR_CARD_BG
+	panel_box.border_color = COLOR_CARD_BORDER
 	panel_box.set_border_width_all(2)
-	panel_box.set_corner_radius_all(10)
+	panel_box.set_corner_radius_all(14)
 	panel_box.set_content_margin_all(10)
 	theme.set_stylebox("panel", "Panel", panel_box)
 
@@ -132,6 +167,80 @@ func _initialize() -> void:
 	theme.set_font("font", "ProgressBar", press_font)
 	theme.set_font_size("font_size", "ProgressBar", 10)
 	theme.set_color("font_color", "ProgressBar", COLOR_TEXT)
+
+	# --- EssencePill: distinct pill bg/border via a PanelContainer type variation. ---
+	var pill_box := StyleBoxFlat.new()
+	pill_box.bg_color = COLOR_PILL_BG
+	pill_box.border_color = COLOR_PILL_BORDER
+	pill_box.set_border_width_all(2)
+	pill_box.set_corner_radius_all(10)
+	pill_box.set_content_margin_all(8)
+	theme.set_type_variation("EssencePill", "PanelContainer")
+	theme.set_stylebox("panel", "EssencePill", pill_box)
+
+	# --- StartButton: green gradient fill w/ darker bottom edge (issue #32). ---
+	var start_tex := _gradient_texture([
+		[0.0, Color("#6ce27a")],
+		[0.82, Color("#46b357")],
+		[1.0, Color("#2f7a3a")],
+	], Vector2i(4, 32), Vector2(0.5, 0.0), Vector2(0.5, 1.0))
+	var start_normal := StyleBoxTexture.new()
+	start_normal.texture = start_tex
+	start_normal.set_content_margin_all(10)
+	var start_hover := StyleBoxTexture.new()
+	start_hover.texture = start_tex
+	start_hover.set_content_margin_all(10)
+	start_hover.modulate_color = Color(1.08, 1.08, 1.08)
+	var start_pressed := StyleBoxTexture.new()
+	start_pressed.texture = start_tex
+	start_pressed.set_content_margin_all(10)
+	start_pressed.modulate_color = Color(0.85, 0.85, 0.85)
+
+	theme.set_type_variation("StartButton", "Button")
+	theme.set_stylebox("normal", "StartButton", start_normal)
+	theme.set_stylebox("hover", "StartButton", start_hover)
+	theme.set_stylebox("pressed", "StartButton", start_pressed)
+	theme.set_stylebox("disabled", "StartButton", start_normal)
+	theme.set_stylebox("focus", "StartButton", start_normal)
+	theme.set_font("font", "StartButton", press_font)
+	theme.set_font_size("font_size", "StartButton", 16)
+	theme.set_color("font_color", "StartButton", Color("#12261a"))
+	theme.set_color("font_hover_color", "StartButton", Color("#12261a"))
+	theme.set_color("font_pressed_color", "StartButton", Color("#12261a"))
+
+	# --- HP bars: shared dark track + red (monster) / green (player)
+	# gradient fills, exposed as ProgressBar type variations. ---
+	var hp_track := StyleBoxFlat.new()
+	hp_track.bg_color = COLOR_HP_TRACK_BG
+	hp_track.border_color = COLOR_HP_TRACK_BORDER
+	hp_track.set_border_width_all(2)
+	hp_track.set_corner_radius_all(4)
+
+	var monster_hp_tex := _gradient_texture([
+		[0.0, Color("#ff5a3c")],
+		[1.0, Color("#cc331a")],
+	], Vector2i(4, 32), Vector2(0.5, 0.0), Vector2(0.5, 1.0))
+	var monster_hp_fill := StyleBoxTexture.new()
+	monster_hp_fill.texture = monster_hp_tex
+
+	var player_hp_tex := _gradient_texture([
+		[0.0, Color("#6ce27a")],
+		[1.0, Color("#46b357")],
+	], Vector2i(4, 32), Vector2(0.5, 0.0), Vector2(0.5, 1.0))
+	var player_hp_fill := StyleBoxTexture.new()
+	player_hp_fill.texture = player_hp_tex
+
+	theme.set_type_variation("MonsterHpBar", "ProgressBar")
+	theme.set_stylebox("background", "MonsterHpBar", hp_track)
+	theme.set_stylebox("fill", "MonsterHpBar", monster_hp_fill)
+	theme.set_font("font", "MonsterHpBar", press_font)
+	theme.set_font_size("font_size", "MonsterHpBar", 10)
+
+	theme.set_type_variation("PlayerHpBar", "ProgressBar")
+	theme.set_stylebox("background", "PlayerHpBar", hp_track)
+	theme.set_stylebox("fill", "PlayerHpBar", player_hp_fill)
+	theme.set_font("font", "PlayerHpBar", press_font)
+	theme.set_font_size("font_size", "PlayerHpBar", 10)
 
 	# --- PanelContainer/Control background convenience for full-screen roots. ---
 	var root_box := StyleBoxFlat.new()
