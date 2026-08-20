@@ -26,6 +26,7 @@ const MAP_ROWS := 40
 const GAUGE_COLOR_LOW := Color("#57c964")
 const GAUGE_COLOR_HIGH := Color("#f5c542")
 const EXIT_PULSE_PERIOD := 1.1
+const MARKER_EDGE_MARGIN := 28.0
 
 @onready var tile_map: TileMap = %TileMap
 @onready var character: CharacterBody2D = %Character
@@ -68,6 +69,10 @@ func _ready() -> void:
 	camera.limit_top = 0
 	camera.limit_right = int(_map_size.x)
 	camera.limit_bottom = int(_map_size.y)
+	# Snap the follow-camera onto the spawn point immediately so it never
+	# starts at the map's top-left corner and slides in (also makes a
+	# single-frame render represent real gameplay framing).
+	camera.reset_smoothing()
 	retreat_button.pressed.connect(_on_retreat_pressed)
 	gauge_bar.min_value = 0.0
 	gauge_bar.max_value = EncounterSystem.GAUGE_THRESHOLD
@@ -76,8 +81,34 @@ func _ready() -> void:
 	hot_strip_label.visible = false
 	var exit_zone: ZoneDef = GameState.zones.get(_travel_target_zone_id)
 	exit_marker_label.text = "EXIT\n%s" % (exit_zone.name if exit_zone != null else "???")
+	exit_marker.visible = _travel_target_zone_id != ""
 	_start_exit_pulse()
+	_update_exit_marker()
 	_update_hot_strip(OverworldTierLayout.tier_for_cell(tile_map.local_to_map(character.position), MAP_COLS, MAP_ROWS, _tier_ids))
+
+# Positions the exit marker over the exit cell's on-screen location, clamped
+# to the viewport edges so it reads as a directional pointer toward the hot
+# corner while the exit is off-camera, and lands on the tile once it scrolls
+# into view. Runs in _process so it tracks the follow-camera every frame.
+func _process(_delta: float) -> void:
+	if not _combat_active:
+		_update_exit_marker()
+
+func _update_exit_marker() -> void:
+	if _travel_target_zone_id == "":
+		exit_marker.visible = false
+		return
+	# Needs a live viewport/camera transform; guard so instantiation off the
+	# tree (e.g. the scene smoke test) never dereferences a null viewport.
+	if not is_inside_tree() or get_viewport() == null:
+		return
+	var world := Vector2(_exit_cell) * float(TILE_SIZE) + Vector2(TILE_SIZE, TILE_SIZE) / 2.0
+	var screen := get_viewport().get_canvas_transform() * world
+	var vp := get_viewport_rect().size
+	var half := exit_marker.size / 2.0
+	screen.x = clampf(screen.x, MARKER_EDGE_MARGIN + half.x, vp.x - MARKER_EDGE_MARGIN - half.x)
+	screen.y = clampf(screen.y, MARKER_EDGE_MARGIN + half.y, vp.y - MARKER_EDGE_MARGIN - half.y)
+	exit_marker.position = screen - half
 
 func _build_tilemap() -> void:
 	if _tier_table != null:
@@ -97,10 +128,9 @@ func _build_tilemap() -> void:
 			var variant := _rng.randi_range(0, variant_count - 1)
 			tile_map.set_cell(0, cell, tier_id, Vector2i(variant, shade))
 
-# Screen-space pulse (fade in/out) toward the map's hot corner; the marker
-# itself sits anchored top-right in the HUD rather than tracking the exit
-# cell's world position, matching the mockup without a camera-to-UI
-# projection.
+# Screen-space fade pulse on the exit marker. The marker's POSITION is driven
+# by _update_exit_marker (it tracks the exit cell projected through the
+# follow-camera, clamped to the viewport edges); this only animates its alpha.
 func _start_exit_pulse() -> void:
 	var tween := create_tween()
 	tween.set_loops()

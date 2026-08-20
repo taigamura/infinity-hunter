@@ -11,10 +11,10 @@ border_width_top = 4
 border_width_right = 4
 border_width_bottom = 4
 border_color = Color(1, 0.8235294, 0.2901961, 0.85)
-corner_radius_top_left = 100
-corner_radius_top_right = 100
-corner_radius_bottom_right = 100
-corner_radius_bottom_left = 100
+corner_radius_top_left = 150
+corner_radius_top_right = 150
+corner_radius_bottom_right = 150
+corner_radius_bottom_left = 150
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_banner"]
 content_margin_left = 14.0
@@ -76,23 +76,24 @@ theme_override_constants/separation = 8
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "Monster"
 
 [node name="MonsterWeaknessLabel" type="Label" parent="TopPanel/TopVBox/InfoRow"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 9
-theme_override_colors/font_color = Color(0.9607843, 0.77254903, 0.25882354, 1)
+theme_override_fonts/font = ExtResource("2_vt323")
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.54509807, 0.5764706, 0.65882355, 1)
 vertical_alignment = 1
 text = ""
 
 [node name="MonsterElementChip" type="ColorRect" parent="TopPanel/TopVBox/InfoRow"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(12, 12)
+custom_minimum_size = Vector2(15, 15)
 layout_mode = 2
 size_flags_vertical = 4
-pivot_offset = Vector2(6, 6)
+pivot_offset = Vector2(7.5, 7.5)
 rotation_degrees = 45.0
 color = Color(0.6039216, 0.6392157, 0.72156864, 1)
 
@@ -100,7 +101,7 @@ color = Color(0.6039216, 0.6392157, 0.72156864, 1)
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_vt323")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 theme_override_colors/font_color = Color(0.6039216, 0.6392157, 0.72156864, 1)
 vertical_alignment = 1
 text = ""
@@ -109,7 +110,7 @@ text = ""
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_vt323")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 theme_override_colors/font_color = Color(0.6039216, 0.6392157, 0.72156864, 1)
 vertical_alignment = 1
 text = ""
@@ -143,6 +144,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+pivot_offset = Vector2(150, 150)
 theme_override_styles/panel = SubResource("StyleBoxFlat_ring")
 
 [node name="MonsterSprite" type="AnimatedSprite2D" parent="SpriteAnchor"]
@@ -169,7 +171,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_banner")
 
 [node name="TelegraphBannerLabel" type="Label" parent="TelegraphBanner"]
 unique_name_in_owner = true
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(1, 0.8235294, 0.2901961, 1)
 horizontal_alignment = 1
 text = "INCOMING - TAP TO DODGE"
@@ -178,7 +180,7 @@ text = "INCOMING - TAP TO DODGE"
 unique_name_in_owner = true
 visible = false
 layout_mode = 0
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 30
 theme_override_colors/font_color = Color(1, 0.8784314, 0.5411765, 1)
 theme_override_colors/font_shadow_color = Color(0.5686275, 0.35686275, 0, 1)
 theme_override_constants/shadow_offset_x = 2
@@ -209,7 +211,7 @@ alignment = 1
 [node name="PlayerHpLabel" type="Label" parent="BottomHud"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 text = "Your HP"
 
@@ -225,13 +227,14 @@ unique_name_in_owner = true
 layout_mode = 2
 custom_minimum_size = Vector2(0, 88)
 theme_type_variation = &"DodgeButton"
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 26
 text = "DODGE"
 
 [node name="DodgeSubtitleLabel" type="Label" parent="BottomHud"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 9
+theme_override_fonts/font = ExtResource("2_vt323")
+theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(0.6039216, 0.6392157, 0.72156864, 1)
 horizontal_alignment = 1
 autowrap_mode = 2
@@ -259,14 +262,14 @@ theme_override_constants/separation = 12
 [node name="ResultTitleLabel" type="Label" parent="ResultOverlay/ResultCenter/ResultPanel/ResultVBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
 text = ""
 
 [node name="ResultBodyLabel" type="Label" parent="ResultOverlay/ResultCenter/ResultPanel/ResultVBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 15
 autowrap_mode = 3
 horizontal_alignment = 1
 text = ""

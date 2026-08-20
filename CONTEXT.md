@@ -139,10 +139,19 @@ LAUNCH ──▶ OVERWORLD ──▶ COMBAT ──┬─▶ VICTORY ──(push 
 - **Node-map retired (#23).** The PRD's branching `NodeMap` was replaced by the
   walkable overworld (#20–22). `RunState.node_map` and `NodeMap` are gone. Traversal
   is now: roam tiles → encounter gauge fires → combat; travel deeper via the exit cell.
-- **Art is placeholder** except monsters and weapons: overworld tiles are solid-color
-  per-tier squares built at runtime (`OverworldTileset`, green→red), the player is a
-  yellow square, HUD is default Godot widgets. Monster sprites and weapon icons are
-  real AI-generated art.
+- **HUD is themed to the visual-target canvas (#27, slices #28–#34).** A project-wide
+  pixel `Theme` (`assets/theme/pixel_theme.tres`) with two vendored OFL fonts
+  (`Press Start 2P` headers, `VT323` body) skins every screen; launch/overworld/combat
+  are hand-composed to match the design canvas (navy backgrounds via
+  `src/ui/common/screen_background.gd`, gradient HP/gauge bars, styled buttons, combat
+  telegraph ring + floating damage juice), and inventory/bestiary/meta inherit the base
+  theme. Verified two ways: `tests/unit/test_scenes_smoke.gd` (structural, in the gate)
+  and `scripts/verify_visual.sh` (pixel invariants, wired into `scripts/test.sh`);
+  `scripts/screenshot.sh` renders PNGs for human review.
+- **Field art stays procedural placeholder:** overworld tiles are per-tier colour
+  squares with shade jitter (`OverworldTileset`, green→olive→red toward the hot corner),
+  the player is a bordered square. Monster sprites and weapon icons are real
+  AI-generated art; tiles/player have no hand-authored sprites yet.
 - **Weapon-class feel not built.** Great Sword / Dual Blades / Hammer differentiation
   and part-break targeting from combat are specced but not implemented; combat is the
   generic dodge race.

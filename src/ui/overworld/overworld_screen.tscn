@@ -70,8 +70,8 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 offset_left = 24.0
 offset_top = 40.0
-offset_right = 296.0
-offset_bottom = 140.0
+offset_right = 360.0
+offset_bottom = 156.0
 
 [node name="TopVBox" type="VBoxContainer" parent="UI/TopPanel"]
 layout_mode = 2
@@ -84,33 +84,34 @@ theme_override_constants/separation = 8
 [node name="GaugeLabel" type="Label" parent="UI/TopPanel/TopVBox/GaugeRow"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 13
 text = "ENCOUNTER"
 
 [node name="GaugeBar" type="ProgressBar" parent="UI/TopPanel/TopVBox/GaugeRow"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-custom_minimum_size = Vector2(0, 18)
+custom_minimum_size = Vector2(0, 22)
 show_percentage = false
 
 [node name="RetreatButton" type="Button" parent="UI/TopPanel/TopVBox"]
 unique_name_in_owner = true
 layout_mode = 2
-custom_minimum_size = Vector2(0, 36)
+custom_minimum_size = Vector2(0, 40)
 theme_type_variation = &"RetreatButton"
+theme_override_font_sizes/font_size = 14
 text = "Retreat and Bank Haul"
 
 [node name="HotStripLabel" type="Label" parent="UI"]
 unique_name_in_owner = true
 visible = false
 offset_left = 24.0
-offset_top = 148.0
-offset_right = 296.0
-offset_bottom = 176.0
+offset_top = 168.0
+offset_right = 360.0
+offset_bottom = 200.0
 theme_override_styles/normal = SubResource("StyleBoxFlat_hotstrip")
 theme_override_fonts/font = ExtResource("3_vt323")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 19
 theme_override_colors/font_color = Color(1, 0.6039216, 0.5254902, 1)
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -118,19 +119,15 @@ text = "⚠ Hot region - gauge fills fast"
 
 [node name="ExitMarker" type="PanelContainer" parent="UI"]
 unique_name_in_owner = true
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -180.0
+offset_left = 520.0
 offset_top = 40.0
-offset_right = -24.0
-offset_bottom = 76.0
-grow_horizontal = 0
+offset_right = 696.0
+offset_bottom = 80.0
 
 [node name="ExitMarkerLabel" type="Label" parent="UI/ExitMarker"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 9
+theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.9607843, 0.77254903, 0.25882354, 1)
 horizontal_alignment = 1
 vertical_alignment = 1

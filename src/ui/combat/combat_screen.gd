@@ -22,8 +22,12 @@ const MAX_ROUNDS := 12
 # affects ROUND_DURATION/PERFECT_OFFSET or CombatResolver's math.
 const TELEGRAPH_LEAD := 0.5
 const TELEGRAPH_BLINK_HZ := 4.0
-const IDLE_BOB_AMPLITUDE := 6.0
+const IDLE_BOB_AMPLITUDE := 12.0
 const IDLE_BOB_HZ := 1.2
+# Continuous "radar ping" ring around the monster (mockup's ring keyframe):
+# expands from 0.7 to 1.4 while fading, looping for the whole fight so there
+# is always motion around the monster, independent of the attack telegraph.
+const RING_PULSE_PERIOD := 1.2
 const DAMAGE_FLOAT_DISTANCE := 34.0
 const DAMAGE_FLOAT_DURATION := 0.6
 
@@ -112,8 +116,8 @@ func _ready() -> void:
 
 	result_overlay.visible = false
 	telegraph_banner.visible = false
-	telegraph_ring.visible = false
 	damage_number_label.visible = false
+	_start_ring_pulse()
 
 	_build_round_dots()
 
@@ -147,7 +151,7 @@ func _build_round_dots() -> void:
 	_round_dots.clear()
 	for i in range(MAX_ROUNDS):
 		var dot := ColorRect.new()
-		dot.custom_minimum_size = Vector2(10, 10)
+		dot.custom_minimum_size = Vector2(14, 14)
 		dot.color = DOT_PENDING_COLOR
 		round_dots_row.add_child(dot)
 		_round_dots.append(dot)
@@ -163,11 +167,24 @@ func _update_round_dots() -> void:
 		else:
 			dot.color = DOT_PENDING_COLOR
 
+# Continuous radar-ping ring around the monster for the whole fight — expands
+# and fades on a loop, matching the mockup's always-on ring. The attack
+# telegraph is signalled separately by the flashing banner in _process.
+func _start_ring_pulse() -> void:
+	# pivot_offset is set in the scene (150,150 = centre of the 300x300 ring);
+	# do not recompute it here, size is not laid out yet at _ready.
+	telegraph_ring.visible = true
+	var tween := create_tween().set_loops()
+	tween.tween_callback(func() -> void:
+		telegraph_ring.scale = Vector2(0.7, 0.7)
+		telegraph_ring.modulate.a = 0.9)
+	tween.tween_property(telegraph_ring, "scale", Vector2(1.4, 1.4), RING_PULSE_PERIOD).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(telegraph_ring, "modulate:a", 0.0, RING_PULSE_PERIOD)
+
 func _start_round() -> void:
 	_round_start_ms = Time.get_ticks_msec()
 	_dodge_tapped_this_round = false
 	telegraph_banner.visible = false
-	telegraph_ring.visible = false
 	_update_round_dots()
 	if timer.is_inside_tree():
 		timer.start()
@@ -183,11 +200,9 @@ func _process(delta: float) -> void:
 	var elapsed := (Time.get_ticks_msec() - _round_start_ms) / 1000.0
 	var in_telegraph := elapsed >= (ROUND_DURATION - TELEGRAPH_LEAD)
 	telegraph_banner.visible = in_telegraph
-	telegraph_ring.visible = in_telegraph
 	if in_telegraph:
 		var blink := (sin(_elapsed_time * TELEGRAPH_BLINK_HZ * TAU) + 1.0) / 2.0
 		telegraph_banner.modulate.a = 0.4 + blink * 0.6
-		telegraph_ring.modulate.a = 0.4 + blink * 0.6
 
 func _on_dodge_pressed() -> void:
 	if _fight_over or _dodge_tapped_this_round:
@@ -215,7 +230,6 @@ func _on_round_timeout() -> void:
 		monster_sprite.play("attack")
 
 	telegraph_banner.visible = false
-	telegraph_ring.visible = false
 
 	if outcome["monster_hp"] <= 0.0 or outcome["player_hp"] <= 0.0 or beats.size() >= MAX_ROUNDS:
 		_end_reflex_phase()
