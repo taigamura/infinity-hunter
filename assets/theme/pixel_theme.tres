@@ -265,6 +265,54 @@ content_margin_bottom = 10.0
 texture = SubResource("GradientTexture2D_dodge")
 modulate_color = Color(0.85, 0.85, 0.85, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_retreat_normal"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.22745098, 0.12156863, 0.12156863, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.63529414, 0.2627451, 0.18431373, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_retreat_hover"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.28627452, 0.15686275, 0.15686275, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.7607843, 0.34509805, 0.25490198, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_retreat_pressed"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.16078432, 0.08235294, 0.08235294, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.5019608, 0.2, 0.14117648, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
 [resource]
 default_font = ExtResource("1_8tstd")
 default_font_size = 12
@@ -323,6 +371,17 @@ ProgressBar/font_sizes/font_size = 10
 ProgressBar/fonts/font = ExtResource("1_8tstd")
 ProgressBar/styles/background = SubResource("StyleBoxFlat_y6lhh")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_j6cc2")
+RetreatButton/base_type = &"Button"
+RetreatButton/colors/font_color = Color(0.90588236, 0.9137255, 0.9411765, 1)
+RetreatButton/colors/font_hover_color = Color(1, 0.8, 0.75, 1)
+RetreatButton/colors/font_pressed_color = Color(1, 0.8, 0.75, 1)
+RetreatButton/font_sizes/font_size = 12
+RetreatButton/fonts/font = ExtResource("1_8tstd")
+RetreatButton/styles/disabled = SubResource("StyleBoxFlat_8tstd")
+RetreatButton/styles/focus = SubResource("StyleBoxFlat_retreat_normal")
+RetreatButton/styles/hover = SubResource("StyleBoxFlat_retreat_hover")
+RetreatButton/styles/normal = SubResource("StyleBoxFlat_retreat_normal")
+RetreatButton/styles/pressed = SubResource("StyleBoxFlat_retreat_pressed")
 RichTextLabel/colors/default_color = Color(0.90588236, 0.9137255, 0.9411765, 1)
 RichTextLabel/font_sizes/normal_font_size = 18
 RichTextLabel/fonts/font = ExtResource("2_83ckq")

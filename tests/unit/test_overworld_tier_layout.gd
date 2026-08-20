@@ -34,3 +34,18 @@ func test_exit_cell_sits_in_the_highest_tier() -> void:
 	var exit_cell := OverworldTierLayout.exit_cell(30, 40)
 	var tier_id := OverworldTierLayout.tier_for_cell(exit_cell, 30, 40, tiers)
 	assert_eq(tier_id, 2)
+
+func test_distance_ratio_is_near_zero_at_center() -> void:
+	var ratio := OverworldTierLayout.distance_ratio(Vector2i(15, 20), 30, 40)
+	assert_almost_eq(ratio, 0.0, 0.05)
+
+func test_distance_ratio_is_near_one_at_corner() -> void:
+	var ratio := OverworldTierLayout.distance_ratio(Vector2i(0, 0), 30, 40)
+	assert_almost_eq(ratio, 1.0, 0.05)
+
+func test_distance_ratio_rises_monotonically_with_distance_from_center() -> void:
+	var prev_ratio := OverworldTierLayout.distance_ratio(Vector2i(15, 20), 30, 40)
+	for step in range(1, 15):
+		var ratio := OverworldTierLayout.distance_ratio(Vector2i(15 + step, 20), 30, 40)
+		assert_true(ratio >= prev_ratio, "distance ratio should not decrease moving away from center")
+		prev_ratio = ratio

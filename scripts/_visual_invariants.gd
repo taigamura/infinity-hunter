@@ -7,13 +7,14 @@ extends SceneTree
 
 func _initialize() -> void:
 	var args := OS.get_cmdline_user_args()
-	if args.size() < 2:
-		push_error("usage: _visual_invariants.gd -- <launch.png> <combat.png>")
+	if args.size() < 3:
+		push_error("usage: _visual_invariants.gd -- <launch.png> <combat.png> <overworld.png>")
 		quit(1)
 		return
 	var ok := _check_navy_corners(args[0], "launch")
 	ok = _check_navy_corners(args[1], "combat") and ok
 	ok = _check_combat_bars(args[1]) and ok
+	ok = _check_overworld_hot_corner(args[2]) and ok
 	quit(0 if ok else 1)
 
 # Coarse band check: dark AND blue-leaning (b clearly above r). Distinguishes
@@ -59,6 +60,31 @@ func _check_combat_bars(path: String) -> bool:
 	if not found_green:
 		push_error("combat: no greenish pixel found (player HP bar must render filled green)")
 	return found_red and found_green
+
+# The overworld tile field must show its danger gradient rising toward the
+# hot (top-right) corner (issue #34): scan the top-right quadrant of the
+# rendered frame for at least one reddish pixel (the tier-2 tile colour, or
+# the exit marker/hot-strip UI drawn in the same red family).
+func _check_overworld_hot_corner(path: String) -> bool:
+	var img := Image.new()
+	if img.load(path) != OK:
+		push_error("overworld: could not load rendered frame %s" % path)
+		return false
+	var w := img.get_width()
+	var h := img.get_height()
+	var x_start := int(w / 2.0)
+	var y_end := int(h / 2.0)
+	var step := 3
+	var y := 0
+	while y < y_end:
+		var x := x_start
+		while x < w:
+			if _is_reddish(img.get_pixel(x, y)):
+				return true
+			x += step
+		y += step
+	push_error("overworld: no reddish pixel found toward the top-right (hot) corner")
+	return false
 
 func _check_navy_corners(path: String, label: String) -> bool:
 	var img := Image.new()

@@ -191,4 +191,8 @@ func test_overworld_screen_smoke() -> void:
 	assert_not_null(joystick_base, "overworld joystick %Base must exist")
 	var joystick_knob: Control = screen.get_node("%Knob")
 	assert_not_null(joystick_knob, "overworld joystick %Knob must exist")
+	var base_center: Vector2 = joystick_base.position + joystick_base.size / 2.0
+	var knob_center: Vector2 = joystick_knob.position + joystick_knob.size / 2.0
+	assert_almost_eq(base_center.x, knob_center.x, 0.01, "joystick knob must rest centred in the base (x)")
+	assert_almost_eq(base_center.y, knob_center.y, 0.01, "joystick knob must rest centred in the base (y)")
 	_cleanup(screen)

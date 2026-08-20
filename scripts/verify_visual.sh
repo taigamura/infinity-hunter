@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 # Pixel-invariant visual gate (issue #32).
 #
-# Renders the launch + combat screens via xvfb-run (gl_compatibility, same
-# technique as scripts/screenshot.sh) and asserts coarse background-color
-# invariants plus (for combat, issue #33) that the rendered frame contains
-# both red (monster HP bar) and green (player HP bar) pixels, so the
-# autonomous loop can verify the *look* of a screen, not just its structure
-# (tests/unit/test_scenes_smoke.gd).
+# Renders the launch + combat + overworld screens via xvfb-run
+# (gl_compatibility, same technique as scripts/screenshot.sh) and asserts
+# coarse background-color invariants plus (for combat, issue #33) that the
+# rendered frame contains both red (monster HP bar) and green (player HP
+# bar) pixels, and (for overworld, issue #34) a reddish pixel toward the hot
+# top-right corner, so the autonomous loop can verify the *look* of a
+# screen, not just its structure (tests/unit/test_scenes_smoke.gd).
 #
 # Infra-safe by design: if a display/driver isn't available and no frame can
 # be rendered at all, this SKIPS with a warning and exits 0 -- it must never
@@ -40,6 +41,7 @@ trap 'rm -rf "$TMP_DIR"' EXIT
 SCENES=(
 	"res://src/ui/launch/launch_screen.tscn|launch|0"
 	"res://src/ui/combat/combat_screen.tscn|combat|1"
+	"res://src/ui/overworld/overworld_screen.tscn|overworld|1"
 )
 
 for entry in "${SCENES[@]}"; do
@@ -61,7 +63,7 @@ done
 # Frames rendered successfully -- now the gate is live: a violation here is
 # a real failure, not an infra skip.
 if ! "$GODOT" --headless --path . --script res://scripts/_visual_invariants.gd -- \
-	"$TMP_DIR/launch.png" "$TMP_DIR/combat.png"; then
+	"$TMP_DIR/launch.png" "$TMP_DIR/combat.png" "$TMP_DIR/overworld.png"; then
 	echo "verify_visual: FAILED -- rendered frame violates a pixel invariant" >&2
 	exit 1
 fi
