@@ -44,6 +44,11 @@ func _instantiate(scene_path: String) -> Node:
 	assert_not_null(packed, "failed to load %s" % scene_path)
 	var node: Node = packed.instantiate()
 	_tree().root.add_child(node)
+	# Headless `--script` runs never flush the deferred NOTIFICATION_READY
+	# that add_child() schedules (same root cause as GameState._ready() in
+	# before_each above) -- so _ready() would otherwise never run and every
+	# @onready field would stay unset. Invoke it directly.
+	node._ready()
 	return node
 
 func _cleanup(node: Node) -> void:
@@ -129,6 +134,33 @@ func test_combat_screen_smoke() -> void:
 	_setup_minimal_run()
 	var screen: Control = _instantiate(COMBAT_SCENE)
 	_assert_control_inherits_project_theme(screen)
+	assert_true(screen.get_node_or_null("%StartButton") == null, "standalone Start button must be gone; combat auto-starts")
+	var monster_info_label: Label = screen.get_node("%MonsterInfoLabel")
+	assert_not_null(monster_info_label, "combat %MonsterInfoLabel must exist")
+	assert_true(monster_info_label.text != "", "combat auto-starts and shows monster info on _ready")
+	var monster_hp_bar: ProgressBar = screen.get_node("%MonsterHpBar")
+	assert_not_null(monster_hp_bar, "combat %MonsterHpBar must exist")
+	var player_hp_bar: ProgressBar = screen.get_node("%PlayerHpBar")
+	assert_not_null(player_hp_bar, "combat %PlayerHpBar must exist")
+	var dodge_button: Button = screen.get_node("%DodgeButton")
+	assert_not_null(dodge_button, "combat %DodgeButton must exist")
+	assert_true(dodge_button.visible, "dodge button must be visible once the fight auto-starts")
+	var telegraph_banner: Label = screen.get_node("%TelegraphBanner")
+	assert_not_null(telegraph_banner, "combat %TelegraphBanner must exist")
+	var telegraph_ring: Control = screen.get_node("%TelegraphRing")
+	assert_not_null(telegraph_ring, "combat %TelegraphRing must exist")
+	var damage_number_label: Label = screen.get_node("%DamageNumberLabel")
+	assert_not_null(damage_number_label, "combat %DamageNumberLabel must exist")
+	var round_dots_row: HBoxContainer = screen.get_node("%RoundDotsRow")
+	assert_not_null(round_dots_row, "combat %RoundDotsRow must exist")
+	assert_eq(round_dots_row.get_child_count(), 12, "round-dot row must track MAX_ROUNDS rounds")
+	var result_overlay: Control = screen.get_node("%ResultOverlay")
+	assert_not_null(result_overlay, "combat %ResultOverlay must exist")
+	assert_true(not result_overlay.visible, "result overlay must be hidden mid-fight")
+	var push_on_button: Button = screen.get_node("%PushOnButton")
+	assert_not_null(push_on_button, "combat %PushOnButton must exist")
+	var bank_button: Button = screen.get_node("%BankButton")
+	assert_not_null(bank_button, "combat %BankButton must exist")
 	_cleanup(screen)
 
 func test_overworld_screen_smoke() -> void:
