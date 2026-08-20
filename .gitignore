@@ -53,3 +53,12 @@ target/
 export_presets.cfg
 # Keep .import metadata out of VCS (regenerated on import)
 *.import
+
+# Copyrighted Pokémon reference sprites — used locally as STYLE reference only, never redistributed
+docs/references/Gen 4 Pokemon/
+docs/references/Gen 4 Overworld/
+docs/references/*_Icons.png
+docs/references/*_Overworld*.png
+docs/references/characters.png
+docs/references/*.Identifier
+docs/references/*:Zone.Identifier
