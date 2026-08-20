@@ -91,6 +91,23 @@ func _assert_control_inherits_project_theme(control: Control) -> void:
 func test_launch_screen_smoke() -> void:
 	var screen: Control = _instantiate(LAUNCH_SCENE)
 	_assert_control_inherits_project_theme(screen)
+	var essence_label: Label = screen.get_node("%EssenceLabel")
+	assert_not_null(essence_label, "launch %EssenceLabel must exist")
+	var zone_swatch: ColorRect = screen.get_node("%ZoneSwatch")
+	assert_not_null(zone_swatch, "launch %ZoneSwatch must exist")
+	var zone_name_label: Label = screen.get_node("%ZoneNameLabel")
+	assert_not_null(zone_name_label, "launch %ZoneNameLabel must exist")
+	assert_true(zone_name_label.text != "", "zone card must show a selected zone name")
+	var weapon_icon: TextureRect = screen.get_node("%WeaponIcon")
+	assert_not_null(weapon_icon, "launch %WeaponIcon must exist")
+	var weapon_name_label: Label = screen.get_node("%WeaponNameLabel")
+	assert_not_null(weapon_name_label, "launch %WeaponNameLabel must exist")
+	assert_eq(weapon_name_label.text, "( none )", "fresh save must show no equipped weapon")
+	var start_button: Button = screen.get_node("%StartButton")
+	assert_not_null(start_button, "launch %StartButton must exist")
+	var nav_buttons := [screen.get_node("%InventoryButton"), screen.get_node("%BestiaryButton"), screen.get_node("%MetaButton")]
+	for nav_button in nav_buttons:
+		assert_not_null(nav_button, "launch nav buttons must exist")
 	_cleanup(screen)
 
 func test_inventory_screen_smoke() -> void:
