@@ -40,7 +40,12 @@ func _populate_weapons() -> void:
 	for instance in GameState.inventory.gear:
 		if GameState.weapons.has(instance["def_id"]):
 			var def: WeaponDef = GameState.weapons[instance["def_id"]]
-			weapon_option.add_item("%s (%s)" % [def.name, instance["rolled_stats"].get("rarity", "")])
+			var text := "%s (%s)" % [def.name, instance["rolled_stats"].get("rarity", "")]
+			var icon := WeaponIcons.for_id(def.id)
+			if icon != null:
+				weapon_option.add_icon_item(icon, text)
+			else:
+				weapon_option.add_item(text)
 			_weapon_gear_ids.append(instance["def_id"])
 
 func _on_start_pressed() -> void:

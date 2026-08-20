@@ -127,15 +127,21 @@ LAUNCH ──▶ OVERWORLD ──▶ COMBAT ──┬─▶ VICTORY ──(push 
   AI-generated art).
 - Weapons, armor, armor_sets, companions, materials: `data/*` (loaded but inventory
   is empty on a fresh save until crafted).
+- **Weapon icons** (9, one per weapon) in `assets/weapons/<id>.png` (32×32, real
+  AI-generated art via img2img from tinted silhouette templates). `WeaponIcons.for_id`
+  (`src/ui/weapon_icons.gd`) loads them by the same per-id convention as monster
+  sheets; shown in the launch weapon dropdown and inventory gear/recipe rows. Armor
+  has no icons yet (helper returns null, slot stays empty).
 
 ## Current state vs PRD (deltas that matter)
 
 - **Node-map retired (#23).** The PRD's branching `NodeMap` was replaced by the
   walkable overworld (#20–22). `RunState.node_map` and `NodeMap` are gone. Traversal
   is now: roam tiles → encounter gauge fires → combat; travel deeper via the exit cell.
-- **Art is placeholder** except monsters: overworld tiles are solid-color per-tier
-  squares built at runtime (`OverworldTileset`, green→red), the player is a yellow
-  square, HUD is default Godot widgets. Monster sprites are the real roster.
+- **Art is placeholder** except monsters and weapons: overworld tiles are solid-color
+  per-tier squares built at runtime (`OverworldTileset`, green→red), the player is a
+  yellow square, HUD is default Godot widgets. Monster sprites and weapon icons are
+  real AI-generated art.
 - **Weapon-class feel not built.** Great Sword / Dual Blades / Hammer differentiation
   and part-break targeting from combat are specced but not implemented; combat is the
   generic dodge race.
