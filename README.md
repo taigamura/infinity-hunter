@@ -14,16 +14,18 @@ out.** Between runs your level resets, but gear, materials, captures, bestiary,
 unlocks, and a permanent upgrade currency (essence) carry over, so you start a little
 stronger each time.
 
-## Design canvas
+## Design canvas (visual target)
 
-Screen mockups (Launch, Overworld, Combat) and the full run-loop diagram for the
-current build:
+Screen mockups (Launch, Overworld, Combat) and the full run-loop diagram — the
+**visual target** the UI is being themed toward, not a screenshot of the current
+build:
 
 **https://claude.ai/code/artifact/b7dc6b5b-99de-4211-bb1a-f4ad5443e2fa**
 
-The mockups match the real UI structure and use the game's actual tier colors and
-monster sprites. Sticky notes on the canvas flag what is finished placeholder art
-versus real.
+The mockups match the real UI *structure* and use the game's actual tier colors and
+monster sprites, but the running game is not yet skinned to them — that theming pass
+is tracked in issue #27 (slices #28–#31). Until it lands, the live HUD uses default
+Godot widgets; the canvas shows where it is headed.
 
 ## The loop
 

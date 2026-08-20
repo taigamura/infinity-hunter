@@ -6,7 +6,8 @@
 > the code, fix the code or fix this doc: it is meant to stay true.
 >
 > Deep specs live elsewhere: `docs/PRD.md` (full resolved design), `docs/adr/`
-> (decisions, lazily added), and the visual design canvas linked in the README.
+> (decisions, lazily added), and the visual-target design canvas linked in the
+> README (a target mockup the UI is being themed toward, not the current build's look).
 
 ## What the game is
 
