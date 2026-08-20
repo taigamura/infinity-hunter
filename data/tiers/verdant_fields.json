@@ -1,0 +1,8 @@
+{
+  "zone_id": "verdant_fields",
+  "tiers": {
+    "0": { "level_min": 1, "level_max": 3, "gauge_rate": 6, "weight": 1, "loot_boost": 0 },
+    "1": { "level_min": 2, "level_max": 5, "gauge_rate": 10, "weight": 2, "loot_boost": 0 },
+    "2": { "level_min": 4, "level_max": 8, "gauge_rate": 16, "weight": 1, "loot_boost": 0 }
+  }
+}

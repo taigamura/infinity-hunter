@@ -1,0 +1,214 @@
+{
+  "version": "1.0",
+  "created_at": "2026-08-19T01:49:13+00:00",
+  "updated_at": "2026-08-19T07:35:11+00:00",
+  "repository": "",
+  "queue": [
+    {
+      "source": "github",
+      "issue_number": 17,
+      "title": "EncounterSystem: pure gauge fill + band-filtered monster pick",
+      "priority": "P0",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTrg",
+          "name": "P0",
+          "description": "",
+          "color": "b60205"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [],
+      "id": "github-17",
+      "status": "completed",
+      "added_at": "2026-08-19T07:17:45+00:00",
+      "started_at": "2026-08-19T07:19:22+00:00",
+      "completed_at": "2026-08-19T07:20:53+00:00",
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 18,
+      "title": "Region/tier data model: danger tiers for Verdant Fields, loader + validation",
+      "priority": "P0",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTrg",
+          "name": "P0",
+          "description": "",
+          "color": "b60205"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [],
+      "id": "github-18",
+      "status": "completed",
+      "added_at": "2026-08-19T07:18:22+00:00",
+      "started_at": "2026-08-19T07:20:53+00:00",
+      "completed_at": "2026-08-19T07:23:38+00:00",
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 19,
+      "title": "Overworld scene + launch redirect: walk Verdant Fields with joystick + follow-camera",
+      "priority": "P0",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTrg",
+          "name": "P0",
+          "description": "",
+          "color": "b60205"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [],
+      "id": "github-19",
+      "status": "completed",
+      "added_at": "2026-08-19T07:18:23+00:00",
+      "started_at": "2026-08-19T07:23:38+00:00",
+      "completed_at": "2026-08-19T07:28:03+00:00",
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 20,
+      "title": "Gauge wiring: tier-under-character drives EncounterSystem tick + gauge HUD",
+      "priority": "P0",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTrg",
+          "name": "P0",
+          "description": "",
+          "color": "b60205"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        17,
+        18,
+        19
+      ],
+      "id": "github-20",
+      "status": "completed",
+      "added_at": "2026-08-19T07:18:24+00:00",
+      "started_at": "2026-08-19T07:28:03+00:00",
+      "completed_at": "2026-08-19T07:31:17+00:00",
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 21,
+      "title": "Combat overlay: combat_screen emits combat_finished, fight renders over paused map",
+      "priority": "P0",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTrg",
+          "name": "P0",
+          "description": "",
+          "color": "b60205"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        20
+      ],
+      "id": "github-21",
+      "status": "completed",
+      "added_at": "2026-08-19T07:18:25+00:00",
+      "started_at": "2026-08-19T07:31:17+00:00",
+      "completed_at": "2026-08-19T07:35:11+00:00",
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 22,
+      "title": "Exit-tile travel: reach an exit in a hot region to unlock + travel deeper",
+      "priority": "P1",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTuQ",
+          "name": "P1",
+          "description": "",
+          "color": "d93f0b"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        21
+      ],
+      "id": "github-22",
+      "status": "processing",
+      "added_at": "2026-08-19T07:18:26+00:00",
+      "started_at": "2026-08-19T07:35:11+00:00",
+      "completed_at": null,
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 23,
+      "title": "Retire node-map: delete NodeMap/node_map_screen, drop RunState.node_map",
+      "priority": "P1",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTuQ",
+          "name": "P1",
+          "description": "",
+          "color": "d93f0b"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        22
+      ],
+      "id": "github-23",
+      "status": "pending",
+      "added_at": "2026-08-19T07:18:27+00:00",
+      "started_at": null,
+      "completed_at": null,
+      "error_message": ""
+    }
+  ]
+}

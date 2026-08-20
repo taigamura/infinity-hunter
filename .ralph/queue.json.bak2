@@ -1,0 +1,436 @@
+{
+  "version": "1.0",
+  "created_at": "2026-08-19T01:49:13+00:00",
+  "updated_at": "2026-08-19T02:32:51+00:00",
+  "repository": "",
+  "queue": [
+    {
+      "source": "github",
+      "issue_number": 2,
+      "title": "Data loader + typed defs + validation",
+      "priority": "P0",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTrg",
+          "name": "P0",
+          "description": "",
+          "color": "b60205"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [],
+      "id": "github-2",
+      "status": "completed",
+      "added_at": "2026-08-19T01:49:13+00:00",
+      "started_at": "2026-08-19T01:55:05+00:00",
+      "completed_at": "2026-08-19T02:03:42+00:00",
+      "error_message": "salvaged: implemented + gate green (18/18), committed manually after ALLOWED_TOOLS fix"
+    },
+    {
+      "source": "github",
+      "issue_number": 8,
+      "title": "Crafting + inventory + rarity rolls",
+      "priority": "P1",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTuQ",
+          "name": "P1",
+          "description": "",
+          "color": "d93f0b"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        2,
+        7
+      ],
+      "id": "github-8",
+      "status": "pending",
+      "added_at": "2026-08-19T01:49:14+00:00",
+      "started_at": null,
+      "completed_at": null,
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 14,
+      "title": "Placeholder sprite pipeline (AnimatedSprite2D)",
+      "priority": "P2",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfAIQ",
+          "name": "P2",
+          "description": "",
+          "color": "fbca04"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        13
+      ],
+      "id": "github-14",
+      "status": "pending",
+      "added_at": "2026-08-19T01:49:15+00:00",
+      "started_at": null,
+      "completed_at": null,
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 4,
+      "title": "Core run loop: RunState + hunts + node-map + resolution",
+      "priority": "P0",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTrg",
+          "name": "P0",
+          "description": "",
+          "color": "b60205"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        2,
+        3
+      ],
+      "id": "github-4",
+      "status": "failed",
+      "added_at": "2026-08-19T01:49:34+00:00",
+      "started_at": "2026-08-19T02:20:40+00:00",
+      "completed_at": "2026-08-19T02:32:51+00:00",
+      "error_message": "gated: loop exited 0 but left 1 unchecked fix_plan item(s) and/or updated human-gate.md — not actually complete (see agent-harness#14)"
+    },
+    {
+      "source": "github",
+      "issue_number": 10,
+      "title": "Capture + companion passives",
+      "priority": "P1",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTuQ",
+          "name": "P1",
+          "description": "",
+          "color": "d93f0b"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        4,
+        7
+      ],
+      "id": "github-10",
+      "status": "pending",
+      "added_at": "2026-08-19T01:49:35+00:00",
+      "started_at": null,
+      "completed_at": null,
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 5,
+      "title": "Save system: atomic, versioned, migratable",
+      "priority": "P0",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTrg",
+          "name": "P0",
+          "description": "",
+          "color": "b60205"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        4
+      ],
+      "id": "github-5",
+      "status": "pending",
+      "added_at": "2026-08-19T01:49:39+00:00",
+      "started_at": null,
+      "completed_at": null,
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 11,
+      "title": "Meta progression: essence + permanent upgrades",
+      "priority": "P1",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTuQ",
+          "name": "P1",
+          "description": "",
+          "color": "d93f0b"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        4,
+        5
+      ],
+      "id": "github-11",
+      "status": "pending",
+      "added_at": "2026-08-19T01:49:40+00:00",
+      "started_at": null,
+      "completed_at": null,
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 13,
+      "title": "UI shells over the logic modules",
+      "priority": "P1",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTuQ",
+          "name": "P1",
+          "description": "",
+          "color": "d93f0b"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        4,
+        6,
+        8
+      ],
+      "id": "github-13",
+      "status": "pending",
+      "added_at": "2026-08-19T01:49:41+00:00",
+      "started_at": null,
+      "completed_at": null,
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 15,
+      "title": "MVP content: zones, monsters, weapons, armor",
+      "priority": "P1",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTuQ",
+          "name": "P1",
+          "description": "",
+          "color": "d93f0b"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        2,
+        7,
+        8
+      ],
+      "id": "github-15",
+      "status": "pending",
+      "added_at": "2026-08-19T01:49:42+00:00",
+      "started_at": null,
+      "completed_at": null,
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 3,
+      "title": "XP curve + level-to-power scaling",
+      "priority": "P0",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTrg",
+          "name": "P0",
+          "description": "",
+          "color": "b60205"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [],
+      "id": "github-3",
+      "status": "completed",
+      "added_at": "2026-08-19T01:49:46+00:00",
+      "started_at": "2026-08-19T02:19:11+00:00",
+      "completed_at": "2026-08-19T02:20:40+00:00",
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 7,
+      "title": "Drops, materials, and part-breaking",
+      "priority": "P1",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTuQ",
+          "name": "P1",
+          "description": "",
+          "color": "d93f0b"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        2,
+        4
+      ],
+      "id": "github-7",
+      "status": "pending",
+      "added_at": "2026-08-19T01:49:47+00:00",
+      "started_at": null,
+      "completed_at": null,
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 6,
+      "title": "Combat resolver: dodge/HP-race, weapon classes, elements",
+      "priority": "P0",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTrg",
+          "name": "P0",
+          "description": "",
+          "color": "b60205"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        2,
+        4
+      ],
+      "id": "github-6",
+      "status": "pending",
+      "added_at": "2026-08-19T01:49:52+00:00",
+      "started_at": null,
+      "completed_at": null,
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 12,
+      "title": "Bestiary tracking and entries",
+      "priority": "P2",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfAIQ",
+          "name": "P2",
+          "description": "",
+          "color": "fbca04"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        7,
+        10
+      ],
+      "id": "github-12",
+      "status": "pending",
+      "added_at": "2026-08-19T01:50:01+00:00",
+      "started_at": null,
+      "completed_at": null,
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 9,
+      "title": "Armor skills + set bonuses to build stats",
+      "priority": "P1",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTuQ",
+          "name": "P1",
+          "description": "",
+          "color": "d93f0b"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        6,
+        8
+      ],
+      "id": "github-9",
+      "status": "pending",
+      "added_at": "2026-08-19T01:51:09+00:00",
+      "started_at": null,
+      "completed_at": null,
+      "error_message": ""
+    }
+  ]
+}

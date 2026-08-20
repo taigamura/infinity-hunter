@@ -1,0 +1,6411 @@
+{
+"1": {
+"n": "Bulbasaur",
+"b": "quadruped",
+"t": [
+"plant",
+"bulb",
+"reptilian",
+"4-legs",
+"big-eyes"
+],
+"c": "green",
+"sprite": "Spr_4d_001.png"
+},
+"2": {
+"n": "Ivysaur",
+"b": "quadruped",
+"t": [
+"plant",
+"bud",
+"reptilian",
+"4-legs"
+],
+"c": "green",
+"sprite": "Spr_4d_002.png"
+},
+"3": {
+"n": "Venusaur",
+"b": "quadruped",
+"t": [
+"plant",
+"flower",
+"4-legs",
+"bulky"
+],
+"c": "green",
+"sprite": "Spr_4d_003_m.png"
+},
+"4": {
+"n": "Charmander",
+"b": "biped",
+"t": [
+"reptilian",
+"tail-flame",
+"2-arms",
+"2-legs",
+"tail"
+],
+"c": "orange",
+"sprite": "Spr_4d_004.png"
+},
+"5": {
+"n": "Charmeleon",
+"b": "biped",
+"t": [
+"reptilian",
+"tail-flame",
+"horn",
+"tail",
+"claws"
+],
+"c": "red",
+"sprite": "Spr_4d_005.png"
+},
+"6": {
+"n": "Charizard",
+"b": "biped",
+"t": [
+"dragon",
+"wings",
+"tail-flame",
+"horns",
+"tail"
+],
+"c": "orange",
+"sprite": "Spr_4d_006.png"
+},
+"7": {
+"n": "Squirtle",
+"b": "biped",
+"t": [
+"turtle",
+"shell",
+"2-arms",
+"2-legs",
+"tail",
+"cream-belly"
+],
+"c": "blue",
+"sprite": "Spr_4d_007.png"
+},
+"8": {
+"n": "Wartortle",
+"b": "biped",
+"t": [
+"turtle",
+"shell",
+"ears",
+"tail",
+"fluffy-tail"
+],
+"c": "blue",
+"sprite": "Spr_4d_008.png"
+},
+"9": {
+"n": "Blastoise",
+"b": "biped",
+"t": [
+"turtle",
+"shell",
+"cannons",
+"bulky"
+],
+"c": "blue",
+"sprite": "Spr_4d_009.png"
+},
+"10": {
+"n": "Caterpie",
+"b": "bug",
+"t": [
+"larva",
+"segmented",
+"antenna",
+"many-legs"
+],
+"c": "green",
+"sprite": "Spr_4d_010.png"
+},
+"11": {
+"n": "Metapod",
+"b": "blob",
+"t": [
+"cocoon",
+"bug",
+"hard-shell",
+"no-limbs"
+],
+"c": "green",
+"sprite": "Spr_4d_011.png"
+},
+"12": {
+"n": "Butterfree",
+"b": "bird",
+"t": [
+"bug",
+"wings",
+"antenna",
+"floating",
+"big-eyes"
+],
+"c": "purple",
+"sprite": "Spr_4d_012_m.png"
+},
+"13": {
+"n": "Weedle",
+"b": "bug",
+"t": [
+"larva",
+"segmented",
+"horn",
+"many-legs"
+],
+"c": "tan",
+"sprite": "Spr_4d_013.png"
+},
+"14": {
+"n": "Kakuna",
+"b": "blob",
+"t": [
+"cocoon",
+"bug",
+"spikes",
+"no-limbs"
+],
+"c": "yellow",
+"sprite": "Spr_4d_014.png"
+},
+"15": {
+"n": "Beedrill",
+"b": "bug",
+"t": [
+"wings",
+"stingers",
+"floating",
+"segmented",
+"arms"
+],
+"c": "yellow",
+"sprite": "Spr_4d_015.png"
+},
+"16": {
+"n": "Pidgey",
+"b": "bird",
+"t": [
+"avian",
+"wings",
+"beak",
+"talons",
+"small"
+],
+"c": "brown",
+"sprite": "Spr_4d_016.png"
+},
+"17": {
+"n": "Pidgeotto",
+"b": "bird",
+"t": [
+"avian",
+"wings",
+"crest",
+"talons"
+],
+"c": "brown",
+"sprite": "Spr_4d_017.png"
+},
+"18": {
+"n": "Pidgeot",
+"b": "bird",
+"t": [
+"avian",
+"wings",
+"crest",
+"plume"
+],
+"c": "brown",
+"sprite": "Spr_4d_018.png"
+},
+"19": {
+"n": "Rattata",
+"b": "quadruped",
+"t": [
+"rodent",
+"4-legs",
+"tail",
+"fangs",
+"small"
+],
+"c": "purple",
+"sprite": "Spr_4d_019_m.png"
+},
+"20": {
+"n": "Raticate",
+"b": "quadruped",
+"t": [
+"rodent",
+"4-legs",
+"tail",
+"whiskers"
+],
+"c": "tan",
+"sprite": "Spr_4d_020_m.png"
+},
+"21": {
+"n": "Spearow",
+"b": "bird",
+"t": [
+"avian",
+"wings",
+"beak",
+"small"
+],
+"c": "brown",
+"sprite": "Spr_4d_021.png"
+},
+"22": {
+"n": "Fearow",
+"b": "bird",
+"t": [
+"avian",
+"wings",
+"long-beak",
+"talons"
+],
+"c": "brown",
+"sprite": "Spr_4d_022.png"
+},
+"23": {
+"n": "Ekans",
+"b": "serpent",
+"t": [
+"snake",
+"noodle",
+"no-limbs",
+"tail-rattle"
+],
+"c": "purple",
+"sprite": "Spr_4d_023.png"
+},
+"24": {
+"n": "Arbok",
+"b": "serpent",
+"t": [
+"snake",
+"hood",
+"noodle",
+"no-limbs"
+],
+"c": "purple",
+"sprite": "Spr_4d_024.png"
+},
+"25": {
+"n": "Pikachu",
+"b": "biped",
+"t": [
+"rodent",
+"ears",
+"tail",
+"cheeks",
+"big-eyes",
+"small"
+],
+"c": "yellow",
+"sprite": "Spr_4d_025_m.png"
+},
+"26": {
+"n": "Raichu",
+"b": "biped",
+"t": [
+"rodent",
+"ears",
+"tail",
+"cheeks"
+],
+"c": "orange",
+"sprite": "Spr_4d_026_m.png"
+},
+"27": {
+"n": "Sandshrew",
+"b": "biped",
+"t": [
+"armored",
+"claws",
+"2-arms",
+"2-legs",
+"curl"
+],
+"c": "tan",
+"sprite": "Spr_4d_027.png"
+},
+"28": {
+"n": "Sandslash",
+"b": "biped",
+"t": [
+"armored",
+"spikes",
+"claws",
+"quills"
+],
+"c": "tan",
+"sprite": "Spr_4d_028.png"
+},
+"29": {
+"n": "Nidoran-f",
+"b": "quadruped",
+"t": [
+"rodent",
+"ears",
+"spikes",
+"4-legs",
+"small"
+],
+"c": "blue",
+"sprite": "Spr_4d_029.png"
+},
+"30": {
+"n": "Nidorina",
+"b": "quadruped",
+"t": [
+"rodent",
+"ears",
+"spikes",
+"4-legs"
+],
+"c": "blue",
+"sprite": "Spr_4d_030.png"
+},
+"31": {
+"n": "Nidoqueen",
+"b": "biped",
+"t": [
+"armored",
+"spikes",
+"bulky",
+"2-arms",
+"tail"
+],
+"c": "blue",
+"sprite": "Spr_4d_031.png"
+},
+"32": {
+"n": "Nidoran-m",
+"b": "quadruped",
+"t": [
+"rodent",
+"ears",
+"horn",
+"4-legs",
+"small"
+],
+"c": "purple",
+"sprite": "Spr_4d_032.png"
+},
+"33": {
+"n": "Nidorino",
+"b": "quadruped",
+"t": [
+"rodent",
+"horn",
+"spikes",
+"4-legs"
+],
+"c": "purple",
+"sprite": "Spr_4d_033.png"
+},
+"34": {
+"n": "Nidoking",
+"b": "biped",
+"t": [
+"armored",
+"horn",
+"spikes",
+"bulky",
+"tail"
+],
+"c": "purple",
+"sprite": "Spr_4d_034.png"
+},
+"35": {
+"n": "Clefairy",
+"b": "blob",
+"t": [
+"round",
+"ears",
+"wings-small",
+"tail",
+"blush",
+"big-eyes",
+"cute"
+],
+"c": "pink",
+"sprite": "Spr_4d_035.png"
+},
+"36": {
+"n": "Clefable",
+"b": "biped",
+"t": [
+"round",
+"ears",
+"wings-small",
+"tail",
+"cute"
+],
+"c": "pink",
+"sprite": "Spr_4d_036.png"
+},
+"37": {
+"n": "Vulpix",
+"b": "quadruped",
+"t": [
+"fox",
+"tails",
+"curls",
+"4-legs",
+"cute"
+],
+"c": "tan",
+"sprite": "Spr_4d_037.png"
+},
+"38": {
+"n": "Ninetales",
+"b": "quadruped",
+"t": [
+"fox",
+"many-tails",
+"mane",
+"4-legs"
+],
+"c": "cream",
+"sprite": "Spr_4d_038.png"
+},
+"39": {
+"n": "Jigglypuff",
+"b": "blob",
+"t": [
+"round",
+"ears",
+"curl",
+"big-eyes",
+"blush",
+"no-neck",
+"cute"
+],
+"c": "pink",
+"sprite": "Spr_4d_039.png"
+},
+"40": {
+"n": "Wigglytuff",
+"b": "blob",
+"t": [
+"round",
+"ears",
+"fluffy",
+"big-eyes",
+"cute"
+],
+"c": "pink",
+"sprite": "Spr_4d_040.png"
+},
+"41": {
+"n": "Zubat",
+"b": "bird",
+"t": [
+"bat",
+"wings",
+"floating",
+"fangs",
+"no-eyes"
+],
+"c": "blue",
+"sprite": "Spr_4d_041_m.png"
+},
+"42": {
+"n": "Golbat",
+"b": "bird",
+"t": [
+"bat",
+"wings",
+"floating",
+"big-mouth",
+"fangs"
+],
+"c": "blue",
+"sprite": "Spr_4d_042_m.png"
+},
+"43": {
+"n": "Oddish",
+"b": "blob",
+"t": [
+"plant",
+"bulb-body",
+"leaves",
+"2-legs",
+"big-eyes",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_043.png"
+},
+"44": {
+"n": "Gloom",
+"b": "biped",
+"t": [
+"plant",
+"flower-head",
+"2-arms",
+"drool"
+],
+"c": "blue",
+"sprite": "Spr_4d_044_m.png"
+},
+"45": {
+"n": "Vileplume",
+"b": "biped",
+"t": [
+"plant",
+"big-flower",
+"2-legs"
+],
+"c": "blue",
+"sprite": "Spr_4d_045_m.png"
+},
+"46": {
+"n": "Paras",
+"b": "bug",
+"t": [
+"insect",
+"mushrooms",
+"many-legs",
+"claws"
+],
+"c": "orange",
+"sprite": "Spr_4d_046.png"
+},
+"47": {
+"n": "Parasect",
+"b": "bug",
+"t": [
+"insect",
+"big-mushroom",
+"many-legs",
+"claws"
+],
+"c": "orange",
+"sprite": "Spr_4d_047.png"
+},
+"48": {
+"n": "Venonat",
+"b": "blob",
+"t": [
+"bug",
+"round",
+"big-eyes",
+"legs",
+"fuzzy",
+"antenna"
+],
+"c": "purple",
+"sprite": "Spr_4d_048.png"
+},
+"49": {
+"n": "Venomoth",
+"b": "bug",
+"t": [
+"moth",
+"wings",
+"floating",
+"fuzzy",
+"antenna"
+],
+"c": "purple",
+"sprite": "Spr_4d_049.png"
+},
+"50": {
+"n": "Diglett",
+"b": "blob",
+"t": [
+"mole",
+"head-only",
+"no-limbs",
+"underground",
+"cute"
+],
+"c": "brown",
+"sprite": "Spr_4d_050.png"
+},
+"51": {
+"n": "Dugtrio",
+"b": "blob",
+"t": [
+"mole",
+"three-heads",
+"no-limbs"
+],
+"c": "brown",
+"sprite": "Spr_4d_051.png"
+},
+"52": {
+"n": "Meowth",
+"b": "biped",
+"t": [
+"cat",
+"coin",
+"ears",
+"tail",
+"4-legs",
+"cute"
+],
+"c": "cream",
+"sprite": "Spr_4d_052.png"
+},
+"53": {
+"n": "Persian",
+"b": "quadruped",
+"t": [
+"cat",
+"gem",
+"whiskers",
+"4-legs",
+"sleek"
+],
+"c": "cream",
+"sprite": "Spr_4d_053.png"
+},
+"54": {
+"n": "Psyduck",
+"b": "biped",
+"t": [
+"duck",
+"bill",
+"2-arms",
+"2-legs",
+"dizzy",
+"cute"
+],
+"c": "yellow",
+"sprite": "Spr_4d_054.png"
+},
+"55": {
+"n": "Golduck",
+"b": "biped",
+"t": [
+"duck",
+"bill",
+"crest",
+"webbed",
+"tail"
+],
+"c": "blue",
+"sprite": "Spr_4d_055.png"
+},
+"56": {
+"n": "Mankey",
+"b": "biped",
+"t": [
+"monkey",
+"fuzzy",
+"2-arms",
+"2-legs",
+"angry"
+],
+"c": "tan",
+"sprite": "Spr_4d_056.png"
+},
+"57": {
+"n": "Primeape",
+"b": "biped",
+"t": [
+"monkey",
+"fuzzy",
+"fists",
+"angry"
+],
+"c": "tan",
+"sprite": "Spr_4d_057.png"
+},
+"58": {
+"n": "Growlithe",
+"b": "quadruped",
+"t": [
+"dog",
+"mane",
+"stripes",
+"4-legs",
+"cute"
+],
+"c": "orange",
+"sprite": "Spr_4d_058.png"
+},
+"59": {
+"n": "Arcanine",
+"b": "quadruped",
+"t": [
+"dog",
+"mane",
+"stripes",
+"4-legs",
+"large"
+],
+"c": "orange",
+"sprite": "Spr_4d_059.png"
+},
+"60": {
+"n": "Poliwag",
+"b": "blob",
+"t": [
+"tadpole",
+"round",
+"tail",
+"swirl",
+"big-eyes",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_060.png"
+},
+"61": {
+"n": "Poliwhirl",
+"b": "biped",
+"t": [
+"tadpole",
+"swirl",
+"2-arms",
+"2-legs"
+],
+"c": "blue",
+"sprite": "Spr_4d_061.png"
+},
+"62": {
+"n": "Poliwrath",
+"b": "biped",
+"t": [
+"amphibian",
+"swirl",
+"muscular",
+"bulky"
+],
+"c": "blue",
+"sprite": "Spr_4d_062.png"
+},
+"63": {
+"n": "Abra",
+"b": "biped",
+"t": [
+"psychic",
+"fox",
+"sitting",
+"tail",
+"2-arms"
+],
+"c": "yellow",
+"sprite": "Spr_4d_063.png"
+},
+"64": {
+"n": "Kadabra",
+"b": "biped",
+"t": [
+"psychic",
+"spoon",
+"tail",
+"whiskers"
+],
+"c": "yellow",
+"sprite": "Spr_4d_064_m.png"
+},
+"65": {
+"n": "Alakazam",
+"b": "biped",
+"t": [
+"psychic",
+"spoons",
+"mustache",
+"thin"
+],
+"c": "yellow",
+"sprite": "Spr_4d_065_m.png"
+},
+"66": {
+"n": "Machop",
+"b": "biped",
+"t": [
+"muscular",
+"fighter",
+"2-arms",
+"2-legs",
+"tail"
+],
+"c": "gray",
+"sprite": "Spr_4d_066.png"
+},
+"67": {
+"n": "Machoke",
+"b": "biped",
+"t": [
+"muscular",
+"fighter",
+"belt",
+"bulky"
+],
+"c": "gray",
+"sprite": "Spr_4d_067.png"
+},
+"68": {
+"n": "Machamp",
+"b": "biped",
+"t": [
+"muscular",
+"four-arms",
+"fighter",
+"bulky"
+],
+"c": "gray",
+"sprite": "Spr_4d_068.png"
+},
+"69": {
+"n": "Bellsprout",
+"b": "biped",
+"t": [
+"plant",
+"stem",
+"bell-head",
+"2-legs",
+"thin"
+],
+"c": "green",
+"sprite": "Spr_4d_069.png"
+},
+"70": {
+"n": "Weepinbell",
+"b": "floating",
+"t": [
+"plant",
+"bell-body",
+"hook",
+"floating"
+],
+"c": "green",
+"sprite": "Spr_4d_070.png"
+},
+"71": {
+"n": "Victreebel",
+"b": "floating",
+"t": [
+"plant",
+"pitcher",
+"vine",
+"big-mouth"
+],
+"c": "green",
+"sprite": "Spr_4d_071.png"
+},
+"72": {
+"n": "Tentacool",
+"b": "floating",
+"t": [
+"jellyfish",
+"gem",
+"tentacles",
+"floating",
+"aquatic"
+],
+"c": "blue",
+"sprite": "Spr_4d_072.png"
+},
+"73": {
+"n": "Tentacruel",
+"b": "floating",
+"t": [
+"jellyfish",
+"gems",
+"tentacles",
+"floating",
+"aquatic"
+],
+"c": "blue",
+"sprite": "Spr_4d_073.png"
+},
+"74": {
+"n": "Geodude",
+"b": "blob",
+"t": [
+"rock",
+"boulder",
+"2-arms",
+"no-legs",
+"golem",
+"angry"
+],
+"c": "gray",
+"sprite": "Spr_4d_074.png"
+},
+"75": {
+"n": "Graveler",
+"b": "blob",
+"t": [
+"rock",
+"boulder",
+"four-arms",
+"golem"
+],
+"c": "gray",
+"sprite": "Spr_4d_075.png"
+},
+"76": {
+"n": "Golem",
+"b": "blob",
+"t": [
+"rock",
+"shell-plates",
+"2-arms",
+"2-legs",
+"golem",
+"bulky"
+],
+"c": "gray",
+"sprite": "Spr_4d_076.png"
+},
+"77": {
+"n": "Ponyta",
+"b": "quadruped",
+"t": [
+"horse",
+"fire-mane",
+"4-legs",
+"hooves"
+],
+"c": "cream",
+"sprite": "Spr_4d_077.png"
+},
+"78": {
+"n": "Rapidash",
+"b": "quadruped",
+"t": [
+"horse",
+"fire-mane",
+"horn",
+"4-legs"
+],
+"c": "cream",
+"sprite": "Spr_4d_078.png"
+},
+"79": {
+"n": "Slowpoke",
+"b": "quadruped",
+"t": [
+"round",
+"tail",
+"dopey",
+"4-legs",
+"big-eyes",
+"cute"
+],
+"c": "pink",
+"sprite": "Spr_4d_079.png"
+},
+"80": {
+"n": "Slowbro",
+"b": "biped",
+"t": [
+"round",
+"shell-tail",
+"2-arms",
+"dopey"
+],
+"c": "pink",
+"sprite": "Spr_4d_080.png"
+},
+"81": {
+"n": "Magnemite",
+"b": "floating",
+"t": [
+"mechanical",
+"magnet",
+"floating",
+"single-eye",
+"round"
+],
+"c": "gray",
+"sprite": "Spr_4d_081.png"
+},
+"82": {
+"n": "Magneton",
+"b": "floating",
+"t": [
+"mechanical",
+"magnets",
+"floating",
+"cluster"
+],
+"c": "gray",
+"sprite": "Spr_4d_082.png"
+},
+"83": {
+"n": "Farfetchd",
+"b": "bird",
+"t": [
+"duck",
+"leek",
+"wings",
+"beak"
+],
+"c": "brown",
+"sprite": "Spr_4d_083.png"
+},
+"84": {
+"n": "Doduo",
+"b": "bird",
+"t": [
+"ratite",
+"two-heads",
+"2-legs",
+"beaks",
+"running"
+],
+"c": "brown",
+"sprite": "Spr_4d_084_m.png"
+},
+"85": {
+"n": "Dodrio",
+"b": "bird",
+"t": [
+"ratite",
+"three-heads",
+"2-legs",
+"beaks"
+],
+"c": "brown",
+"sprite": "Spr_4d_085_m.png"
+},
+"86": {
+"n": "Seel",
+"b": "blob",
+"t": [
+"seal",
+"horn",
+"flippers",
+"aquatic",
+"cute"
+],
+"c": "white",
+"sprite": "Spr_4d_086.png"
+},
+"87": {
+"n": "Dewgong",
+"b": "serpent",
+"t": [
+"seal",
+"horn",
+"aquatic",
+"sleek"
+],
+"c": "white",
+"sprite": "Spr_4d_087.png"
+},
+"88": {
+"n": "Grimer",
+"b": "blob",
+"t": [
+"slime",
+"sludge",
+"amorphous",
+"2-arms",
+"big-mouth",
+"ooze"
+],
+"c": "purple",
+"sprite": "Spr_4d_088.png"
+},
+"89": {
+"n": "Muk",
+"b": "blob",
+"t": [
+"slime",
+"sludge",
+"amorphous",
+"ooze",
+"big"
+],
+"c": "purple",
+"sprite": "Spr_4d_089.png"
+},
+"90": {
+"n": "Shellder",
+"b": "blob",
+"t": [
+"shell",
+"clam",
+"tongue",
+"aquatic",
+"round"
+],
+"c": "purple",
+"sprite": "Spr_4d_090.png"
+},
+"91": {
+"n": "Cloyster",
+"b": "blob",
+"t": [
+"shell",
+"spikes",
+"clam",
+"aquatic",
+"hard"
+],
+"c": "purple",
+"sprite": "Spr_4d_091.png"
+},
+"92": {
+"n": "Gastly",
+"b": "floating",
+"t": [
+"ghost",
+"gas",
+"floating",
+"no-limbs",
+"big-eyes",
+"amorphous"
+],
+"c": "purple",
+"sprite": "Spr_4d_092.png"
+},
+"93": {
+"n": "Haunter",
+"b": "floating",
+"t": [
+"ghost",
+"floating",
+"hands",
+"tongue",
+"big-eyes"
+],
+"c": "purple",
+"sprite": "Spr_4d_093.png"
+},
+"94": {
+"n": "Gengar",
+"b": "biped",
+"t": [
+"ghost",
+"grin",
+"spikes",
+"2-arms",
+"2-legs",
+"mischief"
+],
+"c": "purple",
+"sprite": "Spr_4d_094.png"
+},
+"95": {
+"n": "Onix",
+"b": "serpent",
+"t": [
+"rock",
+"boulders",
+"serpent",
+"huge",
+"noodle"
+],
+"c": "gray",
+"sprite": "Spr_4d_095.png"
+},
+"96": {
+"n": "Drowzee",
+"b": "biped",
+"t": [
+"tapir",
+"psychic",
+"2-arms",
+"2-legs",
+"dopey"
+],
+"c": "yellow",
+"sprite": "Spr_4d_096.png"
+},
+"97": {
+"n": "Hypno",
+"b": "biped",
+"t": [
+"tapir",
+"pendulum",
+"mane",
+"2-arms"
+],
+"c": "yellow",
+"sprite": "Spr_4d_097_m.png"
+},
+"98": {
+"n": "Krabby",
+"b": "blob",
+"t": [
+"crab",
+"claws",
+"legs",
+"aquatic",
+"small"
+],
+"c": "orange",
+"sprite": "Spr_4d_098.png"
+},
+"99": {
+"n": "Kingler",
+"b": "blob",
+"t": [
+"crab",
+"big-claw",
+"legs",
+"aquatic"
+],
+"c": "orange",
+"sprite": "Spr_4d_099.png"
+},
+"100": {
+"n": "Voltorb",
+"b": "blob",
+"t": [
+"sphere",
+"ball",
+"face",
+"no-limbs",
+"mechanical"
+],
+"c": "red",
+"sprite": "Spr_4d_100.png"
+},
+"101": {
+"n": "Electrode",
+"b": "blob",
+"t": [
+"sphere",
+"ball",
+"face",
+"no-limbs",
+"mechanical"
+],
+"c": "red",
+"sprite": "Spr_4d_101.png"
+},
+"102": {
+"n": "Exeggcute",
+"b": "floating",
+"t": [
+"eggs",
+"cluster",
+"seeds",
+"floating",
+"cracked"
+],
+"c": "pink",
+"sprite": "Spr_4d_102.png"
+},
+"103": {
+"n": "Exeggutor",
+"b": "biped",
+"t": [
+"palm-tree",
+"heads",
+"trunk",
+"2-legs",
+"tall"
+],
+"c": "brown",
+"sprite": "Spr_4d_103.png"
+},
+"104": {
+"n": "Cubone",
+"b": "biped",
+"t": [
+"skull-helm",
+"bone",
+"2-arms",
+"2-legs",
+"tail",
+"cute"
+],
+"c": "brown",
+"sprite": "Spr_4d_104.png"
+},
+"105": {
+"n": "Marowak",
+"b": "biped",
+"t": [
+"skull-helm",
+"bone-club",
+"2-arms",
+"tail"
+],
+"c": "brown",
+"sprite": "Spr_4d_105.png"
+},
+"106": {
+"n": "Hitmonlee",
+"b": "biped",
+"t": [
+"fighter",
+"long-legs",
+"2-arms",
+"no-head-neck"
+],
+"c": "brown",
+"sprite": "Spr_4d_106.png"
+},
+"107": {
+"n": "Hitmonchan",
+"b": "biped",
+"t": [
+"fighter",
+"gloves",
+"2-arms",
+"2-legs"
+],
+"c": "brown",
+"sprite": "Spr_4d_107.png"
+},
+"108": {
+"n": "Lickitung",
+"b": "biped",
+"t": [
+"round",
+"long-tongue",
+"2-arms",
+"2-legs",
+"tail",
+"pink"
+],
+"c": "pink",
+"sprite": "Spr_4d_108.png"
+},
+"109": {
+"n": "Koffing",
+"b": "floating",
+"t": [
+"gas",
+"sphere",
+"floating",
+"skulls",
+"no-limbs"
+],
+"c": "purple",
+"sprite": "Spr_4d_109.png"
+},
+"110": {
+"n": "Weezing",
+"b": "floating",
+"t": [
+"gas",
+"two-heads",
+"floating",
+"no-limbs"
+],
+"c": "purple",
+"sprite": "Spr_4d_110.png"
+},
+"111": {
+"n": "Rhyhorn",
+"b": "quadruped",
+"t": [
+"rhino",
+"rock",
+"horn",
+"4-legs",
+"armored"
+],
+"c": "gray",
+"sprite": "Spr_4d_111_m.png"
+},
+"112": {
+"n": "Rhydon",
+"b": "biped",
+"t": [
+"rhino",
+"rock",
+"horn",
+"2-arms",
+"tail",
+"armored"
+],
+"c": "gray",
+"sprite": "Spr_4d_112_m.png"
+},
+"113": {
+"n": "Chansey",
+"b": "blob",
+"t": [
+"round",
+"egg-pouch",
+"2-arms",
+"2-legs",
+"cute",
+"pink"
+],
+"c": "pink",
+"sprite": "Spr_4d_113.png"
+},
+"114": {
+"n": "Tangela",
+"b": "blob",
+"t": [
+"vines",
+"round",
+"tangle",
+"2-legs",
+"eyes"
+],
+"c": "blue",
+"sprite": "Spr_4d_114.png"
+},
+"115": {
+"n": "Kangaskhan",
+"b": "biped",
+"t": [
+"kangaroo",
+"pouch",
+"2-arms",
+"tail",
+"bulky",
+"baby"
+],
+"c": "tan",
+"sprite": "Spr_4d_115.png"
+},
+"116": {
+"n": "Horsea",
+"b": "fish",
+"t": [
+"seahorse",
+"fin",
+"curl-tail",
+"aquatic",
+"small",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_116.png"
+},
+"117": {
+"n": "Seadra",
+"b": "fish",
+"t": [
+"seahorse",
+"spikes",
+"fin",
+"aquatic"
+],
+"c": "blue",
+"sprite": "Spr_4d_117.png"
+},
+"118": {
+"n": "Goldeen",
+"b": "fish",
+"t": [
+"fish",
+"fins",
+"horn",
+"aquatic"
+],
+"c": "white",
+"sprite": "Spr_4d_118_m.png"
+},
+"119": {
+"n": "Seaking",
+"b": "fish",
+"t": [
+"fish",
+"fins",
+"horn",
+"aquatic"
+],
+"c": "orange",
+"sprite": "Spr_4d_119_m.png"
+},
+"120": {
+"n": "Staryu",
+"b": "star",
+"t": [
+"starfish",
+"radial",
+"gem",
+"aquatic",
+"symmetric"
+],
+"c": "brown",
+"sprite": "Spr_4d_120.png"
+},
+"121": {
+"n": "Starmie",
+"b": "star",
+"t": [
+"starfish",
+"gem",
+"radial",
+"two-stars",
+"aquatic"
+],
+"c": "purple",
+"sprite": "Spr_4d_121.png"
+},
+"122": {
+"n": "MrMime",
+"b": "biped",
+"t": [
+"mime",
+"2-arms",
+"2-legs",
+"humanoid"
+],
+"c": "pink",
+"sprite": "Spr_4d_122.png"
+},
+"123": {
+"n": "Scyther",
+"b": "bug",
+"t": [
+"mantis",
+"scythes",
+"wings",
+"2-legs",
+"fast"
+],
+"c": "green",
+"sprite": "Spr_4d_123_m.png"
+},
+"124": {
+"n": "Jynx",
+"b": "biped",
+"t": [
+"humanoid",
+"gown",
+"2-arms",
+"hair"
+],
+"c": "purple",
+"sprite": "Spr_4d_124.png"
+},
+"125": {
+"n": "Electabuzz",
+"b": "biped",
+"t": [
+"muscular",
+"stripes",
+"2-arms",
+"tail",
+"electric"
+],
+"c": "yellow",
+"sprite": "Spr_4d_125.png"
+},
+"126": {
+"n": "Magmar",
+"b": "biped",
+"t": [
+"fire",
+"flames",
+"beak",
+"2-arms",
+"tail"
+],
+"c": "red",
+"sprite": "Spr_4d_126.png"
+},
+"127": {
+"n": "Pinsir",
+"b": "bug",
+"t": [
+"beetle",
+"pincers",
+"2-arms",
+"2-legs",
+"armored"
+],
+"c": "brown",
+"sprite": "Spr_4d_127.png"
+},
+"128": {
+"n": "Tauros",
+"b": "quadruped",
+"t": [
+"bull",
+"horns",
+"tails",
+"4-legs",
+"muscular"
+],
+"c": "brown",
+"sprite": "Spr_4d_128.png"
+},
+"129": {
+"n": "Magikarp",
+"b": "fish",
+"t": [
+"fish",
+"fins",
+"whiskers",
+"aquatic",
+"derpy"
+],
+"c": "red",
+"sprite": "Spr_4d_129_m.png"
+},
+"130": {
+"n": "Gyarados",
+"b": "serpent",
+"t": [
+"serpent",
+"dragon",
+"fins",
+"huge",
+"fierce"
+],
+"c": "blue",
+"sprite": "Spr_4d_130_m.png"
+},
+"131": {
+"n": "Lapras",
+"b": "quadruped",
+"t": [
+"plesiosaur",
+"shell",
+"long-neck",
+"aquatic",
+"4-flippers",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_131.png"
+},
+"132": {
+"n": "Ditto",
+"b": "blob",
+"t": [
+"slime",
+"amorphous",
+"blob",
+"face",
+"no-limbs",
+"ooze",
+"cute"
+],
+"c": "pink",
+"sprite": "Spr_4d_132.png"
+},
+"133": {
+"n": "Eevee",
+"b": "quadruped",
+"t": [
+"fox",
+"ruff",
+"tail",
+"4-legs",
+"ears",
+"cute"
+],
+"c": "brown",
+"sprite": "Spr_4d_133.png"
+},
+"134": {
+"n": "Vaporeon",
+"b": "quadruped",
+"t": [
+"fox",
+"fins",
+"fluke",
+"aquatic",
+"4-legs"
+],
+"c": "blue",
+"sprite": "Spr_4d_134.png"
+},
+"135": {
+"n": "Jolteon",
+"b": "quadruped",
+"t": [
+"fox",
+"spiky-fur",
+"4-legs",
+"electric"
+],
+"c": "yellow",
+"sprite": "Spr_4d_135.png"
+},
+"136": {
+"n": "Flareon",
+"b": "quadruped",
+"t": [
+"fox",
+"fluffy",
+"mane",
+"4-legs",
+"fire"
+],
+"c": "red",
+"sprite": "Spr_4d_136.png"
+},
+"137": {
+"n": "Porygon",
+"b": "biped",
+"t": [
+"polygon",
+"digital",
+"blocky",
+"angular",
+"floating"
+],
+"c": "pink",
+"sprite": "Spr_4d_137.png"
+},
+"138": {
+"n": "Omanyte",
+"b": "blob",
+"t": [
+"ammonite",
+"spiral-shell",
+"tentacles",
+"aquatic"
+],
+"c": "blue",
+"sprite": "Spr_4d_138.png"
+},
+"139": {
+"n": "Omastar",
+"b": "blob",
+"t": [
+"ammonite",
+"spiral-shell",
+"tentacles",
+"spikes"
+],
+"c": "blue",
+"sprite": "Spr_4d_139.png"
+},
+"140": {
+"n": "Kabuto",
+"b": "blob",
+"t": [
+"trilobite",
+"dome-shell",
+"aquatic",
+"small"
+],
+"c": "brown",
+"sprite": "Spr_4d_140.png"
+},
+"141": {
+"n": "Kabutops",
+"b": "biped",
+"t": [
+"trilobite",
+"scythes",
+"2-legs",
+"fast"
+],
+"c": "brown",
+"sprite": "Spr_4d_141.png"
+},
+"142": {
+"n": "Aerodactyl",
+"b": "bird",
+"t": [
+"pterosaur",
+"wings",
+"fangs",
+"dragon",
+"flying"
+],
+"c": "purple",
+"sprite": "Spr_4d_142.png"
+},
+"143": {
+"n": "Snorlax",
+"b": "blob",
+"t": [
+"round",
+"huge",
+"cream-belly",
+"2-arms",
+"2-legs",
+"sleepy",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_143.png"
+},
+"144": {
+"n": "Articuno",
+"b": "bird",
+"t": [
+"legendary",
+"wings",
+"crest",
+"tail",
+"ice"
+],
+"c": "blue",
+"sprite": "Spr_4d_144.png"
+},
+"145": {
+"n": "Zapdos",
+"b": "bird",
+"t": [
+"legendary",
+"wings",
+"spiky",
+"electric"
+],
+"c": "yellow",
+"sprite": "Spr_4d_145.png"
+},
+"146": {
+"n": "Moltres",
+"b": "bird",
+"t": [
+"legendary",
+"wings",
+"flames",
+"fire"
+],
+"c": "orange",
+"sprite": "Spr_4d_146.png"
+},
+"147": {
+"n": "Dratini",
+"b": "serpent",
+"t": [
+"dragon",
+"noodle",
+"serpent",
+"fins",
+"no-limbs",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_147.png"
+},
+"148": {
+"n": "Dragonair",
+"b": "serpent",
+"t": [
+"dragon",
+"noodle",
+"serpent",
+"orbs",
+"elegant"
+],
+"c": "blue",
+"sprite": "Spr_4d_148.png"
+},
+"149": {
+"n": "Dragonite",
+"b": "biped",
+"t": [
+"dragon",
+"wings",
+"2-arms",
+"2-legs",
+"tail",
+"friendly",
+"cute"
+],
+"c": "orange",
+"sprite": "Spr_4d_149.png"
+},
+"150": {
+"n": "Mewtwo",
+"b": "biped",
+"t": [
+"psychic",
+"humanoid",
+"tail",
+"2-arms",
+"tall"
+],
+"c": "purple",
+"sprite": "Spr_4d_150.png"
+},
+"151": {
+"n": "Mew",
+"b": "biped",
+"t": [
+"round",
+"tail",
+"2-arms",
+"2-legs",
+"big-eyes",
+"cute",
+"small"
+],
+"c": "pink",
+"sprite": "Spr_4d_151.png"
+},
+"152": {
+"n": "Chikorita",
+"b": "quadruped",
+"t": [
+"plant",
+"leaf-head",
+"4-legs",
+"reptilian",
+"cute"
+],
+"c": "green",
+"sprite": "Spr_4d_152.png"
+},
+"153": {
+"n": "Bayleef",
+"b": "quadruped",
+"t": [
+"plant",
+"leaf-collar",
+"4-legs",
+"reptilian"
+],
+"c": "green",
+"sprite": "Spr_4d_153.png"
+},
+"154": {
+"n": "Meganium",
+"b": "quadruped",
+"t": [
+"plant",
+"flower-collar",
+"4-legs",
+"large"
+],
+"c": "green",
+"sprite": "Spr_4d_154_m.png"
+},
+"155": {
+"n": "Cyndaquil",
+"b": "quadruped",
+"t": [
+"fire",
+"back-flames",
+"4-legs",
+"small",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_155.png"
+},
+"156": {
+"n": "Quilava",
+"b": "quadruped",
+"t": [
+"fire",
+"back-flames",
+"4-legs"
+],
+"c": "blue",
+"sprite": "Spr_4d_156.png"
+},
+"157": {
+"n": "Typhlosion",
+"b": "biped",
+"t": [
+"fire",
+"mane-flames",
+"2-arms",
+"2-legs",
+"bulky"
+],
+"c": "blue",
+"sprite": "Spr_4d_157.png"
+},
+"158": {
+"n": "Totodile",
+"b": "biped",
+"t": [
+"croc",
+"jaws",
+"2-arms",
+"2-legs",
+"tail",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_158.png"
+},
+"159": {
+"n": "Croconaw",
+"b": "biped",
+"t": [
+"croc",
+"jaws",
+"spikes",
+"tail"
+],
+"c": "blue",
+"sprite": "Spr_4d_159.png"
+},
+"160": {
+"n": "Feraligatr",
+"b": "biped",
+"t": [
+"croc",
+"jaws",
+"spikes",
+"bulky",
+"tail"
+],
+"c": "blue",
+"sprite": "Spr_4d_160.png"
+},
+"161": {
+"n": "Sentret",
+"b": "biped",
+"t": [
+"rodent",
+"tail",
+"2-arms",
+"standing",
+"cute"
+],
+"c": "brown",
+"sprite": "Spr_4d_161.png"
+},
+"162": {
+"n": "Furret",
+"b": "quadruped",
+"t": [
+"ferret",
+"long-body",
+"tail",
+"4-legs"
+],
+"c": "brown",
+"sprite": "Spr_4d_162.png"
+},
+"163": {
+"n": "Hoothoot",
+"b": "bird",
+"t": [
+"owl",
+"round",
+"one-leg",
+"big-eyes",
+"cute"
+],
+"c": "brown",
+"sprite": "Spr_4d_163.png"
+},
+"164": {
+"n": "Noctowl",
+"b": "bird",
+"t": [
+"owl",
+"wings",
+"tufts",
+"big-eyes"
+],
+"c": "brown",
+"sprite": "Spr_4d_164.png"
+},
+"165": {
+"n": "Ledyba",
+"b": "bug",
+"t": [
+"ladybug",
+"wings",
+"spots",
+"2-arms",
+"cute"
+],
+"c": "red",
+"sprite": "Spr_4d_165_m.png"
+},
+"166": {
+"n": "Ledian",
+"b": "bug",
+"t": [
+"ladybug",
+"wings",
+"stars",
+"arms",
+"floating"
+],
+"c": "red",
+"sprite": "Spr_4d_166_m.png"
+},
+"167": {
+"n": "Spinarak",
+"b": "bug",
+"t": [
+"spider",
+"legs",
+"face-pattern",
+"small"
+],
+"c": "green",
+"sprite": "Spr_4d_167.png"
+},
+"168": {
+"n": "Ariados",
+"b": "bug",
+"t": [
+"spider",
+"legs",
+"horns",
+"pattern"
+],
+"c": "red",
+"sprite": "Spr_4d_168.png"
+},
+"169": {
+"n": "Crobat",
+"b": "bird",
+"t": [
+"bat",
+"four-wings",
+"floating",
+"fangs"
+],
+"c": "purple",
+"sprite": "Spr_4d_169.png"
+},
+"170": {
+"n": "Chinchou",
+"b": "fish",
+"t": [
+"anglerfish",
+"antennae",
+"fins",
+"aquatic",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_170.png"
+},
+"171": {
+"n": "Lanturn",
+"b": "fish",
+"t": [
+"anglerfish",
+"lure",
+"big-body",
+"aquatic"
+],
+"c": "blue",
+"sprite": "Spr_4d_171.png"
+},
+"172": {
+"n": "Pichu",
+"b": "biped",
+"t": [
+"rodent",
+"ears",
+"tiny",
+"big-head",
+"cheeks",
+"cute"
+],
+"c": "yellow",
+"sprite": "Spr_4d_172.png"
+},
+"173": {
+"n": "Cleffa",
+"b": "blob",
+"t": [
+"round",
+"curl",
+"ears",
+"star-shape",
+"cute",
+"small"
+],
+"c": "pink",
+"sprite": "Spr_4d_173.png"
+},
+"174": {
+"n": "Igglybuff",
+"b": "blob",
+"t": [
+"round",
+"curl",
+"tiny",
+"big-eyes",
+"cute"
+],
+"c": "pink",
+"sprite": "Spr_4d_174.png"
+},
+"175": {
+"n": "Togepi",
+"b": "blob",
+"t": [
+"egg-shell",
+"round",
+"spikes",
+"2-arms",
+"cute",
+"small"
+],
+"c": "cream",
+"sprite": "Spr_4d_175.png"
+},
+"176": {
+"n": "Togetic",
+"b": "biped",
+"t": [
+"round",
+"wings-small",
+"spikes",
+"floating",
+"cute"
+],
+"c": "white",
+"sprite": "Spr_4d_176.png"
+},
+"177": {
+"n": "Natu",
+"b": "bird",
+"t": [
+"chick",
+"round",
+"2-legs",
+"big-eyes",
+"cute",
+"small"
+],
+"c": "green",
+"sprite": "Spr_4d_177.png"
+},
+"178": {
+"n": "Xatu",
+"b": "bird",
+"t": [
+"totem",
+"wings",
+"standing",
+"patterns"
+],
+"c": "green",
+"sprite": "Spr_4d_178_m.png"
+},
+"179": {
+"n": "Mareep",
+"b": "quadruped",
+"t": [
+"sheep",
+"wool",
+"tail-orb",
+"4-legs",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_179.png"
+},
+"180": {
+"n": "Flaaffy",
+"b": "biped",
+"t": [
+"sheep",
+"wool",
+"2-arms",
+"2-legs",
+"tail-orb"
+],
+"c": "pink",
+"sprite": "Spr_4d_180.png"
+},
+"181": {
+"n": "Ampharos",
+"b": "biped",
+"t": [
+"sheep",
+"tail-orb",
+"2-arms",
+"tall",
+"electric"
+],
+"c": "yellow",
+"sprite": "Spr_4d_181.png"
+},
+"182": {
+"n": "Bellossom",
+"b": "biped",
+"t": [
+"plant",
+"flower-skirt",
+"2-legs",
+"dancer",
+"cute"
+],
+"c": "green",
+"sprite": "Spr_4d_182.png"
+},
+"183": {
+"n": "Marill",
+"b": "blob",
+"t": [
+"round",
+"ears",
+"tail-orb",
+"2-arms",
+"2-legs",
+"big-eyes",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_183.png"
+},
+"184": {
+"n": "Azumarill",
+"b": "biped",
+"t": [
+"round",
+"ears",
+"tail-orb",
+"2-arms",
+"belly-pattern",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_184.png"
+},
+"185": {
+"n": "Sudowoodo",
+"b": "biped",
+"t": [
+"tree",
+"rock",
+"2-arms",
+"2-legs",
+"golem",
+"brown"
+],
+"c": "brown",
+"sprite": "Spr_4d_185_m.png"
+},
+"186": {
+"n": "Politoed",
+"b": "biped",
+"t": [
+"frog",
+"curl",
+"2-arms",
+"2-legs",
+"big-mouth"
+],
+"c": "green",
+"sprite": "Spr_4d_186_m.png"
+},
+"187": {
+"n": "Hoppip",
+"b": "floating",
+"t": [
+"plant",
+"leaves",
+"round",
+"floating",
+"small",
+"cute"
+],
+"c": "pink",
+"sprite": "Spr_4d_187.png"
+},
+"188": {
+"n": "Skiploom",
+"b": "floating",
+"t": [
+"plant",
+"flower",
+"leaves",
+"floating",
+"cute"
+],
+"c": "green",
+"sprite": "Spr_4d_188.png"
+},
+"189": {
+"n": "Jumpluff",
+"b": "floating",
+"t": [
+"plant",
+"cotton-puffs",
+"floating",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_189.png"
+},
+"190": {
+"n": "Aipom",
+"b": "biped",
+"t": [
+"monkey",
+"hand-tail",
+"2-arms",
+"2-legs",
+"cute"
+],
+"c": "purple",
+"sprite": "Spr_4d_190_m.png"
+},
+"191": {
+"n": "Sunkern",
+"b": "blob",
+"t": [
+"seed",
+"round",
+"leaves",
+"no-limbs",
+"tiny",
+"cute"
+],
+"c": "yellow",
+"sprite": "Spr_4d_191.png"
+},
+"192": {
+"n": "Sunflora",
+"b": "biped",
+"t": [
+"plant",
+"sunflower-head",
+"2-arms",
+"2-legs"
+],
+"c": "yellow",
+"sprite": "Spr_4d_192.png"
+},
+"193": {
+"n": "Yanma",
+"b": "bug",
+"t": [
+"dragonfly",
+"wings",
+"big-eyes",
+"floating"
+],
+"c": "red",
+"sprite": "Spr_4d_193.png"
+},
+"194": {
+"n": "Wooper",
+"b": "biped",
+"t": [
+"axolotl",
+"gills",
+"2-arms",
+"tail",
+"big-eyes",
+"cute",
+"small"
+],
+"c": "blue",
+"sprite": "Spr_4d_194_m.png"
+},
+"195": {
+"n": "Quagsire",
+"b": "biped",
+"t": [
+"axolotl",
+"round",
+"2-arms",
+"dopey",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_195_m.png"
+},
+"196": {
+"n": "Espeon",
+"b": "quadruped",
+"t": [
+"fox",
+"gem",
+"split-tail",
+"4-legs",
+"sleek",
+"cute"
+],
+"c": "purple",
+"sprite": "Spr_4d_196.png"
+},
+"197": {
+"n": "Umbreon",
+"b": "quadruped",
+"t": [
+"fox",
+"rings",
+"tail",
+"4-legs",
+"sleek"
+],
+"c": "black",
+"sprite": "Spr_4d_197.png"
+},
+"198": {
+"n": "Murkrow",
+"b": "bird",
+"t": [
+"crow",
+"hat-crest",
+"wings",
+"mischief"
+],
+"c": "black",
+"sprite": "Spr_4d_198_m.png"
+},
+"199": {
+"n": "Slowking",
+"b": "biped",
+"t": [
+"round",
+"shell-crown",
+"2-arms",
+"dopey"
+],
+"c": "pink",
+"sprite": "Spr_4d_199.png"
+},
+"200": {
+"n": "Misdreavus",
+"b": "floating",
+"t": [
+"ghost",
+"floating",
+"necklace",
+"big-eyes",
+"no-limbs",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_200.png"
+},
+"201": {
+"n": "Unown",
+"b": "floating",
+"t": [
+"symbol",
+"letter",
+"floating",
+"one-eye",
+"flat"
+],
+"c": "black",
+"sprite": "Spr_4d_201.png"
+},
+"202": {
+"n": "Wobbuffet",
+"b": "blob",
+"t": [
+"round",
+"blue",
+"tail-face",
+"2-arms",
+"big"
+],
+"c": "blue",
+"sprite": "Spr_4d_202_m.png"
+},
+"203": {
+"n": "Girafarig",
+"b": "quadruped",
+"t": [
+"giraffe",
+"tail-head",
+"4-legs",
+"patterns"
+],
+"c": "yellow",
+"sprite": "Spr_4d_203_m.png"
+},
+"204": {
+"n": "Pineco",
+"b": "blob",
+"t": [
+"pinecone",
+"round",
+"no-limbs",
+"bug",
+"cute"
+],
+"c": "gray",
+"sprite": "Spr_4d_204.png"
+},
+"205": {
+"n": "Forretress",
+"b": "blob",
+"t": [
+"shell",
+"round",
+"spikes",
+"fortress",
+"bug"
+],
+"c": "purple",
+"sprite": "Spr_4d_205.png"
+},
+"206": {
+"n": "Dunsparce",
+"b": "serpent",
+"t": [
+"serpent",
+"wings-tiny",
+"drill-tail",
+"noodle",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_206.png"
+},
+"207": {
+"n": "Gligar",
+"b": "bird",
+"t": [
+"scorpion",
+"wings",
+"claws",
+"fangs",
+"floating"
+],
+"c": "purple",
+"sprite": "Spr_4d_207_m.png"
+},
+"208": {
+"n": "Steelix",
+"b": "serpent",
+"t": [
+"metal",
+"rock",
+"serpent",
+"huge",
+"noodle"
+],
+"c": "gray",
+"sprite": "Spr_4d_208_m.png"
+},
+"209": {
+"n": "Snubbull",
+"b": "biped",
+"t": [
+"bulldog",
+"fangs",
+"2-arms",
+"2-legs",
+"pink",
+"cute"
+],
+"c": "pink",
+"sprite": "Spr_4d_209.png"
+},
+"210": {
+"n": "Granbull",
+"b": "biped",
+"t": [
+"bulldog",
+"jaw",
+"2-arms",
+"bulky"
+],
+"c": "purple",
+"sprite": "Spr_4d_210.png"
+},
+"211": {
+"n": "Qwilfish",
+"b": "fish",
+"t": [
+"pufferfish",
+"spikes",
+"round",
+"aquatic"
+],
+"c": "blue",
+"sprite": "Spr_4d_211.png"
+},
+"212": {
+"n": "Scizor",
+"b": "bug",
+"t": [
+"mantis",
+"pincers",
+"metal",
+"wings",
+"2-legs"
+],
+"c": "red",
+"sprite": "Spr_4d_212_m.png"
+},
+"213": {
+"n": "Shuckle",
+"b": "blob",
+"t": [
+"shell",
+"legs-tiny",
+"holes",
+"red-body",
+"cute"
+],
+"c": "yellow",
+"sprite": "Spr_4d_213.png"
+},
+"214": {
+"n": "Heracross",
+"b": "bug",
+"t": [
+"beetle",
+"horn",
+"wings",
+"2-arms",
+"2-legs"
+],
+"c": "blue",
+"sprite": "Spr_4d_214_m.png"
+},
+"215": {
+"n": "Sneasel",
+"b": "biped",
+"t": [
+"weasel",
+"claws",
+"ear-feathers",
+"2-arms",
+"2-legs"
+],
+"c": "black",
+"sprite": "Spr_4d_215_m.png"
+},
+"216": {
+"n": "Teddiursa",
+"b": "biped",
+"t": [
+"bear-cub",
+"round",
+"2-arms",
+"crescent",
+"cute",
+"small"
+],
+"c": "brown",
+"sprite": "Spr_4d_216.png"
+},
+"217": {
+"n": "Ursaring",
+"b": "biped",
+"t": [
+"bear",
+"2-arms",
+"2-legs",
+"bulky",
+"fierce"
+],
+"c": "brown",
+"sprite": "Spr_4d_217_m.png"
+},
+"218": {
+"n": "Slugma",
+"b": "blob",
+"t": [
+"slug",
+"lava",
+"amorphous",
+"no-limbs",
+"ooze",
+"big-eyes"
+],
+"c": "red",
+"sprite": "Spr_4d_218.png"
+},
+"219": {
+"n": "Magcargo",
+"b": "blob",
+"t": [
+"slug",
+"lava",
+"rock-shell",
+"ooze",
+"snail"
+],
+"c": "red",
+"sprite": "Spr_4d_219.png"
+},
+"220": {
+"n": "Swinub",
+"b": "quadruped",
+"t": [
+"pig",
+"fuzzy",
+"snout",
+"4-legs",
+"tiny",
+"cute"
+],
+"c": "brown",
+"sprite": "Spr_4d_220.png"
+},
+"221": {
+"n": "Piloswine",
+"b": "quadruped",
+"t": [
+"boar",
+"fur",
+"tusks",
+"4-legs",
+"shaggy"
+],
+"c": "brown",
+"sprite": "Spr_4d_221_m.png"
+},
+"222": {
+"n": "Corsola",
+"b": "blob",
+"t": [
+"coral",
+"branches",
+"round",
+"aquatic",
+"pink",
+"cute"
+],
+"c": "pink",
+"sprite": "Spr_4d_222.png"
+},
+"223": {
+"n": "Remoraid",
+"b": "fish",
+"t": [
+"fish",
+"fins",
+"aquatic",
+"small"
+],
+"c": "blue",
+"sprite": "Spr_4d_223.png"
+},
+"224": {
+"n": "Octillery",
+"b": "blob",
+"t": [
+"octopus",
+"tentacles",
+"aquatic",
+"round"
+],
+"c": "red",
+"sprite": "Spr_4d_224_m.png"
+},
+"225": {
+"n": "Delibird",
+"b": "bird",
+"t": [
+"penguin",
+"sack-tail",
+"wings",
+"2-legs",
+"cute"
+],
+"c": "red",
+"sprite": "Spr_4d_225.png"
+},
+"226": {
+"n": "Mantine",
+"b": "fish",
+"t": [
+"ray",
+"wings-fins",
+"flat",
+"aquatic",
+"glide"
+],
+"c": "blue",
+"sprite": "Spr_4d_226.png"
+},
+"227": {
+"n": "Skarmory",
+"b": "bird",
+"t": [
+"metal",
+"wings",
+"beak",
+"talons",
+"armored"
+],
+"c": "gray",
+"sprite": "Spr_4d_227.png"
+},
+"228": {
+"n": "Houndour",
+"b": "quadruped",
+"t": [
+"dog",
+"bone-bands",
+"4-legs",
+"dark",
+"cute"
+],
+"c": "black",
+"sprite": "Spr_4d_228.png"
+},
+"229": {
+"n": "Houndoom",
+"b": "quadruped",
+"t": [
+"dog",
+"horns",
+"bands",
+"4-legs",
+"dark"
+],
+"c": "black",
+"sprite": "Spr_4d_229_m.png"
+},
+"230": {
+"n": "Kingdra",
+"b": "fish",
+"t": [
+"seahorse",
+"dragon",
+"fins",
+"aquatic"
+],
+"c": "blue",
+"sprite": "Spr_4d_230.png"
+},
+"231": {
+"n": "Phanpy",
+"b": "quadruped",
+"t": [
+"elephant",
+"round",
+"ears",
+"trunk",
+"4-legs",
+"cute",
+"small"
+],
+"c": "blue",
+"sprite": "Spr_4d_231.png"
+},
+"232": {
+"n": "Donphan",
+"b": "quadruped",
+"t": [
+"elephant",
+"tire-body",
+"tusks",
+"4-legs",
+"armored"
+],
+"c": "gray",
+"sprite": "Spr_4d_232_m.png"
+},
+"233": {
+"n": "Porygon2",
+"b": "biped",
+"t": [
+"polygon",
+"digital",
+"rounded",
+"floating"
+],
+"c": "pink",
+"sprite": "Spr_4d_233.png"
+},
+"234": {
+"n": "Stantler",
+"b": "quadruped",
+"t": [
+"deer",
+"antlers",
+"4-legs",
+"orbs"
+],
+"c": "brown",
+"sprite": "Spr_4d_234.png"
+},
+"235": {
+"n": "Smeargle",
+"b": "biped",
+"t": [
+"dog",
+"tail-brush",
+"2-arms",
+"2-legs",
+"beret"
+],
+"c": "cream",
+"sprite": "Spr_4d_235.png"
+},
+"236": {
+"n": "Tyrogue",
+"b": "biped",
+"t": [
+"fighter",
+"2-arms",
+"2-legs",
+"small",
+"scrappy"
+],
+"c": "purple",
+"sprite": "Spr_4d_236.png"
+},
+"237": {
+"n": "Hitmontop",
+"b": "biped",
+"t": [
+"fighter",
+"spin",
+"top",
+"legs",
+"2-arms"
+],
+"c": "brown",
+"sprite": "Spr_4d_237.png"
+},
+"238": {
+"n": "Smoochum",
+"b": "biped",
+"t": [
+"humanoid",
+"lips",
+"hair",
+"2-arms",
+"cute",
+"small"
+],
+"c": "pink",
+"sprite": "Spr_4d_238.png"
+},
+"239": {
+"n": "Elekid",
+"b": "biped",
+"t": [
+"plug-head",
+"2-arms",
+"2-legs",
+"electric",
+"cute",
+"small"
+],
+"c": "yellow",
+"sprite": "Spr_4d_239.png"
+},
+"240": {
+"n": "Magby",
+"b": "biped",
+"t": [
+"fire",
+"beak",
+"2-arms",
+"2-legs",
+"cute",
+"small"
+],
+"c": "red",
+"sprite": "Spr_4d_240.png"
+},
+"241": {
+"n": "Miltank",
+"b": "quadruped",
+"t": [
+"cow",
+"udder",
+"4-legs",
+"pink",
+"bulky",
+"cute"
+],
+"c": "pink",
+"sprite": "Spr_4d_241.png"
+},
+"242": {
+"n": "Blissey",
+"b": "blob",
+"t": [
+"round",
+"egg-pouch",
+"2-arms",
+"2-legs",
+"apron",
+"cute",
+"pink"
+],
+"c": "pink",
+"sprite": "Spr_4d_242.png"
+},
+"243": {
+"n": "Raikou",
+"b": "quadruped",
+"t": [
+"legendary",
+"tiger",
+"mane",
+"4-legs",
+"electric"
+],
+"c": "yellow",
+"sprite": "Spr_4d_243.png"
+},
+"244": {
+"n": "Entei",
+"b": "quadruped",
+"t": [
+"legendary",
+"lion",
+"mane",
+"4-legs",
+"fire",
+"large"
+],
+"c": "brown",
+"sprite": "Spr_4d_244.png"
+},
+"245": {
+"n": "Suicune",
+"b": "quadruped",
+"t": [
+"legendary",
+"mane",
+"4-legs",
+"elegant",
+"water"
+],
+"c": "blue",
+"sprite": "Spr_4d_245.png"
+},
+"246": {
+"n": "Larvitar",
+"b": "biped",
+"t": [
+"reptilian",
+"rock",
+"2-arms",
+"2-legs",
+"horn",
+"cute"
+],
+"c": "green",
+"sprite": "Spr_4d_246.png"
+},
+"247": {
+"n": "Pupitar",
+"b": "blob",
+"t": [
+"cocoon",
+"rock",
+"hard-shell",
+"no-limbs",
+"horn"
+],
+"c": "gray",
+"sprite": "Spr_4d_247.png"
+},
+"248": {
+"n": "Tyranitar",
+"b": "biped",
+"t": [
+"reptilian",
+"armored",
+"spikes",
+"2-arms",
+"tail",
+"bulky"
+],
+"c": "green",
+"sprite": "Spr_4d_248.png"
+},
+"249": {
+"n": "Lugia",
+"b": "biped",
+"t": [
+"legendary",
+"dragon",
+"wings",
+"fins",
+"large"
+],
+"c": "white",
+"sprite": "Spr_4d_249.png"
+},
+"250": {
+"n": "HoOh",
+"b": "bird",
+"t": [
+"legendary",
+"phoenix",
+"wings",
+"plume",
+"fire",
+"large"
+],
+"c": "red",
+"sprite": "Spr_4d_250.png"
+},
+"251": {
+"n": "Celebi",
+"b": "biped",
+"t": [
+"fairy",
+"wings",
+"antennae",
+"2-arms",
+"floating",
+"cute",
+"small"
+],
+"c": "green",
+"sprite": "Spr_4d_251.png"
+},
+"252": {
+"n": "Treecko",
+"b": "biped",
+"t": [
+"gecko",
+"reptilian",
+"2-arms",
+"2-legs",
+"tail",
+"cute"
+],
+"c": "green",
+"sprite": "Spr_4d_252.png"
+},
+"253": {
+"n": "Grovyle",
+"b": "biped",
+"t": [
+"gecko",
+"leaves",
+"2-arms",
+"2-legs",
+"fast"
+],
+"c": "green",
+"sprite": "Spr_4d_253.png"
+},
+"254": {
+"n": "Sceptile",
+"b": "biped",
+"t": [
+"gecko",
+"leaf-blades",
+"2-arms",
+"tail",
+"tall"
+],
+"c": "green",
+"sprite": "Spr_4d_254.png"
+},
+"255": {
+"n": "Torchic",
+"b": "biped",
+"t": [
+"chick",
+"fluffy",
+"2-legs",
+"big-eyes",
+"cute",
+"small"
+],
+"c": "orange",
+"sprite": "Spr_4d_255_m.png"
+},
+"256": {
+"n": "Combusken",
+"b": "biped",
+"t": [
+"chicken",
+"fighter",
+"2-legs",
+"crest"
+],
+"c": "orange",
+"sprite": "Spr_4d_256_m.png"
+},
+"257": {
+"n": "Blaziken",
+"b": "biped",
+"t": [
+"chicken",
+"fighter",
+"flames",
+"2-arms",
+"2-legs",
+"tall"
+],
+"c": "red",
+"sprite": "Spr_4d_257_m.png"
+},
+"258": {
+"n": "Mudkip",
+"b": "quadruped",
+"t": [
+"amphibian",
+"fin-head",
+"4-legs",
+"big-eyes",
+"cute",
+"small"
+],
+"c": "blue",
+"sprite": "Spr_4d_258.png"
+},
+"259": {
+"n": "Marshtomp",
+"b": "biped",
+"t": [
+"amphibian",
+"fin-head",
+"2-arms",
+"2-legs"
+],
+"c": "blue",
+"sprite": "Spr_4d_259.png"
+},
+"260": {
+"n": "Swampert",
+"b": "biped",
+"t": [
+"amphibian",
+"gills",
+"2-arms",
+"bulky",
+"fins"
+],
+"c": "blue",
+"sprite": "Spr_4d_260.png"
+},
+"261": {
+"n": "Poochyena",
+"b": "quadruped",
+"t": [
+"dog",
+"4-legs",
+"tail",
+"fangs",
+"cute"
+],
+"c": "gray",
+"sprite": "Spr_4d_261.png"
+},
+"262": {
+"n": "Mightyena",
+"b": "quadruped",
+"t": [
+"wolf",
+"mane",
+"4-legs",
+"fierce"
+],
+"c": "gray",
+"sprite": "Spr_4d_262.png"
+},
+"263": {
+"n": "Zigzagoon",
+"b": "quadruped",
+"t": [
+"raccoon",
+"zigzag",
+"4-legs",
+"tail",
+"cute"
+],
+"c": "brown",
+"sprite": "Spr_4d_263.png"
+},
+"264": {
+"n": "Linoone",
+"b": "quadruped",
+"t": [
+"raccoon",
+"long-body",
+"4-legs",
+"fast"
+],
+"c": "brown",
+"sprite": "Spr_4d_264.png"
+},
+"265": {
+"n": "Wurmple",
+"b": "bug",
+"t": [
+"larva",
+"segmented",
+"horns",
+"many-legs",
+"small"
+],
+"c": "red",
+"sprite": "Spr_4d_265.png"
+},
+"266": {
+"n": "Silcoon",
+"b": "blob",
+"t": [
+"cocoon",
+"round",
+"bug",
+"no-limbs"
+],
+"c": "white",
+"sprite": "Spr_4d_266.png"
+},
+"267": {
+"n": "Beautifly",
+"b": "bug",
+"t": [
+"butterfly",
+"wings",
+"proboscis",
+"floating"
+],
+"c": "yellow",
+"sprite": "Spr_4d_267_m.png"
+},
+"268": {
+"n": "Cascoon",
+"b": "blob",
+"t": [
+"cocoon",
+"round",
+"bug",
+"spikes",
+"no-limbs"
+],
+"c": "purple",
+"sprite": "Spr_4d_268.png"
+},
+"269": {
+"n": "Dustox",
+"b": "bug",
+"t": [
+"moth",
+"wings",
+"floating",
+"antennae"
+],
+"c": "green",
+"sprite": "Spr_4d_269_m.png"
+},
+"270": {
+"n": "Lotad",
+"b": "blob",
+"t": [
+"lilypad",
+"leaf-hat",
+"4-legs-tiny",
+"aquatic",
+"cute"
+],
+"c": "green",
+"sprite": "Spr_4d_270.png"
+},
+"271": {
+"n": "Lombre",
+"b": "biped",
+"t": [
+"lilypad",
+"2-arms",
+"2-legs",
+"frog",
+"leaf-hat"
+],
+"c": "green",
+"sprite": "Spr_4d_271.png"
+},
+"272": {
+"n": "Ludicolo",
+"b": "biped",
+"t": [
+"sombrero",
+"2-arms",
+"2-legs",
+"dancer",
+"pineapple"
+],
+"c": "green",
+"sprite": "Spr_4d_272_m.png"
+},
+"273": {
+"n": "Seedot",
+"b": "blob",
+"t": [
+"acorn",
+"round",
+"no-limbs",
+"tiny",
+"cute"
+],
+"c": "brown",
+"sprite": "Spr_4d_273.png"
+},
+"274": {
+"n": "Nuzleaf",
+"b": "biped",
+"t": [
+"plant",
+"leaf-nose",
+"2-arms",
+"2-legs"
+],
+"c": "brown",
+"sprite": "Spr_4d_274_m.png"
+},
+"275": {
+"n": "Shiftry",
+"b": "biped",
+"t": [
+"tengu",
+"leaf-fans",
+"nose",
+"2-arms"
+],
+"c": "brown",
+"sprite": "Spr_4d_275_m.png"
+},
+"276": {
+"n": "Taillow",
+"b": "bird",
+"t": [
+"swallow",
+"wings",
+"beak",
+"small",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_276.png"
+},
+"277": {
+"n": "Swellow",
+"b": "bird",
+"t": [
+"swallow",
+"wings",
+"forked-tail",
+"sleek"
+],
+"c": "blue",
+"sprite": "Spr_4d_277.png"
+},
+"278": {
+"n": "Wingull",
+"b": "bird",
+"t": [
+"seagull",
+"wings",
+"beak",
+"aquatic"
+],
+"c": "white",
+"sprite": "Spr_4d_278.png"
+},
+"279": {
+"n": "Pelipper",
+"b": "bird",
+"t": [
+"pelican",
+"big-bill",
+"wings",
+"aquatic"
+],
+"c": "yellow",
+"sprite": "Spr_4d_279.png"
+},
+"280": {
+"n": "Ralts",
+"b": "biped",
+"t": [
+"fairy",
+"gown",
+"horns",
+"2-legs",
+"cute",
+"small"
+],
+"c": "white",
+"sprite": "Spr_4d_280.png"
+},
+"281": {
+"n": "Kirlia",
+"b": "biped",
+"t": [
+"fairy",
+"gown",
+"dancer",
+"horns",
+"2-legs"
+],
+"c": "white",
+"sprite": "Spr_4d_281.png"
+},
+"282": {
+"n": "Gardevoir",
+"b": "biped",
+"t": [
+"fairy",
+"gown",
+"elegant",
+"2-arms",
+"tall"
+],
+"c": "white",
+"sprite": "Spr_4d_282.png"
+},
+"283": {
+"n": "Surskit",
+"b": "bug",
+"t": [
+"waterstrider",
+"legs",
+"antenna",
+"aquatic",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_283.png"
+},
+"284": {
+"n": "Masquerain",
+"b": "bug",
+"t": [
+"eye-wings",
+"antennae",
+"floating"
+],
+"c": "blue",
+"sprite": "Spr_4d_284.png"
+},
+"285": {
+"n": "Shroomish",
+"b": "blob",
+"t": [
+"mushroom",
+"round",
+"2-legs-tiny",
+"spots",
+"cute"
+],
+"c": "brown",
+"sprite": "Spr_4d_285.png"
+},
+"286": {
+"n": "Breloom",
+"b": "biped",
+"t": [
+"mushroom",
+"2-arms",
+"2-legs",
+"tail",
+"fighter"
+],
+"c": "green",
+"sprite": "Spr_4d_286.png"
+},
+"287": {
+"n": "Slakoth",
+"b": "quadruped",
+"t": [
+"sloth",
+"lazy",
+"4-legs",
+"fur",
+"cute"
+],
+"c": "brown",
+"sprite": "Spr_4d_287.png"
+},
+"288": {
+"n": "Vigoroth",
+"b": "biped",
+"t": [
+"sloth",
+"2-arms",
+"2-legs",
+"wild"
+],
+"c": "white",
+"sprite": "Spr_4d_288.png"
+},
+"289": {
+"n": "Slaking",
+"b": "biped",
+"t": [
+"ape",
+"2-arms",
+"bulky",
+"mane",
+"lazy"
+],
+"c": "brown",
+"sprite": "Spr_4d_289.png"
+},
+"290": {
+"n": "Nincada",
+"b": "bug",
+"t": [
+"cicada",
+"claws",
+"legs",
+"underground"
+],
+"c": "gray",
+"sprite": "Spr_4d_290.png"
+},
+"291": {
+"n": "Ninjask",
+"b": "bug",
+"t": [
+"cicada",
+"wings",
+"fast",
+"floating"
+],
+"c": "yellow",
+"sprite": "Spr_4d_291.png"
+},
+"292": {
+"n": "Shedinja",
+"b": "floating",
+"t": [
+"husk",
+"ghost",
+"halo",
+"floating",
+"hollow",
+"bug"
+],
+"c": "brown",
+"sprite": "Spr_4d_292.png"
+},
+"293": {
+"n": "Whismur",
+"b": "biped",
+"t": [
+"round",
+"ears",
+"2-arms",
+"2-legs",
+"big-mouth",
+"cute"
+],
+"c": "pink",
+"sprite": "Spr_4d_293.png"
+},
+"294": {
+"n": "Loudred",
+"b": "biped",
+"t": [
+"round",
+"ears-speaker",
+"2-arms",
+"2-legs"
+],
+"c": "purple",
+"sprite": "Spr_4d_294.png"
+},
+"295": {
+"n": "Exploud",
+"b": "biped",
+"t": [
+"vents",
+"2-arms",
+"2-legs",
+"bulky",
+"loud"
+],
+"c": "purple",
+"sprite": "Spr_4d_295.png"
+},
+"296": {
+"n": "Makuhita",
+"b": "biped",
+"t": [
+"sumo",
+"round",
+"2-arms",
+"2-legs",
+"cute"
+],
+"c": "yellow",
+"sprite": "Spr_4d_296.png"
+},
+"297": {
+"n": "Hariyama",
+"b": "biped",
+"t": [
+"sumo",
+"big-hands",
+"2-arms",
+"bulky"
+],
+"c": "brown",
+"sprite": "Spr_4d_297.png"
+},
+"298": {
+"n": "Azurill",
+"b": "blob",
+"t": [
+"round",
+"ears",
+"tail-orb",
+"2-arms",
+"tiny",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_298.png"
+},
+"299": {
+"n": "Nosepass",
+"b": "biped",
+"t": [
+"rock",
+"nose",
+"statue",
+"golem",
+"stiff"
+],
+"c": "gray",
+"sprite": "Spr_4d_299.png"
+},
+"300": {
+"n": "Skitty",
+"b": "quadruped",
+"t": [
+"cat",
+"round",
+"tail",
+"4-legs",
+"cute",
+"small"
+],
+"c": "pink",
+"sprite": "Spr_4d_300.png"
+},
+"301": {
+"n": "Delcatty",
+"b": "quadruped",
+"t": [
+"cat",
+"collar-fur",
+"4-legs",
+"sleek"
+],
+"c": "cream",
+"sprite": "Spr_4d_301.png"
+},
+"302": {
+"n": "Sableye",
+"b": "biped",
+"t": [
+"gremlin",
+"gem-eyes",
+"2-arms",
+"2-legs",
+"dark",
+"ghost"
+],
+"c": "purple",
+"sprite": "Spr_4d_302.png"
+},
+"303": {
+"n": "Mawile",
+"b": "biped",
+"t": [
+"jaw-hair",
+"2-arms",
+"2-legs",
+"deceiver",
+"cute"
+],
+"c": "black",
+"sprite": "Spr_4d_303.png"
+},
+"304": {
+"n": "Aron",
+"b": "quadruped",
+"t": [
+"metal",
+"armored",
+"4-legs",
+"small",
+"cute"
+],
+"c": "gray",
+"sprite": "Spr_4d_304.png"
+},
+"305": {
+"n": "Lairon",
+"b": "quadruped",
+"t": [
+"metal",
+"armored",
+"4-legs",
+"plates"
+],
+"c": "gray",
+"sprite": "Spr_4d_305.png"
+},
+"306": {
+"n": "Aggron",
+"b": "biped",
+"t": [
+"metal",
+"armored",
+"horns",
+"2-arms",
+"bulky"
+],
+"c": "gray",
+"sprite": "Spr_4d_306.png"
+},
+"307": {
+"n": "Meditite",
+"b": "biped",
+"t": [
+"yogi",
+"2-arms",
+"2-legs",
+"meditate",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_307_m.png"
+},
+"308": {
+"n": "Medicham",
+"b": "biped",
+"t": [
+"yogi",
+"2-arms",
+"2-legs",
+"slender"
+],
+"c": "red",
+"sprite": "Spr_4d_308_m.png"
+},
+"309": {
+"n": "Electrike",
+"b": "quadruped",
+"t": [
+"dog",
+"spiky-fur",
+"4-legs",
+"electric",
+"cute"
+],
+"c": "green",
+"sprite": "Spr_4d_309.png"
+},
+"310": {
+"n": "Manectric",
+"b": "quadruped",
+"t": [
+"dog",
+"mane",
+"4-legs",
+"electric"
+],
+"c": "blue",
+"sprite": "Spr_4d_310.png"
+},
+"311": {
+"n": "Plusle",
+"b": "biped",
+"t": [
+"rodent",
+"ears",
+"cheeks",
+"2-arms",
+"2-legs",
+"cute",
+"small"
+],
+"c": "cream",
+"sprite": "Spr_4d_311.png"
+},
+"312": {
+"n": "Minun",
+"b": "biped",
+"t": [
+"rodent",
+"ears",
+"cheeks",
+"2-arms",
+"2-legs",
+"cute",
+"small"
+],
+"c": "cream",
+"sprite": "Spr_4d_312.png"
+},
+"313": {
+"n": "Volbeat",
+"b": "bug",
+"t": [
+"firefly",
+"tail-light",
+"wings",
+"2-arms"
+],
+"c": "black",
+"sprite": "Spr_4d_313.png"
+},
+"314": {
+"n": "Illumise",
+"b": "bug",
+"t": [
+"firefly",
+"antennae",
+"wings",
+"slender"
+],
+"c": "purple",
+"sprite": "Spr_4d_314.png"
+},
+"315": {
+"n": "Roselia",
+"b": "biped",
+"t": [
+"plant",
+"rose-hands",
+"2-legs",
+"thorns",
+"cute"
+],
+"c": "green",
+"sprite": "Spr_4d_315_m.png"
+},
+"316": {
+"n": "Gulpin",
+"b": "blob",
+"t": [
+"slime",
+"round",
+"stomach",
+"big-mouth",
+"no-limbs",
+"ooze",
+"cute"
+],
+"c": "green",
+"sprite": "Spr_4d_316_m.png"
+},
+"317": {
+"n": "Swalot",
+"b": "blob",
+"t": [
+"slime",
+"round",
+"big-mouth",
+"stubby-arms",
+"ooze"
+],
+"c": "purple",
+"sprite": "Spr_4d_317_m.png"
+},
+"318": {
+"n": "Carvanha",
+"b": "fish",
+"t": [
+"piranha",
+"fangs",
+"fins",
+"aquatic",
+"fierce"
+],
+"c": "red",
+"sprite": "Spr_4d_318.png"
+},
+"319": {
+"n": "Sharpedo",
+"b": "fish",
+"t": [
+"shark",
+"fangs",
+"fins",
+"aquatic",
+"torpedo"
+],
+"c": "blue",
+"sprite": "Spr_4d_319.png"
+},
+"320": {
+"n": "Wailmer",
+"b": "blob",
+"t": [
+"whale",
+"round",
+"ball",
+"aquatic",
+"big",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_320.png"
+},
+"321": {
+"n": "Wailord",
+"b": "blob",
+"t": [
+"whale",
+"huge",
+"aquatic",
+"blimp"
+],
+"c": "blue",
+"sprite": "Spr_4d_321.png"
+},
+"322": {
+"n": "Numel",
+"b": "quadruped",
+"t": [
+"camel",
+"hump",
+"4-legs",
+"dopey",
+"cute"
+],
+"c": "yellow",
+"sprite": "Spr_4d_322_m.png"
+},
+"323": {
+"n": "Camerupt",
+"b": "quadruped",
+"t": [
+"camel",
+"volcano-humps",
+"4-legs",
+"bulky"
+],
+"c": "red",
+"sprite": "Spr_4d_323_m.png"
+},
+"324": {
+"n": "Torkoal",
+"b": "quadruped",
+"t": [
+"turtle",
+"shell-smoke",
+"4-legs",
+"coal"
+],
+"c": "brown",
+"sprite": "Spr_4d_324.png"
+},
+"325": {
+"n": "Spoink",
+"b": "biped",
+"t": [
+"pig",
+"spring-tail",
+"pearl",
+"bouncy",
+"cute"
+],
+"c": "black",
+"sprite": "Spr_4d_325.png"
+},
+"326": {
+"n": "Grumpig",
+"b": "biped",
+"t": [
+"pig",
+"pearls",
+"2-arms",
+"2-legs",
+"dancer"
+],
+"c": "purple",
+"sprite": "Spr_4d_326.png"
+},
+"327": {
+"n": "Spinda",
+"b": "biped",
+"t": [
+"panda",
+"spots",
+"2-arms",
+"2-legs",
+"dizzy",
+"cute"
+],
+"c": "cream",
+"sprite": "Spr_4d_327.png"
+},
+"328": {
+"n": "Trapinch",
+"b": "quadruped",
+"t": [
+"antlion",
+"big-jaws",
+"4-legs",
+"head",
+"cute"
+],
+"c": "orange",
+"sprite": "Spr_4d_328.png"
+},
+"329": {
+"n": "Vibrava",
+"b": "bug",
+"t": [
+"dragon",
+"wings",
+"antennae",
+"floating"
+],
+"c": "green",
+"sprite": "Spr_4d_329.png"
+},
+"330": {
+"n": "Flygon",
+"b": "biped",
+"t": [
+"dragon",
+"wings",
+"2-arms",
+"2-legs",
+"tail",
+"goggle-eyes"
+],
+"c": "green",
+"sprite": "Spr_4d_330.png"
+},
+"331": {
+"n": "Cacnea",
+"b": "blob",
+"t": [
+"cactus",
+"round",
+"2-arms",
+"spikes",
+"cute"
+],
+"c": "green",
+"sprite": "Spr_4d_331.png"
+},
+"332": {
+"n": "Cacturne",
+"b": "biped",
+"t": [
+"cactus",
+"2-arms",
+"2-legs",
+"scarecrow"
+],
+"c": "green",
+"sprite": "Spr_4d_332_m.png"
+},
+"333": {
+"n": "Swablu",
+"b": "bird",
+"t": [
+"bird",
+"cotton-wings",
+"beak",
+"floating",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_333.png"
+},
+"334": {
+"n": "Altaria",
+"b": "bird",
+"t": [
+"dragon",
+"cloud-wings",
+"plume",
+"floating"
+],
+"c": "blue",
+"sprite": "Spr_4d_334.png"
+},
+"335": {
+"n": "Zangoose",
+"b": "biped",
+"t": [
+"mongoose",
+"claws",
+"2-arms",
+"2-legs",
+"scar"
+],
+"c": "white",
+"sprite": "Spr_4d_335.png"
+},
+"336": {
+"n": "Seviper",
+"b": "serpent",
+"t": [
+"snake",
+"blade-tail",
+"noodle",
+"no-limbs",
+"fangs"
+],
+"c": "black",
+"sprite": "Spr_4d_336.png"
+},
+"337": {
+"n": "Lunatone",
+"b": "floating",
+"t": [
+"moon",
+"rock",
+"floating",
+"one-eye",
+"symmetric"
+],
+"c": "yellow",
+"sprite": "Spr_4d_337.png"
+},
+"338": {
+"n": "Solrock",
+"b": "floating",
+"t": [
+"sun",
+"rock",
+"floating",
+"radial",
+"one-eye"
+],
+"c": "orange",
+"sprite": "Spr_4d_338.png"
+},
+"339": {
+"n": "Barboach",
+"b": "fish",
+"t": [
+"loach",
+"whiskers",
+"aquatic",
+"slippery",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_339.png"
+},
+"340": {
+"n": "Whiscash",
+"b": "fish",
+"t": [
+"catfish",
+"whiskers",
+"aquatic",
+"big"
+],
+"c": "blue",
+"sprite": "Spr_4d_340.png"
+},
+"341": {
+"n": "Corphish",
+"b": "blob",
+"t": [
+"crayfish",
+"claws",
+"legs",
+"aquatic",
+"cute"
+],
+"c": "red",
+"sprite": "Spr_4d_341.png"
+},
+"342": {
+"n": "Crawdaunt",
+"b": "blob",
+"t": [
+"crayfish",
+"big-claws",
+"aquatic",
+"fierce"
+],
+"c": "red",
+"sprite": "Spr_4d_342.png"
+},
+"343": {
+"n": "Baltoy",
+"b": "floating",
+"t": [
+"clay",
+"spinning-top",
+"floating",
+"one-arms-out",
+"symmetric",
+"cute"
+],
+"c": "brown",
+"sprite": "Spr_4d_343.png"
+},
+"344": {
+"n": "Claydol",
+"b": "floating",
+"t": [
+"clay",
+"totem",
+"many-arms",
+"floating",
+"eyes"
+],
+"c": "black",
+"sprite": "Spr_4d_344.png"
+},
+"345": {
+"n": "Lileep",
+"b": "floating",
+"t": [
+"crinoid",
+"plant",
+"tentacles",
+"aquatic",
+"fossil"
+],
+"c": "purple",
+"sprite": "Spr_4d_345.png"
+},
+"346": {
+"n": "Cradily",
+"b": "biped",
+"t": [
+"crinoid",
+"tentacles",
+"neck",
+"fossil"
+],
+"c": "green",
+"sprite": "Spr_4d_346.png"
+},
+"347": {
+"n": "Anorith",
+"b": "bug",
+"t": [
+"anomalocaris",
+"plates",
+"claws",
+"aquatic",
+"fossil"
+],
+"c": "gray",
+"sprite": "Spr_4d_347.png"
+},
+"348": {
+"n": "Armaldo",
+"b": "biped",
+"t": [
+"anomalocaris",
+"armored",
+"claws",
+"2-legs",
+"fossil"
+],
+"c": "gray",
+"sprite": "Spr_4d_348.png"
+},
+"349": {
+"n": "Feebas",
+"b": "fish",
+"t": [
+"fish",
+"fins",
+"aquatic",
+"plain",
+"derpy"
+],
+"c": "brown",
+"sprite": "Spr_4d_349.png"
+},
+"350": {
+"n": "Milotic",
+"b": "serpent",
+"t": [
+"serpent",
+"elegant",
+"fins",
+"aquatic",
+"long"
+],
+"c": "cream",
+"sprite": "Spr_4d_350_m.png"
+},
+"351": {
+"n": "Castform",
+"b": "floating",
+"t": [
+"cloud",
+"round",
+"floating",
+"weather",
+"cute"
+],
+"c": "white",
+"sprite": "Spr_4d_351.png"
+},
+"352": {
+"n": "Kecleon",
+"b": "biped",
+"t": [
+"chameleon",
+"zigzag",
+"2-arms",
+"2-legs",
+"tail",
+"curl"
+],
+"c": "green",
+"sprite": "Spr_4d_352.png"
+},
+"353": {
+"n": "Shuppet",
+"b": "floating",
+"t": [
+"ghost",
+"cloth",
+"horn",
+"floating",
+"no-limbs",
+"cute"
+],
+"c": "black",
+"sprite": "Spr_4d_353.png"
+},
+"354": {
+"n": "Banette",
+"b": "floating",
+"t": [
+"ghost",
+"doll",
+"zipper-mouth",
+"floating",
+"arms"
+],
+"c": "black",
+"sprite": "Spr_4d_354.png"
+},
+"355": {
+"n": "Duskull",
+"b": "floating",
+"t": [
+"ghost",
+"skull-mask",
+"floating",
+"one-eye",
+"cute"
+],
+"c": "black",
+"sprite": "Spr_4d_355.png"
+},
+"356": {
+"n": "Dusclops",
+"b": "biped",
+"t": [
+"ghost",
+"one-eye",
+"bandaged",
+"2-arms",
+"bulky"
+],
+"c": "gray",
+"sprite": "Spr_4d_356.png"
+},
+"357": {
+"n": "Tropius",
+"b": "quadruped",
+"t": [
+"dinosaur",
+"leaf-wings",
+"fruit-neck",
+"4-legs",
+"large"
+],
+"c": "green",
+"sprite": "Spr_4d_357.png"
+},
+"358": {
+"n": "Chimecho",
+"b": "floating",
+"t": [
+"chime",
+"round",
+"tail",
+"floating",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_358.png"
+},
+"359": {
+"n": "Absol",
+"b": "quadruped",
+"t": [
+"beast",
+"horn",
+"mane",
+"4-legs",
+"sleek"
+],
+"c": "white",
+"sprite": "Spr_4d_359.png"
+},
+"360": {
+"n": "Wynaut",
+"b": "blob",
+"t": [
+"round",
+"ears",
+"2-arms",
+"big-mouth",
+"cute",
+"small"
+],
+"c": "blue",
+"sprite": "Spr_4d_360.png"
+},
+"361": {
+"n": "Snorunt",
+"b": "blob",
+"t": [
+"ice",
+"cloak",
+"round",
+"2-legs-tiny",
+"cute"
+],
+"c": "gray",
+"sprite": "Spr_4d_361.png"
+},
+"362": {
+"n": "Glalie",
+"b": "floating",
+"t": [
+"ice",
+"rock-face",
+"floating",
+"horns",
+"round"
+],
+"c": "gray",
+"sprite": "Spr_4d_362.png"
+},
+"363": {
+"n": "Spheal",
+"b": "blob",
+"t": [
+"seal",
+"ball",
+"round",
+"flippers",
+"aquatic",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_363.png"
+},
+"364": {
+"n": "Sealeo",
+"b": "blob",
+"t": [
+"seal",
+"tusks",
+"flippers",
+"aquatic"
+],
+"c": "blue",
+"sprite": "Spr_4d_364.png"
+},
+"365": {
+"n": "Walrein",
+"b": "blob",
+"t": [
+"walrus",
+"tusks",
+"flippers",
+"aquatic",
+"big"
+],
+"c": "blue",
+"sprite": "Spr_4d_365.png"
+},
+"366": {
+"n": "Clamperl",
+"b": "blob",
+"t": [
+"clam",
+"shell",
+"pearl",
+"aquatic",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_366.png"
+},
+"367": {
+"n": "Huntail",
+"b": "fish",
+"t": [
+"eel",
+"fangs",
+"tail-lure",
+"aquatic",
+"deep-sea"
+],
+"c": "blue",
+"sprite": "Spr_4d_367.png"
+},
+"368": {
+"n": "Gorebyss",
+"b": "fish",
+"t": [
+"eel",
+"snout",
+"elegant",
+"aquatic",
+"pink"
+],
+"c": "pink",
+"sprite": "Spr_4d_368.png"
+},
+"369": {
+"n": "Relicanth",
+"b": "fish",
+"t": [
+"coelacanth",
+"rock-scales",
+"aquatic",
+"fossil"
+],
+"c": "gray",
+"sprite": "Spr_4d_369_m.png"
+},
+"370": {
+"n": "Luvdisc",
+"b": "fish",
+"t": [
+"heart",
+"fins",
+"aquatic",
+"pink",
+"cute"
+],
+"c": "pink",
+"sprite": "Spr_4d_370.png"
+},
+"371": {
+"n": "Bagon",
+"b": "biped",
+"t": [
+"dragon",
+"rock-head",
+"2-arms",
+"2-legs",
+"tail",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_371.png"
+},
+"372": {
+"n": "Shelgon",
+"b": "quadruped",
+"t": [
+"dragon",
+"shell",
+"armored",
+"4-legs"
+],
+"c": "gray",
+"sprite": "Spr_4d_372.png"
+},
+"373": {
+"n": "Salamence",
+"b": "biped",
+"t": [
+"dragon",
+"wings",
+"2-arms",
+"2-legs",
+"tail",
+"fierce"
+],
+"c": "blue",
+"sprite": "Spr_4d_373.png"
+},
+"374": {
+"n": "Beldum",
+"b": "floating",
+"t": [
+"metal",
+"one-eye",
+"claws",
+"floating",
+"angular"
+],
+"c": "blue",
+"sprite": "Spr_4d_374.png"
+},
+"375": {
+"n": "Metang",
+"b": "floating",
+"t": [
+"metal",
+"two-heads",
+"arms",
+"floating"
+],
+"c": "gray",
+"sprite": "Spr_4d_375.png"
+},
+"376": {
+"n": "Metagross",
+"b": "quadruped",
+"t": [
+"metal",
+"four-legs",
+"big",
+"cross-face"
+],
+"c": "gray",
+"sprite": "Spr_4d_376.png"
+},
+"377": {
+"n": "Regirock",
+"b": "biped",
+"t": [
+"golem",
+"rock",
+"dots-face",
+"2-arms",
+"2-legs",
+"legendary"
+],
+"c": "brown",
+"sprite": "Spr_4d_377.png"
+},
+"378": {
+"n": "Regice",
+"b": "biped",
+"t": [
+"golem",
+"ice",
+"dots-face",
+"2-arms",
+"legendary"
+],
+"c": "blue",
+"sprite": "Spr_4d_378.png"
+},
+"379": {
+"n": "Registeel",
+"b": "biped",
+"t": [
+"golem",
+"metal",
+"dots-face",
+"2-arms",
+"legendary"
+],
+"c": "gray",
+"sprite": "Spr_4d_379.png"
+},
+"380": {
+"n": "Latias",
+"b": "biped",
+"t": [
+"dragon",
+"jet",
+"wings",
+"floating",
+"legendary"
+],
+"c": "red",
+"sprite": "Spr_4d_380.png"
+},
+"381": {
+"n": "Latios",
+"b": "biped",
+"t": [
+"dragon",
+"jet",
+"wings",
+"floating",
+"legendary"
+],
+"c": "blue",
+"sprite": "Spr_4d_381.png"
+},
+"382": {
+"n": "Kyogre",
+"b": "serpent",
+"t": [
+"whale",
+"legendary",
+"fins",
+"aquatic",
+"huge"
+],
+"c": "blue",
+"sprite": "Spr_4d_382.png"
+},
+"383": {
+"n": "Groudon",
+"b": "biped",
+"t": [
+"dinosaur",
+"legendary",
+"claws",
+"spikes",
+"huge"
+],
+"c": "red",
+"sprite": "Spr_4d_383.png"
+},
+"384": {
+"n": "Rayquaza",
+"b": "serpent",
+"t": [
+"dragon",
+"legendary",
+"noodle",
+"fins",
+"huge"
+],
+"c": "green",
+"sprite": "Spr_4d_384.png"
+},
+"385": {
+"n": "Jirachi",
+"b": "biped",
+"t": [
+"star",
+"fairy",
+"tags",
+"2-arms",
+"floating",
+"cute",
+"small"
+],
+"c": "yellow",
+"sprite": "Spr_4d_385.png"
+},
+"386": {
+"n": "Deoxys",
+"b": "biped",
+"t": [
+"alien",
+"tendrils",
+"crystal-core",
+"2-arms",
+"2-legs"
+],
+"c": "orange",
+"sprite": "Spr_4d_386.png"
+},
+"387": {
+"n": "Turtwig",
+"b": "quadruped",
+"t": [
+"turtle",
+"leaf-head",
+"shell",
+"4-legs",
+"cute",
+"small"
+],
+"c": "green",
+"sprite": "Spr_4d_387.png"
+},
+"388": {
+"n": "Grotle",
+"b": "quadruped",
+"t": [
+"turtle",
+"bushes",
+"shell",
+"4-legs"
+],
+"c": "green",
+"sprite": "Spr_4d_388.png"
+},
+"389": {
+"n": "Torterra",
+"b": "quadruped",
+"t": [
+"turtle",
+"tree-back",
+"4-legs",
+"huge",
+"continent"
+],
+"c": "green",
+"sprite": "Spr_4d_389.png"
+},
+"390": {
+"n": "Chimchar",
+"b": "biped",
+"t": [
+"monkey",
+"tail-flame",
+"2-arms",
+"2-legs",
+"cute",
+"small"
+],
+"c": "brown",
+"sprite": "Spr_4d_390.png"
+},
+"391": {
+"n": "Monferno",
+"b": "biped",
+"t": [
+"monkey",
+"tail-flame",
+"2-arms",
+"2-legs",
+"fighter"
+],
+"c": "brown",
+"sprite": "Spr_4d_391.png"
+},
+"392": {
+"n": "Infernape",
+"b": "biped",
+"t": [
+"monkey",
+"head-flame",
+"2-arms",
+"2-legs",
+"fighter"
+],
+"c": "brown",
+"sprite": "Spr_4d_392.png"
+},
+"393": {
+"n": "Piplup",
+"b": "biped",
+"t": [
+"penguin",
+"2-flippers",
+"2-legs",
+"crest",
+"cute",
+"small"
+],
+"c": "blue",
+"sprite": "Spr_4d_393.png"
+},
+"394": {
+"n": "Prinplup",
+"b": "biped",
+"t": [
+"penguin",
+"flippers",
+"crest",
+"2-legs"
+],
+"c": "blue",
+"sprite": "Spr_4d_394.png"
+},
+"395": {
+"n": "Empoleon",
+"b": "biped",
+"t": [
+"penguin",
+"trident-crest",
+"2-legs",
+"emperor"
+],
+"c": "blue",
+"sprite": "Spr_4d_395.png"
+},
+"396": {
+"n": "Starly",
+"b": "bird",
+"t": [
+"starling",
+"wings",
+"beak",
+"small",
+"cute"
+],
+"c": "brown",
+"sprite": "Spr_4d_396_m.png"
+},
+"397": {
+"n": "Staravia",
+"b": "bird",
+"t": [
+"starling",
+"wings",
+"crest",
+"talons"
+],
+"c": "brown",
+"sprite": "Spr_4d_397_m.png"
+},
+"398": {
+"n": "Staraptor",
+"b": "bird",
+"t": [
+"raptor",
+"wings",
+"crest",
+"talons",
+"fierce"
+],
+"c": "brown",
+"sprite": "Spr_4d_398_m.png"
+},
+"399": {
+"n": "Bidoof",
+"b": "quadruped",
+"t": [
+"beaver",
+"teeth",
+"4-legs",
+"tail",
+"derpy",
+"cute"
+],
+"c": "brown",
+"sprite": "Spr_4d_399_m.png"
+},
+"400": {
+"n": "Bibarel",
+"b": "quadruped",
+"t": [
+"beaver",
+"teeth",
+"tail",
+"4-legs",
+"chunky"
+],
+"c": "brown",
+"sprite": "Spr_4d_400_m.png"
+},
+"401": {
+"n": "Kricketot",
+"b": "bug",
+"t": [
+"cricket",
+"round",
+"antennae",
+"2-legs",
+"cute",
+"small"
+],
+"c": "red",
+"sprite": "Spr_4d_401_m.png"
+},
+"402": {
+"n": "Kricketune",
+"b": "bug",
+"t": [
+"cricket",
+"mustache",
+"2-arms",
+"2-legs"
+],
+"c": "red",
+"sprite": "Spr_4d_402_m.png"
+},
+"403": {
+"n": "Shinx",
+"b": "quadruped",
+"t": [
+"lion-cub",
+"4-legs",
+"tail-star",
+"electric",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_403_m.png"
+},
+"404": {
+"n": "Luxio",
+"b": "quadruped",
+"t": [
+"lion",
+"4-legs",
+"mane",
+"electric"
+],
+"c": "blue",
+"sprite": "Spr_4d_404_m.png"
+},
+"405": {
+"n": "Luxray",
+"b": "quadruped",
+"t": [
+"lion",
+"mane",
+"4-legs",
+"fierce",
+"electric"
+],
+"c": "blue",
+"sprite": "Spr_4d_405_m.png"
+},
+"406": {
+"n": "Budew",
+"b": "biped",
+"t": [
+"plant",
+"bud-head",
+"2-legs-tiny",
+"cute",
+"small"
+],
+"c": "green",
+"sprite": "Spr_4d_406.png"
+},
+"407": {
+"n": "Roserade",
+"b": "biped",
+"t": [
+"plant",
+"bouquet-hands",
+"cape",
+"2-legs",
+"elegant"
+],
+"c": "green",
+"sprite": "Spr_4d_407_m.png"
+},
+"408": {
+"n": "Cranidos",
+"b": "biped",
+"t": [
+"dinosaur",
+"dome-head",
+"2-arms",
+"2-legs",
+"tail",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_408.png"
+},
+"409": {
+"n": "Rampardos",
+"b": "biped",
+"t": [
+"dinosaur",
+"dome-head",
+"2-arms",
+"tail",
+"bulky"
+],
+"c": "blue",
+"sprite": "Spr_4d_409.png"
+},
+"410": {
+"n": "Shieldon",
+"b": "quadruped",
+"t": [
+"dinosaur",
+"shield-face",
+"4-legs",
+"armored",
+"cute"
+],
+"c": "gray",
+"sprite": "Spr_4d_410.png"
+},
+"411": {
+"n": "Bastiodon",
+"b": "quadruped",
+"t": [
+"dinosaur",
+"shield-face",
+"4-legs",
+"fortress"
+],
+"c": "gray",
+"sprite": "Spr_4d_411.png"
+},
+"412": {
+"n": "Burmy",
+"b": "blob",
+"t": [
+"larva",
+"cloak",
+"hanging",
+"bug",
+"cute",
+"small"
+],
+"c": "brown",
+"sprite": "Spr_4d_412.png"
+},
+"413": {
+"n": "Wormadam",
+"b": "blob",
+"t": [
+"larva",
+"cloak",
+"bug",
+"2-arms-tiny"
+],
+"c": "brown",
+"sprite": "Spr_4d_413.png"
+},
+"414": {
+"n": "Mothim",
+"b": "bug",
+"t": [
+"moth",
+"wings",
+"antennae",
+"floating"
+],
+"c": "brown",
+"sprite": "Spr_4d_414.png"
+},
+"415": {
+"n": "Combee",
+"b": "bug",
+"t": [
+"bee",
+"three-cells",
+"honeycomb",
+"floating",
+"cute"
+],
+"c": "yellow",
+"sprite": "Spr_4d_415_m.png"
+},
+"416": {
+"n": "Vespiquen",
+"b": "bug",
+"t": [
+"bee",
+"queen",
+"honeycomb-gown",
+"wings"
+],
+"c": "yellow",
+"sprite": "Spr_4d_416.png"
+},
+"417": {
+"n": "Pachirisu",
+"b": "biped",
+"t": [
+"squirrel",
+"tail",
+"cheeks",
+"2-arms",
+"cute",
+"small"
+],
+"c": "blue",
+"sprite": "Spr_4d_417_m.png"
+},
+"418": {
+"n": "Buizel",
+"b": "biped",
+"t": [
+"weasel",
+"flotation-collar",
+"2-arms",
+"tail",
+"aquatic",
+"cute"
+],
+"c": "orange",
+"sprite": "Spr_4d_418_m.png"
+},
+"419": {
+"n": "Floatzel",
+"b": "biped",
+"t": [
+"weasel",
+"flotation",
+"2-arms",
+"fins",
+"aquatic"
+],
+"c": "orange",
+"sprite": "Spr_4d_419_m.png"
+},
+"420": {
+"n": "Cherubi",
+"b": "blob",
+"t": [
+"cherry",
+"round",
+"two-balls",
+"no-limbs",
+"cute",
+"small"
+],
+"c": "pink",
+"sprite": "Spr_4d_420.png"
+},
+"421": {
+"n": "Cherrim",
+"b": "biped",
+"t": [
+"cherry",
+"petals",
+"2-arms",
+"2-legs",
+"bloom"
+],
+"c": "pink",
+"sprite": "Spr_4d_421.png"
+},
+"422": {
+"n": "Shellos",
+"b": "blob",
+"t": [
+"slug",
+"sea",
+"frills",
+"amorphous",
+"no-limbs",
+"ooze",
+"cute"
+],
+"c": "pink",
+"sprite": "Spr_4d_422.png"
+},
+"423": {
+"n": "Gastrodon",
+"b": "blob",
+"t": [
+"slug",
+"sea",
+"frills",
+"amorphous",
+"ooze",
+"big"
+],
+"c": "pink",
+"sprite": "Spr_4d_423.png"
+},
+"424": {
+"n": "Ambipom",
+"b": "biped",
+"t": [
+"monkey",
+"two-hand-tails",
+"2-arms",
+"2-legs"
+],
+"c": "purple",
+"sprite": "Spr_4d_424_m.png"
+},
+"425": {
+"n": "Drifloon",
+"b": "floating",
+"t": [
+"balloon",
+"round",
+"strings",
+"floating",
+"cute"
+],
+"c": "purple",
+"sprite": "Spr_4d_425.png"
+},
+"426": {
+"n": "Drifblim",
+"b": "floating",
+"t": [
+"balloon",
+"big",
+"strings",
+"floating",
+"ghost"
+],
+"c": "purple",
+"sprite": "Spr_4d_426.png"
+},
+"427": {
+"n": "Buneary",
+"b": "biped",
+"t": [
+"rabbit",
+"curl-ears",
+"2-arms",
+"2-legs",
+"fluffy",
+"cute"
+],
+"c": "brown",
+"sprite": "Spr_4d_427.png"
+},
+"428": {
+"n": "Lopunny",
+"b": "biped",
+"t": [
+"rabbit",
+"fluffy",
+"long-ears",
+"2-legs",
+"elegant"
+],
+"c": "brown",
+"sprite": "Spr_4d_428.png"
+},
+"429": {
+"n": "Mismagius",
+"b": "floating",
+"t": [
+"ghost",
+"witch-hat",
+"floating",
+"arms",
+"elegant"
+],
+"c": "purple",
+"sprite": "Spr_4d_429.png"
+},
+"430": {
+"n": "Honchkrow",
+"b": "bird",
+"t": [
+"crow",
+"hat-crest",
+"wings",
+"boss"
+],
+"c": "black",
+"sprite": "Spr_4d_430.png"
+},
+"431": {
+"n": "Glameow",
+"b": "quadruped",
+"t": [
+"cat",
+"curl-tail",
+"4-legs",
+"sleek",
+"cute"
+],
+"c": "gray",
+"sprite": "Spr_4d_431.png"
+},
+"432": {
+"n": "Purugly",
+"b": "quadruped",
+"t": [
+"cat",
+"tail-rings",
+"4-legs",
+"chunky"
+],
+"c": "gray",
+"sprite": "Spr_4d_432.png"
+},
+"433": {
+"n": "Chingling",
+"b": "floating",
+"t": [
+"chime",
+"round",
+"floating",
+"cute",
+"small"
+],
+"c": "yellow",
+"sprite": "Spr_4d_433.png"
+},
+"434": {
+"n": "Stunky",
+"b": "quadruped",
+"t": [
+"skunk",
+"tail",
+"4-legs",
+"stripe",
+"cute"
+],
+"c": "purple",
+"sprite": "Spr_4d_434.png"
+},
+"435": {
+"n": "Skuntank",
+"b": "quadruped",
+"t": [
+"skunk",
+"big-tail",
+"4-legs"
+],
+"c": "purple",
+"sprite": "Spr_4d_435.png"
+},
+"436": {
+"n": "Bronzor",
+"b": "floating",
+"t": [
+"mirror",
+"flat",
+"floating",
+"patterns",
+"one-eyes",
+"symmetric"
+],
+"c": "blue",
+"sprite": "Spr_4d_436.png"
+},
+"437": {
+"n": "Bronzong",
+"b": "floating",
+"t": [
+"bell",
+"totem",
+"floating",
+"arms",
+"stiff"
+],
+"c": "blue",
+"sprite": "Spr_4d_437.png"
+},
+"438": {
+"n": "Bonsly",
+"b": "biped",
+"t": [
+"tree",
+"rock",
+"2-arms",
+"2-legs",
+"teardrops",
+"cute",
+"small"
+],
+"c": "brown",
+"sprite": "Spr_4d_438.png"
+},
+"439": {
+"n": "MimeJr",
+"b": "biped",
+"t": [
+"mime",
+"round",
+"2-arms",
+"2-legs",
+"cute",
+"small"
+],
+"c": "pink",
+"sprite": "Spr_4d_439.png"
+},
+"440": {
+"n": "Happiny",
+"b": "blob",
+"t": [
+"round",
+"egg-pouch",
+"2-arms",
+"2-legs",
+"cute",
+"small",
+"pink"
+],
+"c": "pink",
+"sprite": "Spr_4d_440.png"
+},
+"441": {
+"n": "Chatot",
+"b": "bird",
+"t": [
+"parrot",
+"note-tail",
+"wings",
+"beak",
+"cute"
+],
+"c": "black",
+"sprite": "Spr_4d_441.png"
+},
+"442": {
+"n": "Spiritomb",
+"b": "floating",
+"t": [
+"ghost",
+"keystone",
+"swirl",
+"faces",
+"floating"
+],
+"c": "purple",
+"sprite": "Spr_4d_442.png"
+},
+"443": {
+"n": "Gible",
+"b": "biped",
+"t": [
+"dragon",
+"landshark",
+"2-arms",
+"2-legs",
+"fin-head",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_443_m.png"
+},
+"444": {
+"n": "Gabite",
+"b": "biped",
+"t": [
+"dragon",
+"landshark",
+"2-arms",
+"2-legs",
+"fins"
+],
+"c": "blue",
+"sprite": "Spr_4d_444_m.png"
+},
+"445": {
+"n": "Garchomp",
+"b": "biped",
+"t": [
+"dragon",
+"landshark",
+"wings-arms",
+"2-legs",
+"fierce"
+],
+"c": "blue",
+"sprite": "Spr_4d_445_m.png"
+},
+"446": {
+"n": "Munchlax",
+"b": "biped",
+"t": [
+"round",
+"big-head",
+"2-arms",
+"2-legs",
+"cream-belly",
+"hungry",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_446.png"
+},
+"447": {
+"n": "Riolu",
+"b": "biped",
+"t": [
+"jackal",
+"2-arms",
+"2-legs",
+"tail",
+"fighter",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_447.png"
+},
+"448": {
+"n": "Lucario",
+"b": "biped",
+"t": [
+"jackal",
+"2-arms",
+"2-legs",
+"aura",
+"fighter"
+],
+"c": "blue",
+"sprite": "Spr_4d_448.png"
+},
+"449": {
+"n": "Hippopotas",
+"b": "quadruped",
+"t": [
+"hippo",
+"4-legs",
+"sandy",
+"chunky",
+"cute"
+],
+"c": "tan",
+"sprite": "Spr_4d_449_m.png"
+},
+"450": {
+"n": "Hippowdon",
+"b": "quadruped",
+"t": [
+"hippo",
+"4-legs",
+"huge",
+"jaws"
+],
+"c": "brown",
+"sprite": "Spr_4d_450_m.png"
+},
+"451": {
+"n": "Skorupi",
+"b": "bug",
+"t": [
+"scorpion",
+"claws",
+"tail-sting",
+"legs",
+"purple"
+],
+"c": "purple",
+"sprite": "Spr_4d_451.png"
+},
+"452": {
+"n": "Drapion",
+"b": "biped",
+"t": [
+"scorpion",
+"claws",
+"tail",
+"2-legs",
+"fierce"
+],
+"c": "purple",
+"sprite": "Spr_4d_452.png"
+},
+"453": {
+"n": "Croagunk",
+"b": "biped",
+"t": [
+"frog",
+"poison-cheeks",
+"2-arms",
+"2-legs",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_453_m.png"
+},
+"454": {
+"n": "Toxicroak",
+"b": "biped",
+"t": [
+"frog",
+"poison",
+"2-arms",
+"2-legs",
+"tall"
+],
+"c": "blue",
+"sprite": "Spr_4d_454_m.png"
+},
+"455": {
+"n": "Carnivine",
+"b": "floating",
+"t": [
+"plant",
+"venus-trap",
+"tendrils",
+"big-mouth",
+"floating"
+],
+"c": "green",
+"sprite": "Spr_4d_455.png"
+},
+"456": {
+"n": "Finneon",
+"b": "fish",
+"t": [
+"fish",
+"fins",
+"tail-wings",
+"aquatic",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_456_m.png"
+},
+"457": {
+"n": "Lumineon",
+"b": "fish",
+"t": [
+"fish",
+"fins",
+"glow",
+"aquatic",
+"elegant"
+],
+"c": "blue",
+"sprite": "Spr_4d_457_m.png"
+},
+"458": {
+"n": "Mantyke",
+"b": "fish",
+"t": [
+"ray",
+"wings-fins",
+"flat",
+"aquatic",
+"cute",
+"small"
+],
+"c": "blue",
+"sprite": "Spr_4d_458.png"
+},
+"459": {
+"n": "Snover",
+"b": "biped",
+"t": [
+"tree",
+"snow",
+"2-arms",
+"2-legs",
+"cute"
+],
+"c": "white",
+"sprite": "Spr_4d_459_m.png"
+},
+"460": {
+"n": "Abomasnow",
+"b": "biped",
+"t": [
+"yeti",
+"tree",
+"2-arms",
+"2-legs",
+"shaggy",
+"bulky"
+],
+"c": "white",
+"sprite": "Spr_4d_460_m.png"
+},
+"461": {
+"n": "Weavile",
+"b": "biped",
+"t": [
+"weasel",
+"claws",
+"feather-crest",
+"2-arms",
+"2-legs",
+"sleek"
+],
+"c": "black",
+"sprite": "Spr_4d_461_m.png"
+},
+"462": {
+"n": "Magnezone",
+"b": "floating",
+"t": [
+"mechanical",
+"magnets",
+"ufo",
+"floating",
+"big"
+],
+"c": "gray",
+"sprite": "Spr_4d_462.png"
+},
+"463": {
+"n": "Lickilicky",
+"b": "biped",
+"t": [
+"round",
+"long-tongue",
+"2-arms",
+"2-legs",
+"curl",
+"pink"
+],
+"c": "pink",
+"sprite": "Spr_4d_463.png"
+},
+"464": {
+"n": "Rhyperior",
+"b": "biped",
+"t": [
+"rhino",
+"rock",
+"armored",
+"2-arms",
+"bulky",
+"horn"
+],
+"c": "gray",
+"sprite": "Spr_4d_464_m.png"
+},
+"465": {
+"n": "Tangrowth",
+"b": "blob",
+"t": [
+"vines",
+"tangle",
+"2-arms",
+"round",
+"eyes"
+],
+"c": "blue",
+"sprite": "Spr_4d_465_m.png"
+},
+"466": {
+"n": "Electivire",
+"b": "biped",
+"t": [
+"muscular",
+"tails",
+"2-arms",
+"2-legs",
+"electric"
+],
+"c": "yellow",
+"sprite": "Spr_4d_466.png"
+},
+"467": {
+"n": "Magmortar",
+"b": "biped",
+"t": [
+"fire",
+"cannon-arms",
+"2-legs",
+"flames"
+],
+"c": "red",
+"sprite": "Spr_4d_467.png"
+},
+"468": {
+"n": "Togekiss",
+"b": "bird",
+"t": [
+"round",
+"wings",
+"spikes",
+"floating",
+"elegant",
+"cute"
+],
+"c": "white",
+"sprite": "Spr_4d_468.png"
+},
+"469": {
+"n": "Yanmega",
+"b": "bug",
+"t": [
+"dragonfly",
+"wings",
+"big",
+"floating",
+"fierce"
+],
+"c": "green",
+"sprite": "Spr_4d_469.png"
+},
+"470": {
+"n": "Leafeon",
+"b": "quadruped",
+"t": [
+"fox",
+"leaf-tail",
+"4-legs",
+"plant",
+"sleek",
+"cute"
+],
+"c": "green",
+"sprite": "Spr_4d_470.png"
+},
+"471": {
+"n": "Glaceon",
+"b": "quadruped",
+"t": [
+"fox",
+"ice",
+"4-legs",
+"sleek",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_471.png"
+},
+"472": {
+"n": "Gliscor",
+"b": "bird",
+"t": [
+"bat-scorpion",
+"wings",
+"claws",
+"tail",
+"floating",
+"fangs"
+],
+"c": "purple",
+"sprite": "Spr_4d_472.png"
+},
+"473": {
+"n": "Mamoswine",
+"b": "quadruped",
+"t": [
+"mammoth",
+"tusks",
+"fur",
+"4-legs",
+"huge"
+],
+"c": "brown",
+"sprite": "Spr_4d_473_m.png"
+},
+"474": {
+"n": "PorygonZ",
+"b": "floating",
+"t": [
+"polygon",
+"digital",
+"scattered",
+"floating",
+"glitchy"
+],
+"c": "pink",
+"sprite": "Spr_4d_474.png"
+},
+"475": {
+"n": "Gallade",
+"b": "biped",
+"t": [
+"fairy",
+"blades-arms",
+"2-legs",
+"knight",
+"slender"
+],
+"c": "white",
+"sprite": "Spr_4d_475.png"
+},
+"476": {
+"n": "Probopass",
+"b": "biped",
+"t": [
+"rock",
+"big-nose",
+"mustache-magnets",
+"golem",
+"stiff"
+],
+"c": "gray",
+"sprite": "Spr_4d_476.png"
+},
+"477": {
+"n": "Dusknoir",
+"b": "biped",
+"t": [
+"ghost",
+"one-eye",
+"antenna",
+"2-arms",
+"bulky"
+],
+"c": "black",
+"sprite": "Spr_4d_477.png"
+},
+"478": {
+"n": "Froslass",
+"b": "floating",
+"t": [
+"ghost",
+"ice",
+"kimono",
+"floating",
+"horns",
+"elegant"
+],
+"c": "white",
+"sprite": "Spr_4d_478.png"
+},
+"479": {
+"n": "Rotom",
+"b": "floating",
+"t": [
+"ghost",
+"plasma",
+"floating",
+"arms-lightning",
+"one-eyes",
+"cute"
+],
+"c": "orange",
+"sprite": "Spr_4d_479.png"
+},
+"480": {
+"n": "Uxie",
+"b": "floating",
+"t": [
+"fairy",
+"tails",
+"floating",
+"big-head",
+"legendary",
+"cute"
+],
+"c": "yellow",
+"sprite": "Spr_4d_480.png"
+},
+"481": {
+"n": "Mesprit",
+"b": "floating",
+"t": [
+"fairy",
+"tails",
+"floating",
+"big-head",
+"legendary",
+"cute"
+],
+"c": "pink",
+"sprite": "Spr_4d_481.png"
+},
+"482": {
+"n": "Azelf",
+"b": "floating",
+"t": [
+"fairy",
+"tails",
+"floating",
+"big-head",
+"legendary",
+"cute"
+],
+"c": "blue",
+"sprite": "Spr_4d_482.png"
+},
+"483": {
+"n": "Dialga",
+"b": "quadruped",
+"t": [
+"dragon",
+"metal",
+"legendary",
+"4-legs",
+"huge",
+"diamond"
+],
+"c": "blue",
+"sprite": "Spr_4d_483.png"
+},
+"484": {
+"n": "Palkia",
+"b": "biped",
+"t": [
+"dragon",
+"legendary",
+"2-arms",
+"2-legs",
+"pearls",
+"huge"
+],
+"c": "pink",
+"sprite": "Spr_4d_484.png"
+},
+"485": {
+"n": "Heatran",
+"b": "quadruped",
+"t": [
+"golem",
+"lava",
+"metal",
+"4-legs",
+"legendary"
+],
+"c": "gray",
+"sprite": "Spr_4d_485.png"
+},
+"486": {
+"n": "Regigigas",
+"b": "biped",
+"t": [
+"golem",
+"titan",
+"2-arms",
+"2-legs",
+"stripes",
+"legendary",
+"huge"
+],
+"c": "white",
+"sprite": "Spr_4d_486.png"
+},
+"487": {
+"n": "Giratina",
+"b": "serpent",
+"t": [
+"dragon",
+"ghost",
+"legendary",
+"wings-ghost",
+"huge"
+],
+"c": "black",
+"sprite": "Spr_4d_487.png"
+},
+"488": {
+"n": "Cresselia",
+"b": "floating",
+"t": [
+"swan",
+"crescents",
+"floating",
+"elegant",
+"legendary"
+],
+"c": "yellow",
+"sprite": "Spr_4d_488.png"
+},
+"489": {
+"n": "Phione",
+"b": "floating",
+"t": [
+"fairy",
+"aquatic",
+"antennae",
+"floating",
+"cute",
+"small"
+],
+"c": "blue",
+"sprite": "Spr_4d_489.png"
+},
+"490": {
+"n": "Manaphy",
+"b": "floating",
+"t": [
+"fairy",
+"aquatic",
+"antennae",
+"floating",
+"cute",
+"small"
+],
+"c": "blue",
+"sprite": "Spr_4d_490.png"
+},
+"491": {
+"n": "Darkrai",
+"b": "biped",
+"t": [
+"ghost",
+"shadow",
+"hair-plume",
+"2-arms",
+"floating",
+"legendary"
+],
+"c": "black",
+"sprite": "Spr_4d_491.png"
+},
+"492": {
+"n": "Shaymin",
+"b": "quadruped",
+"t": [
+"hedgehog",
+"plant",
+"flowers",
+"4-legs",
+"cute",
+"small"
+],
+"c": "green",
+"sprite": "Spr_4d_492.png"
+},
+"493": {
+"n": "Arceus",
+"b": "quadruped",
+"t": [
+"deity",
+"ring",
+"4-legs",
+"legendary",
+"huge"
+],
+"c": "white",
+"sprite": "Spr_4d_493.png"
+}
+}

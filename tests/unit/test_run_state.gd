@@ -24,13 +24,6 @@ func test_start_sets_level_hunts_and_zone() -> void:
 	assert_eq(run.status, "active")
 	assert_has(run.unlocked_zone_ids, "verdant_fields")
 
-func test_generate_node_map_populates_from_zone() -> void:
-	var zone_result := DataLoader.load_directory("res://data/zones", ZoneDef.from_dict)
-	var zone: ZoneDef = zone_result["defs"]["verdant_fields"]
-	var run := RunState.start("verdant_fields")
-	run.generate_node_map(zone, _monster_defs)
-	assert_false(run.node_map.is_empty())
-
 func test_winning_fight_spends_a_hunt_and_awards_xp() -> void:
 	var run := RunState.start("verdant_fields", "", {}, 10.0)
 	var result := run.resolve_fight(_slime)

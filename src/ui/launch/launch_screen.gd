@@ -1,6 +1,7 @@
 # LaunchScreen — pick a zone + loadout, start a RunState, hand off to the
-# node-map. Thin shell: all rules (hunts, starting level, node generation)
-# live in RunState/GameState; this only reads GameState and drives buttons.
+# walkable overworld. Thin shell: all rules (hunts, starting level, node
+# generation) live in RunState/GameState; this only reads GameState and
+# drives buttons.
 extends Control
 
 @onready var zone_option: OptionButton = %ZoneOption
@@ -48,4 +49,4 @@ func _on_start_pressed() -> void:
 	var zone_id: String = _zone_ids[zone_option.selected]
 	var weapon_def_id: String = _weapon_gear_ids[weapon_option.selected]
 	GameState.start_run(zone_id, weapon_def_id, {})
-	get_tree().change_scene_to_file("res://src/ui/node_map/node_map_screen.tscn")
+	get_tree().change_scene_to_file("res://src/ui/overworld/overworld_screen.tscn")

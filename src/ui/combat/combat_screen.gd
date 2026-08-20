@@ -1,9 +1,14 @@
-# CombatScreen — renders a CombatResolver HP-race for the monster picked on
-# the node-map, driven by a tap-timed "Dodge" button (touch/mouse) each
-# round. Once the reflex phase ends, the run's authoritative outcome (XP,
-# drops, hunts, death) is resolved through RunState.resolve_fight — no rules
-# logic is reimplemented here, only round timing/animation bookkeeping.
+# CombatScreen — renders a CombatResolver HP-race for the picked monster,
+# driven by a tap-timed "Dodge" button (touch/mouse) each round. Once the
+# reflex phase ends, the run's authoritative outcome (XP, drops, hunts,
+# death) is resolved through RunState.resolve_fight — no rules logic is
+# reimplemented here, only round timing/animation bookkeeping. Instanced as
+# an overlay child (e.g. by the overworld) rather than a standalone scene:
+# it never changes scenes itself, it signals completion via
+# `combat_finished` and leaves scene/run teardown to its parent.
 extends Control
+
+signal combat_finished(result: Dictionary)
 
 const MonsterSpriteSheet = preload("res://src/ui/combat/monster_sprite_sheet.gd")
 
@@ -31,6 +36,7 @@ var beats: Array = []
 var _round_start_ms: int = 0
 var _dodge_tapped_this_round: bool = false
 var _fight_over: bool = false
+var _fight_result: Dictionary = {}
 
 func _ready() -> void:
 	monster = GameState.pending_monster
@@ -118,6 +124,7 @@ func _end_reflex_phase() -> void:
 
 	var run: RunState = GameState.current_run
 	var result := run.resolve_fight(monster, [], null, skill_profile)
+	_fight_result = result
 	if result["died"]:
 		GameState.mark_bestiary_seen(monster.id)
 		result_label.text = "Defeated... the run's haul is forfeited."
@@ -129,10 +136,4 @@ func _end_reflex_phase() -> void:
 	continue_button.visible = true
 
 func _on_continue_pressed() -> void:
-	var run: RunState = GameState.current_run
-	if run.status == "active":
-		get_tree().change_scene_to_file("res://src/ui/node_map/node_map_screen.tscn")
-		return
-	GameState.settle_run(run)
-	GameState.current_run = null
-	get_tree().change_scene_to_file("res://src/ui/launch/launch_screen.tscn")
+	combat_finished.emit(_fight_result)

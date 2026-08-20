@@ -12,6 +12,7 @@ var armor_sets: Dictionary = {} # id -> ArmorSetDef
 var zones: Dictionary = {} # id -> ZoneDef
 var companions: Dictionary = {} # id -> CompanionDef
 var materials: Dictionary = {} # id -> MaterialDef
+var tier_tables: Dictionary = {} # zone_id -> TierTableDef
 
 var save_state: Dictionary = {}
 var inventory: Inventory
@@ -34,6 +35,7 @@ func _load_data() -> void:
 	zones = _load_dir("res://data/zones", ZoneDef.from_dict)
 	companions = _load_dir("res://data/companions", CompanionDef.from_dict)
 	materials = _load_dir("res://data/materials", MaterialDef.from_dict)
+	tier_tables = _load_dir("res://data/tiers", TierTableDef.from_dict)
 
 func _load_dir(path: String, from_dict_fn: Callable) -> Dictionary:
 	var result := DataLoader.load_directory(path, from_dict_fn)
@@ -97,5 +99,4 @@ func start_run(zone_id: String, weapon_id: String, armor_ids: Dictionary) -> voi
 	var hunts_max: float = RunState.DEFAULT_HUNTS + modifiers.get("hunt_count_bonus", 0.0)
 	var run := RunState.start(zone_id, weapon_id, armor_ids, hunts_max)
 	run.level += modifiers.get("starting_level_bonus", 0.0)
-	run.generate_node_map(zones[zone_id], monsters)
 	current_run = run

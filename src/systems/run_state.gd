@@ -1,5 +1,5 @@
 # RunState — drives one expedition: start at Lv.1 in a chosen zone with
-# equipped gear, resolve fights from the NodeMap (spending hunts, awarding
+# equipped gear, resolve fights from encounters (spending hunts, awarding
 # XP), and end the run by banking (retreat / hunt exhaustion) or dying
 # (forfeit unbanked haul; crafted/equipped gear is never touched here since
 # it isn't part of the run's haul state).
@@ -22,7 +22,6 @@ var zone_id: String = ""
 var equipped_weapon_id: String = ""
 var equipped_armor_ids: Dictionary = {} # slot -> armor id
 var unlocked_zone_ids: Array = []
-var node_map: Array = []
 
 var status: String = "active" # active | banked | dead
 var end_reason: String = "" # "" | retreat | hunt_exhaustion | death
@@ -44,9 +43,6 @@ static func start(zone_id: String, equipped_weapon_id: String = "", equipped_arm
 	run.unlocked_zone_ids = [zone_id]
 	run.status = "active"
 	return run
-
-func generate_node_map(zone: ZoneDef, monster_defs: Dictionary) -> void:
-	node_map = NodeMap.generate(zone, monster_defs)
 
 # Resolves a fight against `monster`. Spends 1 hunt. On win, awards XP
 # (possibly crossing several level thresholds), rolls `monster`'s drop table
