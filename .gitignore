@@ -62,3 +62,9 @@ docs/references/*_Overworld*.png
 docs/references/characters.png
 docs/references/*.Identifier
 docs/references/*:Zone.Identifier
+
+# AI weapon-icon generation scratch (candidates/raw gens); finals are assets/weapons/*.png
+assets/weapons/_gen/
+
+# AI monster-sprite generation scratch (candidates/raw gens + Pokemon style refs); finals are assets/sprites/*.png
+assets/sprites/_gen/

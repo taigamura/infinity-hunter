@@ -27,15 +27,20 @@ func _refresh() -> void:
 		materials_list.add_child(label)
 
 	for instance in GameState.inventory.gear:
-		var label := Label.new()
 		var def_id: String = instance["def_id"]
 		var def_name := def_id
 		if GameState.weapons.has(def_id):
 			def_name = GameState.weapons[def_id].name
 		elif GameState.armors.has(def_id):
 			def_name = GameState.armors[def_id].name
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 8)
+		row.add_child(_icon_rect(def_id))
+		var label := Label.new()
 		label.text = "%s [%s]" % [def_name, instance["rolled_stats"].get("rarity", "")]
-		gear_list.add_child(label)
+		label.size_flags_vertical = SIZE_SHRINK_CENTER
+		row.add_child(label)
+		gear_list.add_child(row)
 
 	for def_id in GameState.weapons:
 		_add_recipe_row(GameState.weapons[def_id])
@@ -45,6 +50,8 @@ func _refresh() -> void:
 func _add_recipe_row(def) -> void:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)
+
+	row.add_child(_icon_rect(def.id))
 
 	var label := Label.new()
 	label.text = "%s (%s)" % [def.name, _recipe_text(def.recipe)]
@@ -71,6 +78,16 @@ func _on_craft_pressed(def) -> void:
 	if result["ok"]:
 		GameState.persist()
 		_refresh()
+
+# A fixed 32x32 icon slot. Weapons show their sprite; anything without an icon
+# (armor, or a weapon lacking art) gets an empty slot so rows stay aligned.
+func _icon_rect(def_id: String) -> TextureRect:
+	var tr := TextureRect.new()
+	tr.custom_minimum_size = Vector2(32, 32)
+	tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	tr.size_flags_vertical = SIZE_SHRINK_CENTER
+	tr.texture = WeaponIcons.for_id(def_id)
+	return tr
 
 func _clear(container: VBoxContainer) -> void:
 	for child in container.get_children():
