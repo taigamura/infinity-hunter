@@ -63,6 +63,9 @@ const DOT_ACTIVE_COLOR := Color(1, 0.8235294, 0.2901961, 1)
 @onready var result_overlay: Control = %ResultOverlay
 @onready var result_title_label: Label = %ResultTitleLabel
 @onready var result_body_label: Label = %ResultBodyLabel
+@onready var xp_level_label: Label = %XpLevelLabel
+@onready var xp_bar: ProgressBar = %XpBar
+@onready var level_up_toasts: VBoxContainer = %LevelUpToasts
 @onready var push_on_button: Button = %PushOnButton
 @onready var bank_button: Button = %BankButton
 @onready var continue_button: Button = %ContinueButton
@@ -116,6 +119,8 @@ func _ready() -> void:
 	continue_button.pressed.connect(_on_continue_pressed)
 
 	result_overlay.visible = false
+	xp_level_label.visible = false
+	xp_bar.visible = false
 	telegraph_banner.visible = false
 	damage_number_label.visible = false
 	_start_ring_pulse()
@@ -284,19 +289,67 @@ func _end_reflex_phase() -> void:
 		result_title_label.text = "Defeated"
 		result_body_label.text = "The run's haul is forfeited."
 		continue_button.visible = true
+		xp_level_label.visible = false
+		xp_bar.visible = false
+		for child in level_up_toasts.get_children():
+			child.queue_free()
 	else:
 		GameState.mark_bestiary_defeated(monster.id, result["materials_dropped"])
 		result_title_label.text = "Victory!"
-		result_body_label.text = "+%s XP, %d level(s) gained. Dropped: %s" % [
-			Big.fmt(result["xp_awarded"]), result["levels_gained"], ", ".join(result["materials_dropped"])
-		]
+		var drops: String = ", ".join(result["materials_dropped"])
+		result_body_label.text = ("Dropped: %s" % drops) if drops != "" else "No drops"
+		xp_level_label.visible = true
+		xp_bar.visible = true
 		if run.status == "active":
 			push_on_button.visible = true
 			bank_button.visible = true
 		else:
 			continue_button.visible = true
+		_animate_xp(result)
 
 	result_overlay.visible = true
+
+func _animate_xp(result: Dictionary) -> void:
+	for child in level_up_toasts.get_children():
+		child.queue_free()
+
+	var segments: Array = XpCurve.fill_segments(
+		result["level_before"], result["xp_carry_before"], result["level_after"], result["xp_carry_after"]
+	)
+	if segments.is_empty():
+		return
+
+	xp_level_label.text = "Lv %d" % int(result["level_before"])
+	xp_bar.value = segments[0]["from"]
+
+	var seg_time: float = clampf(1.2 / float(max(segments.size(), 1)), 0.10, 0.30)
+	var tween := create_tween()
+	for seg in segments:
+		tween.tween_property(xp_bar, "value", seg["to"], seg_time).from(seg["from"]).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tween.tween_callback(_on_xp_segment_finished.bind(seg))
+
+func _on_xp_segment_finished(seg: Dictionary) -> void:
+	if seg["levels_up"]:
+		xp_level_label.text = "Lv %d" % (int(seg["level"]) + 1)
+		_spawn_level_up_toast()
+
+func _spawn_level_up_toast() -> void:
+	var toast := Label.new()
+	toast.text = "LEVEL UP!"
+	toast.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	toast.add_theme_font_size_override("font_size", 15)
+	toast.add_theme_color_override("font_color", Color(1, 0.8235294, 0.2901961, 1))
+	level_up_toasts.add_child(toast)
+	toast.pivot_offset = toast.size / 2.0
+	toast.scale = Vector2(0.6, 0.6)
+	toast.modulate.a = 0.0
+	var start_pos := toast.position
+	toast.position.y += 6.0
+	var tween := create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(toast, "scale", Vector2.ONE, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(toast, "modulate:a", 1.0, 0.15)
+	tween.tween_property(toast, "position:y", start_pos.y, 0.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 func _on_push_on_pressed() -> void:
 	combat_finished.emit(_fight_result)
