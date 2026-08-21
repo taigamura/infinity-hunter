@@ -115,6 +115,19 @@ func test_resolve_fight_applies_armor_skill_profile_xp_bonus() -> void:
 
 	assert_gt(boosted.xp_carry, baseline.xp_carry, "an XP Boost skill profile should grant more effective XP")
 
+func test_combat_outcome_win_overrides_losing_level_compare() -> void:
+	var run := RunState.start("verdant_fields")
+	var result := run.resolve_fight(_ember_wolf, [], null, {}, {"won": true})
+	assert_true(result["won"])
+	assert_false(result["died"])
+	assert_eq(run.status, "active")
+
+func test_combat_outcome_loss_overrides_winning_level_compare() -> void:
+	var run := RunState.start("verdant_fields")
+	var result := run.resolve_fight(_slime, [], null, {}, {"won": false})
+	assert_true(result["died"])
+	assert_eq(run.status, "dead")
+
 func test_unlock_zone_records_new_zone_and_moves_run() -> void:
 	var run := RunState.start("verdant_fields")
 	assert_false(run.unlocked_zone_ids.has("cinder_dunes"))

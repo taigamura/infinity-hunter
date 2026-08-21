@@ -79,6 +79,7 @@ var _round_start_ms: int = 0
 var _dodge_tapped_this_round: bool = false
 var _fight_over: bool = false
 var _fight_result: Dictionary = {}
+var _reflex_outcome: Dictionary = {}
 var _elapsed_time: float = 0.0
 var _sprite_base_y: float = 0.0
 
@@ -232,6 +233,7 @@ func _on_round_timeout() -> void:
 	telegraph_banner.visible = false
 
 	if outcome["monster_hp"] <= 0.0 or outcome["player_hp"] <= 0.0 or beats.size() >= MAX_ROUNDS:
+		_reflex_outcome = outcome
 		_end_reflex_phase()
 	else:
 		_start_round()
@@ -257,8 +259,20 @@ func _end_reflex_phase() -> void:
 	telegraph_ring.visible = false
 	_update_round_dots()
 
+	var player_hp: float = _reflex_outcome.get("player_hp", 0.0)
+	var monster_hp: float = _reflex_outcome.get("monster_hp", 0.0)
+	var won: bool
+	if monster_hp <= 0.0 and player_hp > 0.0:
+		won = true
+	elif player_hp <= 0.0:
+		won = false
+	else:
+		var p_frac := player_hp / maxf(player_stats["hp_max"], 1.0)
+		var m_frac := monster_hp / maxf(monster_stats["hp_max"], 1.0)
+		won = p_frac >= m_frac
+
 	var run: RunState = GameState.current_run
-	var result := run.resolve_fight(monster, [], null, skill_profile)
+	var result := run.resolve_fight(monster, [], null, skill_profile, {"won": won})
 	_fight_result = result
 
 	push_on_button.visible = false
