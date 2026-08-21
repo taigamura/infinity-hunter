@@ -64,7 +64,7 @@ loop's verification gate and the definition of "done".
 | `Elements` | 6-element model: Fire/Water/Earth/Thunder/Ice ring (weak ×1.5, resist ×0.66), Neutral ×1.0, rare Dragon ×1.5 vs all. |
 | `EncounterSystem` | Overworld gauge fill from tier params + band-filtered monster pick. `GAUGE_THRESHOLD = 100`. |
 | `OverworldTierLayout` | Buckets a tile into a danger tier by **depth along the vertical travel axis** (near/bottom edge safe, far/top edge hot) per ADR-0001 (Deepening Trail, foundation slice built). Also places the near-edge `camp_cell` (spawn), the on-trail `exit_cell` (portal, deepest band), and `trail_x_for_row` (the winding trail spine's column per row). Per-zone tier tables/palettes (slice C) built. Superseded for the overworld screen's own spawn/tile/encounter geometry by `SectionLayout` (#37); still used by `PoiLayout` for POI band placement. |
-| `SectionLayout` | Buckets a tile into a section by **radial distance from the map center** (center = safest, outer ring = most dangerous), the geometry for the Concentric Sections overworld (PRD #36, tracer bullet #37). Pure/static, caller-supplied RNG, mirrors `OverworldTierLayout`'s shape: `section_for_cell`, `camp_cell` (map center), `portal_cell` (rng-angled point on the outer ring), `distance_ratio`, and `generate` bundling section ids + camp + portal. Drives `overworld_screen.gd` spawn placement, tile shading, and the section params fed into the unchanged `EncounterSystem.tick`. |
+| `SectionLayout` | Path-first generator for the Concentric Sections overworld (PRD #36, full generator #39, superseding the #37 tracer-bullet ring bucketing). `generate(cols, rows, min_level, max_level, rng)` carves a straight, always-connected camp→portal path (Bresenham), bands it into 3-4 concentric ring sections with a gently-rising recommended level (guaranteed monotonic outward by construction), then scatters ~5-10 more variable-size **fill** sections (rng seed cells; level = seed's own ring level + jitter, "loosely correlated" with distance) across the rest of the map — 8-14 total sections. `section_for_cell` resolves on-path cells to their ring section and everything else to its nearest fill seed (cheap Voronoi, no precomputed per-cell grid). Each section's `gauge_rate` is derived straight from its own rolled level (`BASE_GAUGE_RATE + level * GAUGE_RATE_PER_LEVEL`) — the overworld no longer reads `gauge_rate`/`level_min`/`level_max` off the zone's `TierTableDef`/`data/tiers/*.json` at all; those files/loader still exist (`GameState.tier_tables`) but are presently unread outside their own loader test. Bounded fill-seed placement retries (like `PoiLayout`) so degenerate map sizes never hang. `overworld_screen.gd` also now paints the path cells with `OverworldTileset`'s repurposed dirt-trail atlas row so the optimal route is visibly rendered. |
 | `PoiLayout` | Pure/static points-of-interest placement (ADR-0001 slice B, built): `generate(map_cols, map_rows, sorted_tier_ids, rng)` returns a deterministic Array of `{cell, type}` (camp ×1, portal ×1, den 1–3, forage 1–3, cache 0–2, landmark 0–1), banded by depth thirds and trail proximity. Rendered as code-drawn tinted markers above the tilemap in `overworld_screen.gd`; standing on/adjacent to a den multiplies the tier's `gauge_rate` before it's passed into the unchanged `EncounterSystem.tick`. Its own camp/portal entries are discarded and replaced with `SectionLayout`'s so markers match where the hunter actually spawns/travels; den/forage/cache/landmark bands are still `OverworldTierLayout`-derived pending a later slice. |
 | `OverworldMovement` | Joystick + keyboard → clamped character step. |
 | `DropSystem` | Weighted drop tables; part-break sharply boosts/guarantees that part's material. |
@@ -207,6 +207,21 @@ LAUNCH ──▶ OVERWORLD ──▶ COMBAT ──┬─▶ VICTORY ──(push 
   `PoiLayout`'s den/forage/cache/landmark placement is still depth-banded
   (`OverworldTierLayout`) pending a later slice; only its camp/portal entries are
   swapped for `SectionLayout`'s so the markers match where the hunter actually is.
+- **Concentric Sections path-first generator built (PRD #36, issue #39).** `SectionLayout`
+  replaced its simple ring bucketing with a real path-first generator: a straight,
+  always-traversable camp→portal path (Bresenham) banded into 3-4 rings with a
+  monotonically non-decreasing recommended level by construction, plus ~5-10 more
+  variable-size fill sections (rng seed + nearest-neighbor Voronoi) scattered across the
+  rest of the map — 8-14 sections total, each with its own `level_min`/`level_max`/
+  `gauge_rate` (`gauge_rate` derived straight from the rolled level, deadlier sections
+  swarm harder). `overworld_screen.gd` now reads section params off `SectionLayout`'s own
+  generated dict instead of the zone's `TierTableDef`; `data/tiers/*.json` /
+  `GameState.tier_tables` still load and validate but nothing outside their own loader
+  test reads them anymore. The path is now actually rendered — `overworld_screen.gd`
+  paints path cells with `OverworldTileset.trail_shade_row()` (the previously-unused dirt
+  tint row), and `OverworldTileset.TRAIL_BLEND` was tuned down (0.55→0.3) so the trail
+  tint over a safe-band tile still reads as green to `verify_visual.sh`'s
+  concentric-gradient check, since the path now runs directly through the camp.
 - **Field tiles stay procedural placeholder:** overworld tiles are per-tier colour
   squares with shade jitter (`OverworldTileset`, green→olive→red toward the hot corner).
   The player is a Gen-4-style humanoid **walk sheet** (`assets/sprites/player_ethan.png`,

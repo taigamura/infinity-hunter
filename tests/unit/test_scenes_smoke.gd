@@ -230,6 +230,9 @@ func test_overworld_section_border_crossing_resets_gauge_and_shows_banner() -> v
 	# pre-crossing 50 (a full tick alone can't span that gap) rather than
 	# carrying the old fill forward.
 	assert_lt(screen._gauge, 50.0, "crossing a section border must reset the encounter gauge before ticking")
-	assert_eq(gauge_bar.value, screen._gauge, "the gauge bar must reflect the reset")
+	# ProgressBar.value snaps to its Range step (0.01); the gauge bar must
+	# track the reset gauge to that resolution, not bit-for-bit (section
+	# gauge_rate is now a continuous roll, not a hand-authored round number).
+	assert_almost_eq(gauge_bar.value, screen._gauge, 0.01, "the gauge bar must reflect the reset")
 	assert_true(section_banner.visible, "crossing a section border must show the on-enter banner")
 	_cleanup(screen)

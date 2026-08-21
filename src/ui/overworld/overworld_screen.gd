@@ -83,7 +83,7 @@ const DEN_GAUGE_MULTIPLIER := 1.5
 
 var _map_size: Vector2
 var _tier_ids: Array = [0]
-var _tier_table: TierTableDef = null
+var _section_layout: Dictionary = {}
 var _gauge := 0.0
 var _rng := RandomNumberGenerator.new()
 var _combat_active := false
@@ -106,15 +106,17 @@ func _ready() -> void:
 		return
 
 	_rng.randomize()
-	_tier_table = GameState.tier_tables.get(run.zone_id)
 	_zone_def = GameState.zones.get(run.zone_id)
-	_exit_cell = SectionLayout.portal_cell(MAP_COLS, MAP_ROWS, _rng)
+	var min_level := _zone_def.min_level if _zone_def != null else 1.0
+	var max_level := _zone_def.max_level if _zone_def != null else 8.0
+	_section_layout = SectionLayout.generate(MAP_COLS, MAP_ROWS, min_level, max_level, _rng)
+	_exit_cell = _section_layout["portal"]
 	_build_tilemap()
 	_build_character_sprite()
 	_build_poi_markers()
 	_travel_target_zone_id = _zone_def.connections[0] if _zone_def != null and not _zone_def.connections.is_empty() else ""
 	_map_size = Vector2(MAP_COLS * TILE_SIZE, MAP_ROWS * TILE_SIZE)
-	var camp_cell := SectionLayout.camp_cell(MAP_COLS, MAP_ROWS)
+	var camp_cell: Vector2i = _section_layout["camp"]
 	character.position = Vector2(camp_cell) * float(TILE_SIZE) + Vector2(TILE_SIZE, TILE_SIZE) / 2.0
 	camera.limit_left = 0
 	camera.limit_top = 0
@@ -141,7 +143,7 @@ func _ready() -> void:
 	# Spawn is inside a section already; establish it as the current section
 	# and show the persistent badge, but don't fire the on-enter banner —
 	# that's reserved for actually crossing a border during play.
-	_current_section_id = SectionLayout.section_for_cell(tile_map.local_to_map(character.position), MAP_COLS, MAP_ROWS, _tier_ids)
+	_current_section_id = SectionLayout.section_for_cell(tile_map.local_to_map(character.position), MAP_COLS, MAP_ROWS, _section_layout)
 	_update_hot_strip(_current_section_id)
 
 # Positions the exit marker over the exit cell's on-screen location, clamped
@@ -169,18 +171,15 @@ func _update_exit_marker() -> void:
 	exit_marker.position = screen - half
 
 func _build_tilemap() -> void:
-	if _tier_table != null:
-		_tier_ids = _tier_table.tiers.keys().map(func(k): return int(k))
-		_tier_ids.sort()
-	else:
-		_tier_ids = [0]
+	_tier_ids = _section_layout["section_ids"]
 	var palette: Array = _zone_def.palette if _zone_def != null and not _zone_def.palette.is_empty() else OverworldTileset.DEFAULT_PALETTE
 	tile_map.tile_set = OverworldTileset.build(TILE_SIZE, _tier_ids, palette)
 	var variant_count := OverworldTileset.variant_count()
+	var path_cell_set: Dictionary = _section_layout["path_cell_set"]
 	for x in range(MAP_COLS):
 		for y in range(MAP_ROWS):
 			var cell := Vector2i(x, y)
-			var section_id := SectionLayout.section_for_cell(cell, MAP_COLS, MAP_ROWS, _tier_ids)
+			var section_id := SectionLayout.section_for_cell(cell, MAP_COLS, MAP_ROWS, _section_layout)
 			var section_index := _tier_ids.find(section_id)
 			var variant := _rng.randi_range(0, variant_count - 1)
 			# Concentric Sections (PRD issue #36): danger rises with radial
@@ -188,6 +187,11 @@ func _build_tilemap() -> void:
 			# shade is keyed on SectionLayout.distance_ratio.
 			var distance := SectionLayout.distance_ratio(cell, MAP_COLS, MAP_ROWS)
 			var shade := OverworldTileset.shade_index_for_distance(distance, section_index, _tier_ids.size())
+			# The visible optimal path (issue #39): on-path cells are painted
+			# with the repurposed dirt-trail row instead of their normal
+			# danger shade, so the camp -> portal route reads as a corridor.
+			if path_cell_set.has(cell):
+				shade = OverworldTileset.trail_shade_row()
 			tile_map.set_cell(0, cell, section_id, Vector2i(variant, shade))
 
 # Points-of-interest overlay (ADR-0001 slice B): places PoiLayout's markers
@@ -203,7 +207,7 @@ func _build_tilemap() -> void:
 func _build_poi_markers() -> void:
 	_pois = PoiLayout.generate(MAP_COLS, MAP_ROWS, _tier_ids, _rng)
 	_pois = _pois.filter(func(poi): return poi["type"] != "camp" and poi["type"] != "portal")
-	_pois.append({"cell": SectionLayout.camp_cell(MAP_COLS, MAP_ROWS), "type": "camp"})
+	_pois.append({"cell": _section_layout["camp"], "type": "camp"})
 	_pois.append({"cell": _exit_cell, "type": "portal"})
 	_den_cells.clear()
 
@@ -290,7 +294,7 @@ func _section_label(tier_id: int) -> String:
 	if index == -1 or _zone_def == null:
 		return ""
 	var band_name := _zone_def.band_name_for_tier_index(index, _tier_ids.size())
-	var tier_params: Dictionary = _tier_table.tier_params(tier_id) if _tier_table != null else {}
+	var tier_params: Dictionary = _section_layout.get("params", {}).get(tier_id, {})
 	var level_min := int(tier_params.get("level_min", 0))
 	var level_max := int(tier_params.get("level_max", 0))
 	return "%s  Lv %d-%d" % [band_name, level_min, level_max]
@@ -403,13 +407,13 @@ func _physics_process(delta: float) -> void:
 
 func _tick_encounter() -> void:
 	var cell := tile_map.local_to_map(character.position)
-	var tier_id := SectionLayout.section_for_cell(cell, MAP_COLS, MAP_ROWS, _tier_ids)
+	var tier_id := SectionLayout.section_for_cell(cell, MAP_COLS, MAP_ROWS, _section_layout)
 	if tier_id != _current_section_id:
 		_current_section_id = tier_id
 		_gauge = 0.0
 		gauge_bar.value = 0.0
 		_show_section_banner(tier_id)
-	var tier_params: Dictionary = _tier_table.tier_params(tier_id) if _tier_table != null else {}
+	var tier_params: Dictionary = _section_layout.get("params", {}).get(tier_id, {})
 	tier_params = _apply_den_bias(tier_params, cell)
 
 	var result := EncounterSystem.tick(tier_params, _gauge, _rng)

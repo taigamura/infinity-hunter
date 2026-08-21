@@ -34,8 +34,12 @@ const BORDER_WIDTH := 2
 const DEFAULT_PALETTE := ["#408C40", "#86602D", "#CC331A"]
 
 # Dirt-brown tint blended over the band colour for the trail spine tiles.
+# Kept modest (issue #39: the path now actually renders near the safe-band
+# camp) so a trail tile still reads as a dirt corridor without fully
+# canceling out the underlying band's hue — the safe band must stay
+# recognizably green near the camp for the concentric-gradient visual gate.
 const TRAIL_TINT := Color(0.5, 0.36, 0.2)
-const TRAIL_BLEND := 0.55
+const TRAIL_BLEND := 0.3
 
 static func build(tile_size: int, tier_ids: Array, palette: Array = DEFAULT_PALETTE) -> TileSet:
 	var tile_set := TileSet.new()
