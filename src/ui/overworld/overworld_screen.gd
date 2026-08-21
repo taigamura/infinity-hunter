@@ -109,7 +109,8 @@ func _ready() -> void:
 	_zone_def = GameState.zones.get(run.zone_id)
 	var min_level := _zone_def.min_level if _zone_def != null else 1.0
 	var max_level := _zone_def.max_level if _zone_def != null else 8.0
-	_section_layout = SectionLayout.generate(MAP_COLS, MAP_ROWS, min_level, max_level, _rng)
+	var band_names: Array = _zone_def.band_names if _zone_def != null else []
+	_section_layout = SectionLayout.generate(MAP_COLS, MAP_ROWS, min_level, max_level, _rng, band_names)
 	_exit_cell = _section_layout["portal"]
 	_build_tilemap()
 	_build_character_sprite()
@@ -194,21 +195,17 @@ func _build_tilemap() -> void:
 				shade = OverworldTileset.trail_shade_row()
 			tile_map.set_cell(0, cell, section_id, Vector2i(variant, shade))
 
-# Points-of-interest overlay (ADR-0001 slice B): places PoiLayout's markers
-# above the tilemap and remembers the den cells for the encounter-gauge bias
-# in _tick_encounter. Reuses the screen's own _rng (already randomize()'d in
-# _ready), so layout varies run to run like the tile variant jitter next to
-# it; PoiLayout itself stays deterministic/unit-tested for a given seed.
-# PoiLayout still places dens/forage/cache/landmarks along its old row-depth
-# bands (a later Concentric Sections slice can re-derive those from
-# SectionLayout's radial geometry); its camp/portal entries are swapped out
-# here for the SectionLayout-driven cells so the markers match where the
-# hunter actually spawns and travels.
+# Points-of-interest overlay (ADR-0001 slice B, re-homed onto the section map
+# by issue #41): places PoiLayout's markers above the tilemap and remembers
+# the den cells for the encounter-gauge bias in _tick_encounter. Reuses the
+# screen's own _rng (already randomize()'d in _ready), so layout varies run
+# to run like the tile variant jitter next to it; PoiLayout itself stays
+# deterministic/unit-tested for a given seed. PoiLayout now places dens/
+# forage/cache/landmarks directly off SectionLayout's radial distance and
+# visible path, and sources camp/portal from the same layout, so the markers
+# always match where the hunter actually spawns and travels.
 func _build_poi_markers() -> void:
-	_pois = PoiLayout.generate(MAP_COLS, MAP_ROWS, _tier_ids, _rng)
-	_pois = _pois.filter(func(poi): return poi["type"] != "camp" and poi["type"] != "portal")
-	_pois.append({"cell": _section_layout["camp"], "type": "camp"})
-	_pois.append({"cell": _exit_cell, "type": "portal"})
+	_pois = PoiLayout.generate(MAP_COLS, MAP_ROWS, _section_layout, _rng)
 	_den_cells.clear()
 
 	var layer := Node2D.new()
@@ -287,17 +284,22 @@ func _build_gauge_style() -> void:
 	gauge_bar.add_theme_stylebox_override("fill", fill)
 
 # Section name + recommended level for `tier_id` (a section id), e.g.
-# "Cinder Dunes  Lv 4-7". Falls back to "" when the tier/zone data isn't
-# resolvable (defensive; every painted cell has a known tier in practice).
+# "Bramble Hollow  Lv 4-7" — the generated per-section name (issue #41,
+# SectionLayout params[id].name, derived from the zone's band_names) falls
+# back to the plain band name if generation left it empty (e.g. a zone with
+# no band_names). Falls back to "" when the tier/zone data isn't resolvable
+# (defensive; every painted cell has a known tier in practice).
 func _section_label(tier_id: int) -> String:
 	var index := _tier_ids.find(tier_id)
 	if index == -1 or _zone_def == null:
 		return ""
-	var band_name := _zone_def.band_name_for_tier_index(index, _tier_ids.size())
 	var tier_params: Dictionary = _section_layout.get("params", {}).get(tier_id, {})
+	var section_name: String = tier_params.get("name", "")
+	if section_name == "":
+		section_name = _zone_def.band_name_for_tier_index(index, _tier_ids.size())
 	var level_min := int(tier_params.get("level_min", 0))
 	var level_max := int(tier_params.get("level_max", 0))
-	return "%s  Lv %d-%d" % [band_name, level_min, level_max]
+	return "%s  Lv %d-%d" % [section_name, level_min, level_max]
 
 # Persistent HUD badge (issue #38): reuses the hot-strip slot to always show
 # the section the hunter currently stands in, not just its former "hot

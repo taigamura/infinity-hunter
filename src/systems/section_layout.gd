@@ -53,6 +53,17 @@ const GAUGE_RATE_PER_LEVEL := 1.5
 # correlated with ring distance" per the spec, not a hard band.
 const FILL_LEVEL_JITTER_FRACTION := 0.15
 
+# Section naming (carryover issue #41): each section's evocative name is its
+# zone band-name (e.g. "Bramble", picked the same way ZoneDef.band_name_for-
+# _tier_index does, by where the section's level sits in the zone's span)
+# plus a generic geographic suffix, so distinct sections sharing a band still
+# read as distinct places ("Bramble Hollow" vs "Bramble Reach"). The suffix
+# list is rotated by one rng draw per generate() call so the same section id
+# doesn't always pair with the same word across different maps.
+const NAME_SUFFIXES := [
+	"Hollow", "Reach", "Basin", "Rise", "Bend", "Flat", "Bluff", "Break", "Span", "Vale",
+]
+
 # Normalized 0..1 radial distance of `cell` from the map center (0 = center,
 # 1 = the outer ring). Normalized against the largest radius that still fits
 # on-grid (half of the shorter map dimension) so the outer ring never runs
@@ -91,10 +102,12 @@ static func portal_cell(map_cols: int, map_rows: int, rng: RandomNumberGenerator
 #   "path_section_ids": Array[int] (ascending by ring/level, index == ring),
 #   "fill_sections": Array[{"id": int, "seed": Vector2i, "level": float, "is_spike": bool}],
 #   "spike_section_ids": Array[int]  (1-2 off-path fill sections, apex encounters),
-#   "params": Dictionary  (section id -> {level_min, level_max, gauge_rate, is_spike}),
+#   "params": Dictionary  (section id -> {level_min, level_max, gauge_rate, is_spike, name}),
 #   "section_ids": Array[int]  (every section id, ascending by level),
 # }
-static func generate(map_cols: int, map_rows: int, min_level: float, max_level: float, rng: RandomNumberGenerator) -> Dictionary:
+# `band_names` (optional, e.g. ZoneDef.band_names) drives each section's
+# generated "name" param; left "" when no band_names are supplied.
+static func generate(map_cols: int, map_rows: int, min_level: float, max_level: float, rng: RandomNumberGenerator, band_names: Array = []) -> Dictionary:
 	var camp := camp_cell(map_cols, map_rows)
 	var portal := portal_cell(map_cols, map_rows, rng)
 	var path_cells := _line_cells(camp, portal)
@@ -150,6 +163,8 @@ static func generate(map_cols: int, map_rows: int, min_level: float, max_level: 
 	for fill in fill_sections:
 		section_ids.append(fill["id"])
 	section_ids.sort_custom(func(a, b): return params[a]["level_min"] < params[b]["level_min"])
+
+	_assign_section_names(params, section_ids, band_names, min_level, level_span, rng)
 
 	return {
 		"camp": camp,
@@ -216,6 +231,24 @@ static func _section_params(level: float, level_span: float, ring_count: int, is
 		"gauge_rate": BASE_GAUGE_RATE + level * GAUGE_RATE_PER_LEVEL,
 		"is_spike": is_spike,
 	}
+
+# Sets params[id]["name"] for every section id: band_names[idx] + a rotating
+# geographic suffix, where idx is picked the same way ZoneDef.band_name_for_-
+# tier_index scales a level onto however many bands a zone defines (band
+# count needn't match section count 1:1). Left "" for every section when
+# band_names is empty (e.g. legacy callers that don't pass it).
+static func _assign_section_names(params: Dictionary, section_ids: Array, band_names: Array, min_level: float, level_span: float, rng: RandomNumberGenerator) -> void:
+	if band_names.is_empty():
+		for section_id in section_ids:
+			params[section_id]["name"] = ""
+		return
+	var suffix_offset := rng.randi_range(0, NAME_SUFFIXES.size() - 1)
+	for section_id in section_ids:
+		var level_min: float = params[section_id]["level_min"]
+		var ratio := clampf((level_min - min_level) / maxf(level_span, 0.001), 0.0, 0.999)
+		var band_idx := clampi(int(ratio * band_names.size()), 0, band_names.size() - 1)
+		var suffix: String = NAME_SUFFIXES[(section_id + suffix_offset) % NAME_SUFFIXES.size()]
+		params[section_id]["name"] = "%s %s" % [band_names[band_idx], suffix]
 
 # Bounded 1-2 fill sections (never more than exist) chosen as off-path
 # spikes, picked without replacement via a seeded Fisher-Yates shuffle so

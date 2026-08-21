@@ -149,3 +149,52 @@ func test_degenerate_tiny_map_never_hangs() -> void:
 	assert_true(layout.has("camp"))
 	var section_id := SectionLayout.section_for_cell(Vector2i(0, 0), 1, 1, layout)
 	assert_true(layout["section_ids"].has(section_id))
+
+const BAND_NAMES := ["Meadow", "Thicket", "Bramble", "Thornwall"]
+
+func _generate_named(seed_value: int) -> Dictionary:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_value
+	return SectionLayout.generate(MAP_COLS, MAP_ROWS, MIN_LEVEL, MAX_LEVEL, rng, BAND_NAMES)
+
+func test_every_section_gets_a_non_empty_name_when_band_names_supplied() -> void:
+	var layout := _generate_named(3)
+	var params: Dictionary = layout["params"]
+	for section_id in layout["section_ids"]:
+		var section_name: String = params[section_id]["name"]
+		assert_false(section_name.is_empty(), "section %d should have a generated name" % section_id)
+
+func test_section_name_starts_with_a_zone_band_name() -> void:
+	var layout := _generate_named(3)
+	var params: Dictionary = layout["params"]
+	for section_id in layout["section_ids"]:
+		var section_name: String = params[section_id]["name"]
+		var matches_a_band := false
+		for band_name in BAND_NAMES:
+			if section_name.begins_with(band_name):
+				matches_a_band = true
+				break
+		assert_true(matches_a_band, "name '%s' should start with one of the zone's band names" % section_name)
+
+func test_section_name_is_empty_when_no_band_names_supplied() -> void:
+	var layout := _generate(3)
+	var params: Dictionary = layout["params"]
+	for section_id in layout["section_ids"]:
+		assert_eq(params[section_id]["name"], "")
+
+func test_section_names_are_deterministic_for_a_fixed_seed() -> void:
+	var layout_a := _generate_named(9)
+	var layout_b := _generate_named(9)
+	for section_id in layout_a["section_ids"]:
+		assert_eq(layout_a["params"][section_id]["name"], layout_b["params"][section_id]["name"])
+
+func test_deeper_sections_prefer_later_band_names() -> void:
+	var layout := _generate_named(3)
+	var params: Dictionary = layout["params"]
+	var path_section_ids: Array = layout["path_section_ids"]
+	var first_ring_name: String = params[path_section_ids[0]]["name"]
+	var last_ring_name: String = params[path_section_ids[-1]]["name"]
+	assert_true(first_ring_name.begins_with(BAND_NAMES[0]),
+		"the mildest ring should use the zone's first band name, got '%s'" % first_ring_name)
+	assert_false(last_ring_name.begins_with(BAND_NAMES[0]),
+		"the deepest ring should not reuse the zone's first band name, got '%s'" % last_ring_name)
