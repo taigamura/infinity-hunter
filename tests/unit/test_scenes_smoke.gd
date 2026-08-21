@@ -107,7 +107,7 @@ func test_launch_screen_smoke() -> void:
 	assert_not_null(weapon_icon, "launch %WeaponIcon must exist")
 	var weapon_name_label: Label = screen.get_node("%WeaponNameLabel")
 	assert_not_null(weapon_name_label, "launch %WeaponNameLabel must exist")
-	assert_eq(weapon_name_label.text, "( none )", "fresh save must show no equipped weapon")
+	assert_eq(weapon_name_label.text, "Rusty Greatsword", "fresh save must auto-equip the starter weapon")
 	var start_button: Button = screen.get_node("%StartButton")
 	assert_not_null(start_button, "launch %StartButton must exist")
 	var nav_buttons := [screen.get_node("%InventoryButton"), screen.get_node("%BestiaryButton"), screen.get_node("%MetaButton")]

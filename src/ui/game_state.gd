@@ -92,6 +92,11 @@ func settle_run(run: RunState) -> void:
 	for material_id in run.materials_banked:
 		inventory.add_material(material_id, int(run.materials_banked[material_id]))
 	MetaProgression.settle_run(save_state, run.level, run.status)
+	var unlocked: Array = save_state.get("unlocked_zones", [])
+	for zid in run.unlocked_zone_ids:
+		if not unlocked.has(zid):
+			unlocked.append(zid)
+	save_state["unlocked_zones"] = unlocked
 	persist()
 
 func start_run(zone_id: String, weapon_id: String, armor_ids: Dictionary) -> void:

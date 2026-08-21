@@ -39,6 +39,11 @@ func _ready() -> void:
 	_populate_weapons()
 	zone_option.item_selected.connect(func(_index): _update_zone_card())
 	weapon_option.item_selected.connect(func(_index): _update_weapon_card())
+	var starting_index := _zone_ids.find(_starting_zone_id)
+	if starting_index >= 0:
+		zone_option.selected = starting_index
+	if _weapon_gear_ids.size() > 1:
+		weapon_option.selected = 1
 	_update_zone_card()
 	_update_weapon_card()
 	start_button.pressed.connect(_on_start_pressed)
@@ -51,7 +56,12 @@ func _populate_zones() -> void:
 	_zone_ids.clear()
 	_starting_zone_id = ""
 	var lowest_min_level := INF
+	var unlocked: Array = GameState.save_state.get("unlocked_zones", [])
 	for zone_id in GameState.zones.keys():
+		# Defensive fallback: if the durable unlock list is somehow empty,
+		# show all zones rather than stranding the player with no options.
+		if not unlocked.is_empty() and not unlocked.has(zone_id):
+			continue
 		var zone: ZoneDef = GameState.zones[zone_id]
 		zone_option.add_item(zone.name)
 		_zone_ids.append(zone_id)
