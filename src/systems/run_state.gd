@@ -74,12 +74,19 @@ func resolve_fight(monster: MonsterDef, broken_parts: Array = [], rng: RandomNum
 		result["died"] = true
 		return result
 
+	var level_before := level
+	var carry_before := xp_carry
 	var xp_mult_bonus: float = armor_skill_profile.get("xp_mult_bonus", 0.0)
-	var xp_result := XpCurve.award_xp(level, xp_carry, monster.xp_reward, xp_mult_bonus)
+	var scaled_reward := XpCurve.gap_scaled_reward(monster.xp_reward, level, monster.level)
+	var xp_result := XpCurve.award_xp(level, xp_carry, scaled_reward, xp_mult_bonus)
 	level = xp_result["level"]
 	xp_carry = xp_result["xp_carry"]
 	result["levels_gained"] = xp_result["levels_gained"]
-	result["xp_awarded"] = monster.xp_reward
+	result["xp_awarded"] = scaled_reward
+	result["level_before"] = level_before
+	result["xp_carry_before"] = carry_before
+	result["level_after"] = level
+	result["xp_carry_after"] = xp_carry
 	essence_unbanked += monster.xp_reward * ESSENCE_PER_XP
 
 	var roll_rng := rng if rng != null else RandomNumberGenerator.new()

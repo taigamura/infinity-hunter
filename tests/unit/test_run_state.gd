@@ -128,6 +128,16 @@ func test_combat_outcome_loss_overrides_winning_level_compare() -> void:
 	assert_true(result["died"])
 	assert_eq(run.status, "dead")
 
+func test_winning_fight_against_far_above_level_monster_explodes_xp() -> void:
+	var run := RunState.start("verdant_fields")
+	var result := run.resolve_fight(_ember_wolf, [], null, {}, {"won": true})
+	assert_true(result["won"])
+	assert_true(result["levels_gained"] >= 5, "an over-level gap kill should vault many levels")
+	assert_gt(run.level, 1.0)
+	assert_gt(result["xp_awarded"], _ember_wolf.xp_reward, "gap-scaled reward must exceed the flat base reward")
+	assert_eq(result["level_before"], 1.0)
+	assert_almost_eq(result["level_after"], run.level)
+
 func test_unlock_zone_records_new_zone_and_moves_run() -> void:
 	var run := RunState.start("verdant_fields")
 	assert_false(run.unlocked_zone_ids.has("cinder_dunes"))

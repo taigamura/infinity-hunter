@@ -61,3 +61,51 @@ func test_power_scaling_monotonic() -> void:
 	var p100 := XpCurve.power_scaling(100.0)
 	assert_gt(p10, p1, "power must increase with level")
 	assert_gt(p100, p10, "power must keep increasing with level")
+
+func test_gap_multiplier_is_flat_for_equal_or_lower_level() -> void:
+	assert_almost_eq(XpCurve.gap_multiplier(5.0, 5.0), 1.0)
+	assert_almost_eq(XpCurve.gap_multiplier(5.0, 3.0), 1.0)
+
+func test_gap_multiplier_grows_for_positive_gap() -> void:
+	var m1 := XpCurve.gap_multiplier(1.0, 2.0)
+	var m8 := XpCurve.gap_multiplier(1.0, 9.0)
+	assert_gt(m1, 1.0, "any positive gap should exceed the flat multiplier")
+	assert_gt(m8, m1, "a bigger gap should multiply harder")
+
+func test_gap_multiplier_clamps_at_cap_for_enormous_gap() -> void:
+	var m := XpCurve.gap_multiplier(1.0, 1.0e10)
+	assert_almost_eq(m, XpCurve.XP_GAP_MULT_CAP)
+
+func test_gap_scaled_reward_multiplies_base() -> void:
+	var expected := 50.0 * XpCurve.gap_multiplier(1.0, 9.0)
+	assert_almost_eq(XpCurve.gap_scaled_reward(50.0, 1.0, 9.0), expected)
+
+func test_fill_segments_within_one_level_single_step() -> void:
+	var steps := XpCurve.fill_segments(1.0, 0.0, 1.0, XpCurve.threshold(1.0) * 0.5)
+	assert_eq(steps.size(), 1)
+	assert_eq(steps[0]["level"], 1)
+	assert_false(steps[0]["levels_up"])
+	assert_almost_eq(steps[0]["from"], 0.0)
+	assert_almost_eq(steps[0]["to"], 0.5)
+
+func test_fill_segments_multi_level_step_shape() -> void:
+	var steps := XpCurve.fill_segments(1.0, 0.0, 5.0, XpCurve.threshold(5.0) * 0.25)
+	var levels_up_count := 0
+	for step in steps:
+		if step["levels_up"]:
+			levels_up_count += 1
+	assert_eq(levels_up_count, 4, "levels_up count must equal level_after - level_before")
+	assert_almost_eq(steps[0]["to"], 1.0)
+	assert_false(steps[steps.size() - 1]["levels_up"])
+
+func test_fill_segments_consistent_with_award_xp() -> void:
+	var start_level := 1.0
+	var start_carry := 10.0
+	var xp := XpCurve.threshold(1.0) * 3.0 + 42.0
+	var award := XpCurve.award_xp(start_level, start_carry, xp)
+	var end_level: float = award["level"]
+	var end_carry: float = award["xp_carry"]
+	var steps := XpCurve.fill_segments(start_level, start_carry, end_level, end_carry)
+	var last: Dictionary = steps[steps.size() - 1]
+	assert_false(last["levels_up"])
+	assert_almost_eq(last["to"], end_carry / XpCurve.threshold(end_level), 0.0001)
