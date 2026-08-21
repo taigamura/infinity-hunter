@@ -160,31 +160,81 @@ func _update_hot_strip(tier_id: int) -> void:
 		return
 	hot_strip_label.visible = index >= int(ceili(_tier_ids.size() / 2.0))
 
-# Placeholder programmer-art marker (bordered square + drop shadow, both
-# baked into the texture) so the character reads against the tilemap without
-# a hand-authored sprite asset.
+# Procedural top-down hunter sprite: a drop shadow blob, a rounded cloak-
+# colored body/torso with a darker outline (so it pops against the green
+# field tiles), a skin-tone head offset toward the top edge for a simple
+# facing cue, and a small hood shading the back of the head. Everything is
+# baked into one ImageTexture — no external art asset — so this stays a
+# self-contained placeholder that's easy to iterate on in code.
 func _build_character_sprite() -> void:
-	const BODY_SIZE := 32
-	const PAD := 8
-	const SHADOW_OFFSET := 4
-	const BORDER := 2
-	var canvas := BODY_SIZE + PAD * 2
-	var img := Image.create(canvas, canvas, false, Image.FORMAT_RGBA8)
+	const CANVAS := 48
+	var img := Image.create(CANVAS, CANVAS, false, Image.FORMAT_RGBA8)
 	img.fill(Color(0, 0, 0, 0))
 
-	var body_color := Color(0.9, 0.85, 0.2)
-	var border_color := body_color.darkened(0.45)
-	var shadow_color := Color(0, 0, 0, 0.35)
+	var center := Vector2(CANVAS / 2.0, CANVAS / 2.0)
 
-	for x in range(BODY_SIZE):
-		for y in range(BODY_SIZE):
-			img.set_pixel(PAD + SHADOW_OFFSET + x, PAD + SHADOW_OFFSET + y, shadow_color)
-	for x in range(BODY_SIZE):
-		for y in range(BODY_SIZE):
-			var is_border := x < BORDER or y < BORDER or x >= BODY_SIZE - BORDER or y >= BODY_SIZE - BORDER
-			img.set_pixel(PAD + x, PAD + y, border_color if is_border else body_color)
+	# Soft drop shadow, offset down-right and slightly below the body so the
+	# figure reads as standing on the tile rather than floating on it.
+	var shadow_color := Color(0, 0, 0, 0.32)
+	_draw_filled_ellipse(img, center + Vector2(2, 9), Vector2(11, 5), shadow_color)
+
+	# Cloak/tunic body: a warm tan that stands out against the green field,
+	# outlined a shade darker so it pops on any tier's tile color.
+	var body_color := Color(0.82, 0.55, 0.28)
+	var body_outline := body_color.darkened(0.5)
+	var body_center := center + Vector2(0, 4)
+	var body_radius := Vector2(11, 9)
+	_draw_filled_ellipse(img, body_center, body_radius + Vector2(1, 1), body_outline)
+	_draw_filled_ellipse(img, body_center, body_radius, body_color)
+
+	# Head: skin-tone circle offset toward the top of the canvas so the
+	# figure reads as facing "up"/forward rather than symmetric top-down.
+	var head_color := Color(0.94, 0.78, 0.6)
+	var head_outline := head_color.darkened(0.45)
+	var head_center := center + Vector2(0, -10)
+	var head_radius := 7.0
+	_draw_filled_circle(img, head_center, head_radius + 1.0, head_outline)
+	_draw_filled_circle(img, head_center, head_radius, head_color)
+
+	# Small hood/cap shading the back (lower half) of the head in the body
+	# color, reinforcing the forward-facing read without hiding the face.
+	for x in range(CANVAS):
+		for y in range(CANVAS):
+			var p := Vector2(x, y) - head_center
+			if p.length() <= head_radius and p.y > -1.0:
+				img.set_pixel(x, y, body_color.darkened(0.15))
+
+	# Lighter front edge on the body (a thin highlight along its top rim)
+	# so the sprite has an obvious "front" even at a glance.
+	var highlight := body_color.lightened(0.25)
+	for angle_deg in range(200, 341, 4):
+		var rad := deg_to_rad(float(angle_deg))
+		var px := int(round(body_center.x + cos(rad) * (body_radius.x - 1.5)))
+		var py := int(round(body_center.y + sin(rad) * (body_radius.y - 1.5)))
+		if px >= 0 and px < CANVAS and py >= 0 and py < CANVAS:
+			img.set_pixel(px, py, highlight)
 
 	character_sprite.texture = ImageTexture.create_from_image(img)
+
+# Fills an axis-aligned ellipse centered at `center` with the given radii
+# (in pixels), used for the body and drop shadow.
+func _draw_filled_ellipse(img: Image, center: Vector2, radii: Vector2, color: Color) -> void:
+	var min_x := int(floor(center.x - radii.x))
+	var max_x := int(ceil(center.x + radii.x))
+	var min_y := int(floor(center.y - radii.y))
+	var max_y := int(ceil(center.y + radii.y))
+	for x in range(min_x, max_x + 1):
+		for y in range(min_y, max_y + 1):
+			if x < 0 or y < 0 or x >= img.get_width() or y >= img.get_height():
+				continue
+			var dx := (x + 0.5 - center.x) / radii.x
+			var dy := (y + 0.5 - center.y) / radii.y
+			if dx * dx + dy * dy <= 1.0:
+				img.set_pixel(x, y, color)
+
+# Fills a circle of the given radius centered at `center`, used for the head.
+func _draw_filled_circle(img: Image, center: Vector2, radius: float, color: Color) -> void:
+	_draw_filled_ellipse(img, center, Vector2(radius, radius), color)
 
 func _physics_process(delta: float) -> void:
 	if GameState.current_run == null or _combat_active:

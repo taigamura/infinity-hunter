@@ -72,7 +72,7 @@ loop's verification gate and the definition of "done".
 | `SkillSystem` | Builds the armor/set-bonus skill effect profile fed into combat. |
 | `Bestiary` | Per-monster seen/kill/capture counts, discovered drops, broken parts. |
 | `MetaProgression` | Essence = f(peak level), banked on a non-dead run; spend on capped global upgrades (see below). |
-| `SaveManager` | Atomic JSON save to `user://` (temp→fsync→rename), `.bak` rollback, debounced autosave, versioned with sequential migration. `CURRENT_VERSION = 2`. |
+| `SaveManager` | Atomic JSON save to `user://` (temp→fsync→rename), `.bak` rollback, debounced autosave, versioned with sequential migration. `CURRENT_VERSION = 3`. A fresh (or empty-gear) save is seeded with a starter **Rusty Greatsword** + `unlocked_zones = [verdant_fields]`. |
 | `SpriteSheetSlicer` | Slices a monster sheet into idle/attack/hit frames per the sheet spec. |
 
 ### UI scenes (`src/ui/`)
@@ -98,9 +98,13 @@ LAUNCH ──▶ OVERWORLD ──▶ COMBAT ──┬─▶ VICTORY ──(push 
   `CombatScreen` as an overlay (movement/ticking frozen). Reaching the corner
   **exit cell** unlocks the connected zone and reloads the scene for it.
 - **Combat:** tap **Dodge** on the monster's telegraph each round; `CombatResolver`
-  runs the reflex phase, then `RunState.resolve_fight` is the authoritative outcome
-  (spends 1 hunt, awards XP/levels/drops, or kills the run). Combat never changes
-  scenes: it emits `combat_finished` and the overworld tears down.
+  runs the reflex HP-race, and its result is now the **authoritative** win/loss:
+  `CombatScreen` passes the reflex outcome into `RunState.resolve_fight` (via its
+  `combat_outcome` arg), which spends 1 hunt, awards XP/levels/drops, or kills the
+  run accordingly. You win by draining the monster's HP before yours; a round-cap
+  timeout is broken by HP fraction. The old bare level-power compare survives only
+  as the headless/test fallback when no `combat_outcome` is supplied. Combat never
+  changes scenes: it emits `combat_finished` and the overworld tears down.
 - **End of run:** hunts hit 0 or you retreat → `status = "banked"`, haul settled into
   the durable inventory + essence. Death → `status = "dead"`, unbanked haul zeroed.
 
@@ -126,8 +130,11 @@ LAUNCH ──▶ OVERWORLD ──▶ COMBAT ──┬─▶ VICTORY ──(push 
   Fields), ember_wolf, sand_scorpion, magma_golem, frost_wyrm, thunder_stag,
   glacier_troll. Sprite sheets in `assets/sprites/` (256×192, 64×64 frames, real
   AI-generated art).
-- Weapons, armor, armor_sets, companions, materials: `data/*` (loaded but inventory
-  is empty on a fresh save until crafted).
+- Weapons, armor, armor_sets, companions, materials: `data/*`. A fresh save is
+  seeded with a starter **Rusty Greatsword** (auto-equipped at launch); everything
+  else is crafted from looted materials. Launch gates the zone dropdown to the
+  durable `unlocked_zones` list (starting at Verdant Fields), which `settle_run`
+  extends whenever a run discovers a deeper zone (persists through death).
 - **Weapon icons** (9, one per weapon) in `assets/weapons/<id>.png` (32×32, real
   AI-generated art via img2img from tinted silhouette templates). `WeaponIcons.for_id`
   (`src/ui/weapon_icons.gd`) loads them by the same per-id convention as monster
@@ -144,17 +151,21 @@ LAUNCH ──▶ OVERWORLD ──▶ COMBAT ──┬─▶ VICTORY ──(push 
   (`Press Start 2P` headers, `VT323` body) skins every screen; launch/overworld/combat
   are hand-composed to match the design canvas (navy backgrounds via
   `src/ui/common/screen_background.gd`, gradient HP/gauge bars, styled buttons, combat
-  telegraph ring + floating damage juice), and inventory/bestiary/meta inherit the base
-  theme. Verified two ways: `tests/unit/test_scenes_smoke.gd` (structural, in the gate)
+  telegraph ring + floating damage juice). Inventory/bestiary/meta now also carry the
+  navy `ScreenBackground` (release-polish pass) plus empty-state hint rows, dimmed
+  disabled Craft buttons, and a bestiary discovered-count subtitle, so all screens
+  share the look. Verified two ways: `tests/unit/test_scenes_smoke.gd` (structural, in the gate)
   and `scripts/verify_visual.sh` (pixel invariants, wired into `scripts/test.sh`);
   `scripts/screenshot.sh` renders PNGs for human review.
-- **Field art stays procedural placeholder:** overworld tiles are per-tier colour
-  squares with shade jitter (`OverworldTileset`, green→olive→red toward the hot corner),
-  the player is a bordered square. Monster sprites and weapon icons are real
-  AI-generated art; tiles/player have no hand-authored sprites yet.
-- **Weapon-class feel not built.** Great Sword / Dual Blades / Hammer differentiation
-  and part-break targeting from combat are specced but not implemented; combat is the
-  generic dodge race.
+- **Field tiles stay procedural placeholder:** overworld tiles are per-tier colour
+  squares with shade jitter (`OverworldTileset`, green→olive→red toward the hot corner).
+  The player is a procedurally-drawn top-down hunter figure (release-polish pass, no
+  external asset). Monster sprites and weapon icons are real AI-generated art; tiles
+  have no hand-authored sprites yet.
+- **Weapon-class differentiation partially live.** Great Sword / Dual Blades / Hammer
+  have distinct attack patterns in `CombatResolver` (charge / demon-meter / stagger-stun)
+  and, now that the reflex outcome is authoritative, they affect who wins. Part-break
+  *targeting* from combat is still specced-not-built.
 - **iOS export deferred** (feature-complete milestone). Develop + verify headless on
   Linux/desktop.
 
