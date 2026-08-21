@@ -63,8 +63,9 @@ loop's verification gate and the definition of "done".
 | `CombatResolver` | Pure dodge/HP-race: dodge timing reduces incoming damage, an unavoidable **chip floor** (`CHIP_FLOOR_FRACTION = 0.35`) always lands, weapon class + element multiplier applied. |
 | `Elements` | 6-element model: Fire/Water/Earth/Thunder/Ice ring (weak ×1.5, resist ×0.66), Neutral ×1.0, rare Dragon ×1.5 vs all. |
 | `EncounterSystem` | Overworld gauge fill from tier params + band-filtered monster pick. `GAUGE_THRESHOLD = 100`. |
-| `OverworldTierLayout` | Buckets a tile into a danger tier by **depth along the vertical travel axis** (near/bottom edge safe, far/top edge hot) per ADR-0001 (Deepening Trail, foundation slice built). Also places the near-edge `camp_cell` (spawn), the on-trail `exit_cell` (portal, deepest band), and `trail_x_for_row` (the winding trail spine's column per row). Per-zone tier tables/palettes (slice C) built. |
-| `PoiLayout` | Pure/static points-of-interest placement (ADR-0001 slice B, built): `generate(map_cols, map_rows, sorted_tier_ids, rng)` returns a deterministic Array of `{cell, type}` (camp ×1, portal ×1, den 1–3, forage 1–3, cache 0–2, landmark 0–1), banded by depth thirds and trail proximity. Rendered as code-drawn tinted markers above the tilemap in `overworld_screen.gd`; standing on/adjacent to a den multiplies the tier's `gauge_rate` before it's passed into the unchanged `EncounterSystem.tick`. |
+| `OverworldTierLayout` | Buckets a tile into a danger tier by **depth along the vertical travel axis** (near/bottom edge safe, far/top edge hot) per ADR-0001 (Deepening Trail, foundation slice built). Also places the near-edge `camp_cell` (spawn), the on-trail `exit_cell` (portal, deepest band), and `trail_x_for_row` (the winding trail spine's column per row). Per-zone tier tables/palettes (slice C) built. Superseded for the overworld screen's own spawn/tile/encounter geometry by `SectionLayout` (#37); still used by `PoiLayout` for POI band placement. |
+| `SectionLayout` | Buckets a tile into a section by **radial distance from the map center** (center = safest, outer ring = most dangerous), the geometry for the Concentric Sections overworld (PRD #36, tracer bullet #37). Pure/static, caller-supplied RNG, mirrors `OverworldTierLayout`'s shape: `section_for_cell`, `camp_cell` (map center), `portal_cell` (rng-angled point on the outer ring), `distance_ratio`, and `generate` bundling section ids + camp + portal. Drives `overworld_screen.gd` spawn placement, tile shading, and the section params fed into the unchanged `EncounterSystem.tick`. |
+| `PoiLayout` | Pure/static points-of-interest placement (ADR-0001 slice B, built): `generate(map_cols, map_rows, sorted_tier_ids, rng)` returns a deterministic Array of `{cell, type}` (camp ×1, portal ×1, den 1–3, forage 1–3, cache 0–2, landmark 0–1), banded by depth thirds and trail proximity. Rendered as code-drawn tinted markers above the tilemap in `overworld_screen.gd`; standing on/adjacent to a den multiplies the tier's `gauge_rate` before it's passed into the unchanged `EncounterSystem.tick`. Its own camp/portal entries are discarded and replaced with `SectionLayout`'s so markers match where the hunter actually spawns/travels; den/forage/cache/landmark bands are still `OverworldTierLayout`-derived pending a later slice. |
 | `OverworldMovement` | Joystick + keyboard → clamped character step. |
 | `DropSystem` | Weighted drop tables; part-break sharply boosts/guarantees that part's material. |
 | `CraftingSystem` | Fixed recipes consume materials → instanced gear rolling a rarity tier (Common/Uncommon/Rare/Epic). |
@@ -94,10 +95,11 @@ LAUNCH ──▶ OVERWORLD ──▶ COMBAT ──┬─▶ VICTORY ──(push 
 
 - **Launch:** pick zone + weapon, `GameState.start_run` builds a `RunState` at Lv.1
   (plus meta modifiers), change scene to the overworld.
-- **Overworld:** walk a 30×40 tile field; each physics frame reads the tier under the
-  character and ticks `EncounterSystem`. On gauge fire, band-pick a monster and open
-  `CombatScreen` as an overlay (movement/ticking frozen). Reaching the corner
-  **exit cell** unlocks the connected zone and reloads the scene for it.
+- **Overworld:** walk a 30×40 tile field, spawning at the **map center** (#37); each
+  physics frame reads the section under the character (`SectionLayout`, radial distance
+  from center) and ticks `EncounterSystem`. On gauge fire, band-pick a monster and open
+  `CombatScreen` as an overlay (movement/ticking frozen). Reaching the outer-ring
+  **portal cell** unlocks the connected zone and reloads the scene for it.
 - **Combat:** tap **Dodge** on the monster's telegraph each round; `CombatResolver`
   runs the reflex HP-race, and its result is now the **authoritative** win/loss:
   `CombatScreen` passes the reflex outcome into `RunState.resolve_fight` (via its
@@ -192,6 +194,19 @@ LAUNCH ──▶ OVERWORLD ──▶ COMBAT ──┬─▶ VICTORY ──(push 
   falling back to Verdant's original colours (`DEFAULT_PALETTE`) when none is
   supplied; the hot-region strip in `overworld_screen.gd` surfaces the current band
   name. Design pitch + mockups: the "Hunting Grounds" artifact.
+- **Concentric Sections tracer bullet built (PRD #36, issue #37).** The Deepening
+  Trail's row-depth banding is superseded for the overworld screen's own geometry by
+  `SectionLayout`: danger now bands by **radial distance from the map center**, not
+  travel depth. The hunter spawns at `SectionLayout.camp_cell` (map center, safest)
+  and the portal sits at `SectionLayout.portal_cell` (rng-angled point on the outer
+  ring, most dangerous); each physics frame resolves the section under the hunter via
+  `section_for_cell` and feeds its tier params (unchanged dict shape) into
+  `EncounterSystem.tick`. Tile shading keys on `distance_ratio` instead of
+  `depth_ratio`. `scripts/verify_visual.sh`'s overworld invariant now checks green
+  near the frame center and red toward the edges/corners (was top/bottom bands).
+  `PoiLayout`'s den/forage/cache/landmark placement is still depth-banded
+  (`OverworldTierLayout`) pending a later slice; only its camp/portal entries are
+  swapped for `SectionLayout`'s so the markers match where the hunter actually is.
 - **Field tiles stay procedural placeholder:** overworld tiles are per-tier colour
   squares with shade jitter (`OverworldTileset`, green→olive→red toward the hot corner).
   The player is a Gen-4-style humanoid **walk sheet** (`assets/sprites/player_ethan.png`,
@@ -204,6 +219,12 @@ LAUNCH ──▶ OVERWORLD ──▶ COMBAT ──┬─▶ VICTORY ──(push 
   region, no scene edit). **This is a temporary placeholder (a repurposed reference sprite)
   to be swapped before any public release.** Monster sprites and weapon icons are real
   AI-generated art; tiles have no hand-authored sprites yet.
+- **Debug sprite/dot toggle (default ON).** `DebugSettings` (`src/core/debug_settings.gd`,
+  a static-var flag) flips every world-entity sprite (overworld player, combat monster,
+  combat "YOU" avatar) between real art and a plain "1 pixel dot" marker. It **defaults to
+  dot mode** so the raw entity positions show without art. An in-game `SPRITES` CheckButton
+  on the overworld HUD flips it live (pressed = real sprites); combat, instanced per fight,
+  reads the flag fresh. Covered by `tests/unit/test_debug_settings.gd`.
 - **Weapon-class differentiation partially live.** Great Sword / Dual Blades / Hammer
   have distinct attack patterns in `CombatResolver` (charge / demon-meter / stagger-stun)
   and, now that the reflex outcome is authoritative, they affect who wins. Part-break

@@ -143,6 +143,19 @@ theme_type_variation = &"RetreatButton"
 theme_override_font_sizes/font_size = 14
 text = "Retreat"
 
+[node name="SpriteToggle" type="CheckButton" parent="UI"]
+unique_name_in_owner = true
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -300.0
+offset_top = 112.0
+offset_right = -40.0
+offset_bottom = 160.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 14
+text = "SPRITES"
+
 [node name="Joystick" type="Control" parent="UI"]
 unique_name_in_owner = true
 anchors_preset = 2

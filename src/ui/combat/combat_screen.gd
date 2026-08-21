@@ -111,7 +111,14 @@ func _ready() -> void:
 	var weakness := Elements.weakness_of(monster.element)
 	monster_weakness_label.text = "WEAK" if weakness != "" else ""
 
-	monster_sprite.sprite_frames = MonsterSpriteSheet.build(monster.id)
+	if DebugSettings.dots_enabled():
+		# Debug dot mode: monster renders as a single dot marker, but keeps its
+		# per-anim SpriteFrames so play("idle"/"hit"/"attack") + the idle bob all
+		# still run harmlessly against the dot.
+		monster_sprite.sprite_frames = DebugSettings.dot_sprite_frames(SpriteSheetSlicer.ANIMS.keys())
+		monster_sprite.scale = Vector2(DebugSettings.DOT_DISPLAY_SCALE, DebugSettings.DOT_DISPLAY_SCALE)
+	else:
+		monster_sprite.sprite_frames = MonsterSpriteSheet.build(monster.id)
 	monster_sprite.animation_finished.connect(_on_monster_anim_finished)
 	monster_sprite.play("idle")
 	_sprite_base_y = monster_sprite.position.y
@@ -373,15 +380,21 @@ func _update_player_hp_label() -> void:
 # player HP label, so the player is represented in combat (matches the overworld
 # character). Built in code from an AtlasTexture region so no scene edit is needed.
 func _add_player_portrait() -> void:
-	var frame := AtlasTexture.new()
-	frame.atlas = PLAYER_SHEET
-	frame.region = Rect2(0, 0, 64, 64)
 	var portrait := TextureRect.new()
-	portrait.texture = frame
 	portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	portrait.custom_minimum_size = Vector2(0, 72)
 	portrait.size_flags_horizontal = Control.SIZE_FILL
+	if DebugSettings.dots_enabled():
+		# Debug dot mode: the "YOU" avatar is a centered dot square sized to the
+		# real portrait (fits the 72px-tall slot).
+		portrait.texture = DebugSettings.dot_texture(DebugSettings.DOT_COLOR, int(DebugSettings.DOT_DISPLAY_SCALE))
+		portrait.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
+	else:
+		var frame := AtlasTexture.new()
+		frame.atlas = PLAYER_SHEET
+		frame.region = Rect2(0, 0, 64, 64)
+		portrait.texture = frame
+		portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	portrait.custom_minimum_size = Vector2(0, 72)
 	var hud: Node = player_hp_label.get_parent()
 	hud.add_child(portrait)
 	hud.move_child(portrait, player_hp_label.get_index())

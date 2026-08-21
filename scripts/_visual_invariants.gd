@@ -14,7 +14,7 @@ func _initialize() -> void:
 	var ok := _check_navy_corners(args[0], "launch")
 	ok = _check_navy_corners(args[1], "combat") and ok
 	ok = _check_combat_bars(args[1]) and ok
-	ok = _check_overworld_depth_gradient(args[2]) and ok
+	ok = _check_overworld_concentric_gradient(args[2]) and ok
 	quit(0 if ok else 1)
 
 # Coarse band check: dark AND blue-leaning (b clearly above r). Distinguishes
@@ -61,50 +61,56 @@ func _check_combat_bars(path: String) -> bool:
 		push_error("combat: no greenish pixel found (player HP bar must render filled green)")
 	return found_red and found_green
 
-# The overworld tile field must show its danger gradient banded by depth
-# along the travel axis (ADR-0001, the Deepening Trail): hot/red pixels
-# toward the deep/far edge (screen TOP), safe/green pixels toward the near
-# edge (screen BOTTOM, where the camp spawns). Scans the top strip for a
-# reddish pixel (tier-hot tile colour, or exit marker/hot-strip UI drawn in
-# the same red family) and the bottom strip for a greenish pixel (safe tile
-# colour around the camp).
-func _check_overworld_depth_gradient(path: String) -> bool:
+# The overworld tile field must show its danger gradient banded by RADIAL
+# DISTANCE from the map center (PRD issue #36/#37, Concentric Sections):
+# safe/green pixels around the center (where the camp spawns), hot/red
+# pixels toward the outer ring (screen edges/corners). The player spawns at
+# center, so the on-screen center is a reliable proxy for the camp
+# regardless of which zone/portal placement generated the frame. Scans a
+# small box around the frame center for a greenish pixel and the outer
+# border ring for a reddish pixel (tier-hot tile colour, or exit
+# marker/hot-strip UI drawn in the same red family).
+func _check_overworld_concentric_gradient(path: String) -> bool:
 	var img := Image.new()
 	if img.load(path) != OK:
 		push_error("overworld: could not load rendered frame %s" % path)
 		return false
 	var w := img.get_width()
 	var h := img.get_height()
-	var strip_h := int(h / 3.0)
 	var step := 3
 
-	var found_red := false
-	var y := 0
-	while y < strip_h and not found_red:
-		var x := 0
-		while x < w:
-			if _is_reddish(img.get_pixel(x, y)):
-				found_red = true
-				break
-			x += step
-		y += step
-	if not found_red:
-		push_error("overworld: no reddish pixel found toward the deep/far (top) edge")
-
 	var found_green := false
-	y = h - strip_h
-	while y < h and not found_green:
-		var x := 0
-		while x < w:
+	var cx := w / 2
+	var cy := h / 2
+	var half := int(minf(w, h) / 6.0)
+	var y := maxi(0, cy - half)
+	while y < mini(h, cy + half) and not found_green:
+		var x := maxi(0, cx - half)
+		while x < mini(w, cx + half):
 			if _is_greenish(img.get_pixel(x, y)):
 				found_green = true
 				break
 			x += step
 		y += step
 	if not found_green:
-		push_error("overworld: no greenish pixel found toward the near (bottom) edge")
+		push_error("overworld: no greenish pixel found near the center (camp)")
 
-	return found_red and found_green
+	var found_red := false
+	var border := int(minf(w, h) / 6.0)
+	y = 0
+	while y < h and not found_red:
+		var x := 0
+		while x < w:
+			var near_edge := x < border or x >= w - border or y < border or y >= h - border
+			if near_edge and _is_reddish(img.get_pixel(x, y)):
+				found_red = true
+				break
+			x += step
+		y += step
+	if not found_red:
+		push_error("overworld: no reddish pixel found toward the outer ring (edges)")
+
+	return found_green and found_red
 
 func _check_navy_corners(path: String, label: String) -> bool:
 	var img := Image.new()

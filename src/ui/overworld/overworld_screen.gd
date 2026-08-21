@@ -1,11 +1,11 @@
 # OverworldScreen — walkable Verdant Fields: a TileMap painted with danger
-# tiers banded by depth along the travel axis (OverworldTierLayout,
-# ADR-0001: the Deepening Trail), a character body driven by joystick +
+# sections banded by RADIAL DISTANCE from the map center (SectionLayout, PRD
+# issue #36: Concentric Sections), a character body driven by joystick +
 # keyboard input (OverworldMovement), a following Camera2D, and the
-# encounter gauge HUD. The player spawns at a camp on the near (safe) edge
-# and travels toward a portal on-trail in the deepest band. Every physics
-# frame reads the tier under the character, ticks EncounterSystem, and
-# updates the gauge bar; on fire it band-picks a monster via
+# encounter gauge HUD. The player spawns at a center camp and travels
+# outward toward a portal on the outer ring. Every physics frame reads the
+# section under the character, ticks EncounterSystem, and updates the gauge
+# bar; on fire it band-picks a monster via
 # EncounterSystem.pick_monster and opens CombatScreen as an instanced
 # overlay, freezing movement/encounter ticking until it signals
 # `combat_finished` (issue #21). Retreat still banks the run via the
@@ -15,7 +15,7 @@ extends Node2D
 
 const OverworldMovement = preload("res://src/systems/overworld_movement.gd")
 const OverworldTileset = preload("res://src/ui/overworld/overworld_tileset.gd")
-const OverworldTierLayout = preload("res://src/systems/overworld_tier_layout.gd")
+const SectionLayout = preload("res://src/systems/section_layout.gd")
 const EncounterSystem = preload("res://src/systems/encounter_system.gd")
 const PoiLayout = preload("res://src/systems/poi_layout.gd")
 const CombatScreenScene = preload("res://src/ui/combat/combat_screen.tscn")
@@ -41,10 +41,6 @@ const GAUGE_COLOR_LOW := Color("#57c964")
 const GAUGE_COLOR_HIGH := Color("#f5c542")
 const EXIT_PULSE_PERIOD := 1.1
 const MARKER_EDGE_MARGIN := 28.0
-
-# Trail spine half-width in tiles: a cell is painted as trail when its column
-# is within this many tiles of OverworldTierLayout.trail_x_for_row(y).
-const TRAIL_HALF_WIDTH := 1
 
 # POI overlay (ADR-0001 slice B): small code-drawn tinted markers, one per
 # PoiLayout.generate() entry, rendered above the tilemap. No new art assets.
@@ -76,6 +72,7 @@ const DEN_GAUGE_MULTIPLIER := 1.5
 @onready var exit_marker: Control = %ExitMarker
 @onready var exit_marker_label: Label = %ExitMarkerLabel
 @onready var ui_layer: CanvasLayer = %UI
+@onready var sprite_toggle: CheckButton = %SpriteToggle
 
 var _map_size: Vector2
 var _tier_ids: Array = [0]
@@ -102,13 +99,13 @@ func _ready() -> void:
 	_rng.randomize()
 	_tier_table = GameState.tier_tables.get(run.zone_id)
 	_zone_def = GameState.zones.get(run.zone_id)
+	_exit_cell = SectionLayout.portal_cell(MAP_COLS, MAP_ROWS, _rng)
 	_build_tilemap()
 	_build_character_sprite()
-	_exit_cell = OverworldTierLayout.exit_cell(MAP_COLS, MAP_ROWS)
 	_build_poi_markers()
 	_travel_target_zone_id = _zone_def.connections[0] if _zone_def != null and not _zone_def.connections.is_empty() else ""
 	_map_size = Vector2(MAP_COLS * TILE_SIZE, MAP_ROWS * TILE_SIZE)
-	var camp_cell := OverworldTierLayout.camp_cell(MAP_COLS, MAP_ROWS)
+	var camp_cell := SectionLayout.camp_cell(MAP_COLS, MAP_ROWS)
 	character.position = Vector2(camp_cell) * float(TILE_SIZE) + Vector2(TILE_SIZE, TILE_SIZE) / 2.0
 	camera.limit_left = 0
 	camera.limit_top = 0
@@ -119,6 +116,8 @@ func _ready() -> void:
 	# single-frame render represent real gameplay framing).
 	camera.reset_smoothing()
 	retreat_button.pressed.connect(_on_retreat_pressed)
+	sprite_toggle.button_pressed = not DebugSettings.dots_enabled()
+	sprite_toggle.toggled.connect(_on_sprite_toggle_toggled)
 	gauge_bar.min_value = 0.0
 	gauge_bar.max_value = EncounterSystem.GAUGE_THRESHOLD
 	gauge_bar.value = 0.0
@@ -129,7 +128,7 @@ func _ready() -> void:
 	exit_marker.visible = _travel_target_zone_id != ""
 	_start_exit_pulse()
 	_update_exit_marker()
-	_update_hot_strip(OverworldTierLayout.tier_for_cell(tile_map.local_to_map(character.position), MAP_COLS, MAP_ROWS, _tier_ids))
+	_update_hot_strip(SectionLayout.section_for_cell(tile_map.local_to_map(character.position), MAP_COLS, MAP_ROWS, _tier_ids))
 
 # Positions the exit marker over the exit cell's on-screen location, clamped
 # to the viewport edges so it reads as a directional pointer toward the hot
@@ -167,27 +166,31 @@ func _build_tilemap() -> void:
 	for x in range(MAP_COLS):
 		for y in range(MAP_ROWS):
 			var cell := Vector2i(x, y)
-			var tier_id := OverworldTierLayout.tier_for_cell(cell, MAP_COLS, MAP_ROWS, _tier_ids)
-			var tier_index := _tier_ids.find(tier_id)
+			var section_id := SectionLayout.section_for_cell(cell, MAP_COLS, MAP_ROWS, _tier_ids)
+			var section_index := _tier_ids.find(section_id)
 			var variant := _rng.randi_range(0, variant_count - 1)
-			# Trail spine (ADR-0001): cosmetic dirt-tint blend over the
-			# depth-banded gradient, visual only — the tier under the tile
-			# (and therefore the encounter math) is unchanged.
-			var trail_x := OverworldTierLayout.trail_x_for_row(y, MAP_COLS, MAP_ROWS)
-			if absi(x - trail_x) <= TRAIL_HALF_WIDTH:
-				tile_map.set_cell(0, cell, tier_id, Vector2i(variant, OverworldTileset.trail_shade_row()))
-				continue
-			var depth := OverworldTierLayout.depth_ratio(cell, MAP_COLS, MAP_ROWS)
-			var shade := OverworldTileset.shade_index_for_distance(depth, tier_index, _tier_ids.size())
-			tile_map.set_cell(0, cell, tier_id, Vector2i(variant, shade))
+			# Concentric Sections (PRD issue #36): danger rises with radial
+			# distance from the center camp, not row depth — the gradient
+			# shade is keyed on SectionLayout.distance_ratio.
+			var distance := SectionLayout.distance_ratio(cell, MAP_COLS, MAP_ROWS)
+			var shade := OverworldTileset.shade_index_for_distance(distance, section_index, _tier_ids.size())
+			tile_map.set_cell(0, cell, section_id, Vector2i(variant, shade))
 
 # Points-of-interest overlay (ADR-0001 slice B): places PoiLayout's markers
 # above the tilemap and remembers the den cells for the encounter-gauge bias
 # in _tick_encounter. Reuses the screen's own _rng (already randomize()'d in
 # _ready), so layout varies run to run like the tile variant jitter next to
 # it; PoiLayout itself stays deterministic/unit-tested for a given seed.
+# PoiLayout still places dens/forage/cache/landmarks along its old row-depth
+# bands (a later Concentric Sections slice can re-derive those from
+# SectionLayout's radial geometry); its camp/portal entries are swapped out
+# here for the SectionLayout-driven cells so the markers match where the
+# hunter actually spawns and travels.
 func _build_poi_markers() -> void:
 	_pois = PoiLayout.generate(MAP_COLS, MAP_ROWS, _tier_ids, _rng)
+	_pois = _pois.filter(func(poi): return poi["type"] != "camp" and poi["type"] != "portal")
+	_pois.append({"cell": SectionLayout.camp_cell(MAP_COLS, MAP_ROWS), "type": "camp"})
+	_pois.append({"cell": _exit_cell, "type": "portal"})
 	_den_cells.clear()
 
 	var layer := Node2D.new()
@@ -282,9 +285,12 @@ func _update_hot_strip(tier_id: int) -> void:
 # movement direction and cycles the walk columns while moving, holding the
 # idle column (0) when standing still.
 func _build_character_sprite() -> void:
-	character_sprite.texture = PLAYER_SHEET
 	character_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	character_sprite.centered = true
+	if DebugSettings.dots_enabled():
+		_build_dot_character_sprite()
+		return
+	character_sprite.texture = PLAYER_SHEET
 	character_sprite.region_enabled = true
 	# Scale the sprite up so the hunter reads clearly against the 64px tiles,
 	# and lift it (offset compensated for the scale) so the feet stay grounded
@@ -292,6 +298,15 @@ func _build_character_sprite() -> void:
 	character_sprite.scale = Vector2(1.35, 1.35)
 	character_sprite.offset = Vector2(0, -19)
 	_set_player_frame(FACE_DOWN, 0)
+
+# Debug dot mode: the player renders as a plain 1px dot marker (scaled up so
+# it's visible) centered on the character body instead of the walk sheet. No
+# region/facing/walk-cycle — the dot is orientation-agnostic.
+func _build_dot_character_sprite() -> void:
+	character_sprite.region_enabled = false
+	character_sprite.texture = DebugSettings.dot_texture()
+	character_sprite.scale = Vector2(DebugSettings.DOT_DISPLAY_SCALE, DebugSettings.DOT_DISPLAY_SCALE)
+	character_sprite.offset = Vector2.ZERO
 
 # Shows one 64x64 cell of the walk sheet (row = facing, col = walk frame).
 func _set_player_frame(row: int, col: int) -> void:
@@ -306,6 +321,9 @@ func _facing_for(direction: Vector2) -> int:
 # Advances the walk-cycle column while moving; resets to the idle column when
 # standing still. Called every physics frame with the frame delta.
 func _animate_walk(direction: Vector2, delta: float) -> void:
+	# Dot mode has no walk sheet / facing rows to cycle — leave the dot as-is.
+	if DebugSettings.dots_enabled():
+		return
 	if direction == Vector2.ZERO:
 		_anim_accum = 0.0
 		_walk_col = 0
@@ -395,6 +413,14 @@ func _travel_deeper() -> void:
 	var run: RunState = GameState.current_run
 	run.unlock_zone(_travel_target_zone_id)
 	get_tree().reload_current_scene()
+
+# In-game debug switch: pressed = real sprites, released = 1px dot mode.
+# Flips the global DebugSettings flag and live-rebuilds the player sprite so
+# the change is visible immediately; combat (instanced per fight) reads the
+# flag fresh when it next opens.
+func _on_sprite_toggle_toggled(button_pressed: bool) -> void:
+	DebugSettings.sprites_as_dots = not button_pressed
+	_build_character_sprite()
 
 func _on_retreat_pressed() -> void:
 	var run: RunState = GameState.current_run
