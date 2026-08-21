@@ -1,0 +1,10 @@
+{
+  "id": "bad",
+  "name": "Bad Zone",
+  "min_level": 1,
+  "max_level": 8,
+  "monster_ids": ["slime"],
+  "connections": [],
+  "palette": ["not-a-color", "#86602D", "#CC331A"],
+  "band_names": ["Meadow"]
+}

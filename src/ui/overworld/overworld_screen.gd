@@ -1,9 +1,12 @@
 # OverworldScreen — walkable Verdant Fields: a TileMap painted with danger
-# tiers (OverworldTierLayout), a character body driven by joystick + keyboard
-# input (OverworldMovement), a following Camera2D, and the encounter gauge
-# HUD. Every physics frame reads the tier under the character, ticks
-# EncounterSystem, and updates the gauge bar; on fire it band-picks a monster
-# via EncounterSystem.pick_monster and opens CombatScreen as an instanced
+# tiers banded by depth along the travel axis (OverworldTierLayout,
+# ADR-0001: the Deepening Trail), a character body driven by joystick +
+# keyboard input (OverworldMovement), a following Camera2D, and the
+# encounter gauge HUD. The player spawns at a camp on the near (safe) edge
+# and travels toward a portal on-trail in the deepest band. Every physics
+# frame reads the tier under the character, ticks EncounterSystem, and
+# updates the gauge bar; on fire it band-picks a monster via
+# EncounterSystem.pick_monster and opens CombatScreen as an instanced
 # overlay, freezing movement/encounter ticking until it signals
 # `combat_finished` (issue #21). Retreat still banks the run via the
 # existing RunState.retreat() -> GameState.settle_run path and returns to
@@ -14,11 +17,22 @@ const OverworldMovement = preload("res://src/systems/overworld_movement.gd")
 const OverworldTileset = preload("res://src/ui/overworld/overworld_tileset.gd")
 const OverworldTierLayout = preload("res://src/systems/overworld_tier_layout.gd")
 const EncounterSystem = preload("res://src/systems/encounter_system.gd")
+const PoiLayout = preload("res://src/systems/poi_layout.gd")
 const CombatScreenScene = preload("res://src/ui/combat/combat_screen.tscn")
 
 const TILE_SIZE := 64
 const MAP_COLS := 30
 const MAP_ROWS := 40
+
+# Player walk sheet (4x4 grid of 64x64 frames). Rows = facing, cols = walk cycle.
+const PLAYER_SHEET := preload("res://assets/sprites/player_ethan.png")
+const FRAME_SIZE := 64
+const WALK_COLS := 4
+const WALK_FPS := 8.0
+const FACE_DOWN := 0
+const FACE_UP := 1
+const FACE_LEFT := 2
+const FACE_RIGHT := 3
 
 # Presentation-only: a tier is a "hot region" once it's in the upper half of
 # the zone's danger tiers, driving the warning strip. Purely cosmetic — the
@@ -27,6 +41,29 @@ const GAUGE_COLOR_LOW := Color("#57c964")
 const GAUGE_COLOR_HIGH := Color("#f5c542")
 const EXIT_PULSE_PERIOD := 1.1
 const MARKER_EDGE_MARGIN := 28.0
+
+# Trail spine half-width in tiles: a cell is painted as trail when its column
+# is within this many tiles of OverworldTierLayout.trail_x_for_row(y).
+const TRAIL_HALF_WIDTH := 1
+
+# POI overlay (ADR-0001 slice B): small code-drawn tinted markers, one per
+# PoiLayout.generate() entry, rendered above the tilemap. No new art assets.
+const POI_MARKER_SIZE := 20
+const POI_MARKER_COLORS := {
+	"camp": Color("#4fd1c5"),
+	"portal": Color("#f5c542"),
+	"den": Color("#e05263"),
+	"forage": Color("#8bd17c"),
+	"cache": Color("#c9a13b"),
+	"landmark": Color("#7c9cf5"),
+}
+
+# Den → spawn bias (ADR-0001 slice B): standing on/adjacent to a den cell
+# multiplies the tier's gauge_rate before it's passed into the unchanged
+# EncounterSystem.tick, so fights come denser near a den without forking the
+# encounter system itself. Kept modest — a hint, not a trap.
+const DEN_BIAS_RADIUS := 1
+const DEN_GAUGE_MULTIPLIER := 1.5
 
 @onready var tile_map: TileMap = %TileMap
 @onready var character: CharacterBody2D = %Character
@@ -49,6 +86,12 @@ var _combat_active := false
 var _combat_overlay: Control = null
 var _exit_cell: Vector2i
 var _travel_target_zone_id := ""
+var _facing := FACE_DOWN
+var _walk_col := 0
+var _anim_accum := 0.0
+var _pois: Array = []
+var _den_cells: Array = []
+var _zone_def: ZoneDef = null
 
 func _ready() -> void:
 	var run: RunState = GameState.current_run
@@ -58,13 +101,15 @@ func _ready() -> void:
 
 	_rng.randomize()
 	_tier_table = GameState.tier_tables.get(run.zone_id)
+	_zone_def = GameState.zones.get(run.zone_id)
 	_build_tilemap()
 	_build_character_sprite()
 	_exit_cell = OverworldTierLayout.exit_cell(MAP_COLS, MAP_ROWS)
-	var zone: ZoneDef = GameState.zones.get(run.zone_id)
-	_travel_target_zone_id = zone.connections[0] if zone != null and not zone.connections.is_empty() else ""
+	_build_poi_markers()
+	_travel_target_zone_id = _zone_def.connections[0] if _zone_def != null and not _zone_def.connections.is_empty() else ""
 	_map_size = Vector2(MAP_COLS * TILE_SIZE, MAP_ROWS * TILE_SIZE)
-	character.position = _map_size / 2.0
+	var camp_cell := OverworldTierLayout.camp_cell(MAP_COLS, MAP_ROWS)
+	character.position = Vector2(camp_cell) * float(TILE_SIZE) + Vector2(TILE_SIZE, TILE_SIZE) / 2.0
 	camera.limit_left = 0
 	camera.limit_top = 0
 	camera.limit_right = int(_map_size.x)
@@ -116,17 +161,84 @@ func _build_tilemap() -> void:
 		_tier_ids.sort()
 	else:
 		_tier_ids = [0]
-	tile_map.tile_set = OverworldTileset.build(TILE_SIZE, _tier_ids)
+	var palette: Array = _zone_def.palette if _zone_def != null and not _zone_def.palette.is_empty() else OverworldTileset.DEFAULT_PALETTE
+	tile_map.tile_set = OverworldTileset.build(TILE_SIZE, _tier_ids, palette)
 	var variant_count := OverworldTileset.variant_count()
 	for x in range(MAP_COLS):
 		for y in range(MAP_ROWS):
 			var cell := Vector2i(x, y)
 			var tier_id := OverworldTierLayout.tier_for_cell(cell, MAP_COLS, MAP_ROWS, _tier_ids)
 			var tier_index := _tier_ids.find(tier_id)
-			var distance := OverworldTierLayout.distance_ratio(cell, MAP_COLS, MAP_ROWS)
-			var shade := OverworldTileset.shade_index_for_distance(distance, tier_index, _tier_ids.size())
 			var variant := _rng.randi_range(0, variant_count - 1)
+			# Trail spine (ADR-0001): cosmetic dirt-tint blend over the
+			# depth-banded gradient, visual only — the tier under the tile
+			# (and therefore the encounter math) is unchanged.
+			var trail_x := OverworldTierLayout.trail_x_for_row(y, MAP_COLS, MAP_ROWS)
+			if absi(x - trail_x) <= TRAIL_HALF_WIDTH:
+				tile_map.set_cell(0, cell, tier_id, Vector2i(variant, OverworldTileset.trail_shade_row()))
+				continue
+			var depth := OverworldTierLayout.depth_ratio(cell, MAP_COLS, MAP_ROWS)
+			var shade := OverworldTileset.shade_index_for_distance(depth, tier_index, _tier_ids.size())
 			tile_map.set_cell(0, cell, tier_id, Vector2i(variant, shade))
+
+# Points-of-interest overlay (ADR-0001 slice B): places PoiLayout's markers
+# above the tilemap and remembers the den cells for the encounter-gauge bias
+# in _tick_encounter. Reuses the screen's own _rng (already randomize()'d in
+# _ready), so layout varies run to run like the tile variant jitter next to
+# it; PoiLayout itself stays deterministic/unit-tested for a given seed.
+func _build_poi_markers() -> void:
+	_pois = PoiLayout.generate(MAP_COLS, MAP_ROWS, _tier_ids, _rng)
+	_den_cells.clear()
+
+	var layer := Node2D.new()
+	layer.name = "PoiLayer"
+	layer.z_index = 5
+	add_child(layer)
+	# Owned + unique-named so tests can reach it via %PoiLayer like the rest
+	# of this scene's structural smoke checks, even though it's built in code.
+	layer.owner = self
+	layer.unique_name_in_owner = true
+
+	for poi in _pois:
+		var poi_type: String = poi["type"]
+		var cell: Vector2i = poi["cell"]
+		if poi_type == "den":
+			_den_cells.append(cell)
+		var marker := Sprite2D.new()
+		marker.name = "Poi_%s_%d_%d" % [poi_type, cell.x, cell.y]
+		marker.texture = _poi_marker_texture(POI_MARKER_COLORS.get(poi_type, Color.WHITE))
+		marker.position = Vector2(cell) * float(TILE_SIZE) + Vector2(TILE_SIZE, TILE_SIZE) / 2.0
+		layer.add_child(marker)
+
+# A small code-drawn filled circle with a darker rim, tinted per POI type —
+# placeholder art (per the spec) assembled at runtime the same way
+# OverworldTileset builds its tile atlas; no new art asset files.
+func _poi_marker_texture(color: Color) -> ImageTexture:
+	var size := POI_MARKER_SIZE
+	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0.0, 0.0, 0.0, 0.0))
+	var center := float(size) / 2.0
+	var radius := float(size) / 2.0 - 2.0
+	for x in range(size):
+		for y in range(size):
+			var dist := Vector2(x - center, y - center).length()
+			if dist <= radius:
+				img.set_pixel(x, y, color)
+			elif dist <= radius + 1.5:
+				img.set_pixel(x, y, color.darkened(0.4))
+	return ImageTexture.create_from_image(img)
+
+# Den bias (ADR-0001 slice B): when `cell` is on or Chebyshev-adjacent to a
+# den, returns a COPY of tier_params with gauge_rate multiplied up, so
+# EncounterSystem.tick (unchanged) fires denser near a den. Untouched
+# tier_params dict is returned as-is everywhere else.
+func _apply_den_bias(tier_params: Dictionary, cell: Vector2i) -> Dictionary:
+	for den_cell in _den_cells:
+		if absi(cell.x - den_cell.x) <= DEN_BIAS_RADIUS and absi(cell.y - den_cell.y) <= DEN_BIAS_RADIUS:
+			var boosted := tier_params.duplicate()
+			boosted["gauge_rate"] = float(boosted.get("gauge_rate", 0.0)) * DEN_GAUGE_MULTIPLIER
+			return boosted
+	return tier_params
 
 # Screen-space fade pulse on the exit marker. The marker's POSITION is driven
 # by _update_exit_marker (it tracks the exit cell projected through the
@@ -159,82 +271,53 @@ func _update_hot_strip(tier_id: int) -> void:
 		hot_strip_label.visible = false
 		return
 	hot_strip_label.visible = index >= int(ceili(_tier_ids.size() / 2.0))
+	if hot_strip_label.visible and _zone_def != null:
+		var band_name := _zone_def.band_name_for_tier_index(index, _tier_ids.size())
+		hot_strip_label.text = "⚠ %s" % band_name if band_name != "" else ""
 
-# Procedural top-down hunter sprite: a drop shadow blob, a rounded cloak-
-# colored body/torso with a darker outline (so it pops against the green
-# field tiles), a skin-tone head offset toward the top edge for a simple
-# facing cue, and a small hood shading the back of the head. Everything is
-# baked into one ImageTexture — no external art asset — so this stays a
-# self-contained placeholder that's easy to iterate on in code.
+# Player character sprite: a Gen-4-style humanoid overworld walk sheet
+# (assets/sprites/player_ethan.png, a 4x4 grid of 64x64 frames — rows are
+# DOWN / UP / LEFT / RIGHT, columns are the 4-frame walk cycle). The sprite
+# shows one region cell; _physics_process picks the facing row from the
+# movement direction and cycles the walk columns while moving, holding the
+# idle column (0) when standing still.
 func _build_character_sprite() -> void:
-	const CANVAS := 48
-	var img := Image.create(CANVAS, CANVAS, false, Image.FORMAT_RGBA8)
-	img.fill(Color(0, 0, 0, 0))
+	character_sprite.texture = PLAYER_SHEET
+	character_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	character_sprite.centered = true
+	character_sprite.region_enabled = true
+	# Scale the sprite up so the hunter reads clearly against the 64px tiles,
+	# and lift it (offset compensated for the scale) so the feet stay grounded
+	# on the tile rather than drawing centered through the body position.
+	character_sprite.scale = Vector2(1.35, 1.35)
+	character_sprite.offset = Vector2(0, -19)
+	_set_player_frame(FACE_DOWN, 0)
 
-	var center := Vector2(CANVAS / 2.0, CANVAS / 2.0)
+# Shows one 64x64 cell of the walk sheet (row = facing, col = walk frame).
+func _set_player_frame(row: int, col: int) -> void:
+	character_sprite.region_rect = Rect2(col * FRAME_SIZE, row * FRAME_SIZE, FRAME_SIZE, FRAME_SIZE)
 
-	# Soft drop shadow, offset down-right and slightly below the body so the
-	# figure reads as standing on the tile rather than floating on it.
-	var shadow_color := Color(0, 0, 0, 0.32)
-	_draw_filled_ellipse(img, center + Vector2(2, 9), Vector2(11, 5), shadow_color)
+# Maps a movement vector to a facing row; the dominant axis wins.
+func _facing_for(direction: Vector2) -> int:
+	if absf(direction.x) > absf(direction.y):
+		return FACE_RIGHT if direction.x > 0.0 else FACE_LEFT
+	return FACE_DOWN if direction.y > 0.0 else FACE_UP
 
-	# Cloak/tunic body: a warm tan that stands out against the green field,
-	# outlined a shade darker so it pops on any tier's tile color.
-	var body_color := Color(0.82, 0.55, 0.28)
-	var body_outline := body_color.darkened(0.5)
-	var body_center := center + Vector2(0, 4)
-	var body_radius := Vector2(11, 9)
-	_draw_filled_ellipse(img, body_center, body_radius + Vector2(1, 1), body_outline)
-	_draw_filled_ellipse(img, body_center, body_radius, body_color)
-
-	# Head: skin-tone circle offset toward the top of the canvas so the
-	# figure reads as facing "up"/forward rather than symmetric top-down.
-	var head_color := Color(0.94, 0.78, 0.6)
-	var head_outline := head_color.darkened(0.45)
-	var head_center := center + Vector2(0, -10)
-	var head_radius := 7.0
-	_draw_filled_circle(img, head_center, head_radius + 1.0, head_outline)
-	_draw_filled_circle(img, head_center, head_radius, head_color)
-
-	# Small hood/cap shading the back (lower half) of the head in the body
-	# color, reinforcing the forward-facing read without hiding the face.
-	for x in range(CANVAS):
-		for y in range(CANVAS):
-			var p := Vector2(x, y) - head_center
-			if p.length() <= head_radius and p.y > -1.0:
-				img.set_pixel(x, y, body_color.darkened(0.15))
-
-	# Lighter front edge on the body (a thin highlight along its top rim)
-	# so the sprite has an obvious "front" even at a glance.
-	var highlight := body_color.lightened(0.25)
-	for angle_deg in range(200, 341, 4):
-		var rad := deg_to_rad(float(angle_deg))
-		var px := int(round(body_center.x + cos(rad) * (body_radius.x - 1.5)))
-		var py := int(round(body_center.y + sin(rad) * (body_radius.y - 1.5)))
-		if px >= 0 and px < CANVAS and py >= 0 and py < CANVAS:
-			img.set_pixel(px, py, highlight)
-
-	character_sprite.texture = ImageTexture.create_from_image(img)
-
-# Fills an axis-aligned ellipse centered at `center` with the given radii
-# (in pixels), used for the body and drop shadow.
-func _draw_filled_ellipse(img: Image, center: Vector2, radii: Vector2, color: Color) -> void:
-	var min_x := int(floor(center.x - radii.x))
-	var max_x := int(ceil(center.x + radii.x))
-	var min_y := int(floor(center.y - radii.y))
-	var max_y := int(ceil(center.y + radii.y))
-	for x in range(min_x, max_x + 1):
-		for y in range(min_y, max_y + 1):
-			if x < 0 or y < 0 or x >= img.get_width() or y >= img.get_height():
-				continue
-			var dx := (x + 0.5 - center.x) / radii.x
-			var dy := (y + 0.5 - center.y) / radii.y
-			if dx * dx + dy * dy <= 1.0:
-				img.set_pixel(x, y, color)
-
-# Fills a circle of the given radius centered at `center`, used for the head.
-func _draw_filled_circle(img: Image, center: Vector2, radius: float, color: Color) -> void:
-	_draw_filled_ellipse(img, center, Vector2(radius, radius), color)
+# Advances the walk-cycle column while moving; resets to the idle column when
+# standing still. Called every physics frame with the frame delta.
+func _animate_walk(direction: Vector2, delta: float) -> void:
+	if direction == Vector2.ZERO:
+		_anim_accum = 0.0
+		_walk_col = 0
+		_set_player_frame(_facing, 0)
+		return
+	_facing = _facing_for(direction)
+	_anim_accum += delta
+	var step := 1.0 / WALK_FPS
+	while _anim_accum >= step:
+		_anim_accum -= step
+		_walk_col = (_walk_col + 1) % WALK_COLS
+	_set_player_frame(_facing, _walk_col)
 
 func _physics_process(delta: float) -> void:
 	if GameState.current_run == null or _combat_active:
@@ -243,6 +326,7 @@ func _physics_process(delta: float) -> void:
 	var joystick_vector: Vector2 = joystick.output_vector if joystick != null else Vector2.ZERO
 	var direction := OverworldMovement.combine_input(keyboard_vector, joystick_vector)
 	character.position = OverworldMovement.step(character.position, direction, delta, _map_size)
+	_animate_walk(direction, delta)
 	if direction == Vector2.ZERO:
 		return
 	if _travel_target_zone_id != "" and tile_map.local_to_map(character.position) == _exit_cell:
@@ -254,6 +338,7 @@ func _tick_encounter() -> void:
 	var cell := tile_map.local_to_map(character.position)
 	var tier_id := tile_map.get_cell_source_id(0, cell)
 	var tier_params: Dictionary = _tier_table.tier_params(tier_id) if _tier_table != null else {}
+	tier_params = _apply_den_bias(tier_params, cell)
 
 	var result := EncounterSystem.tick(tier_params, _gauge, _rng)
 	_gauge = result["gauge"]

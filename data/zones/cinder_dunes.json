@@ -4,5 +4,7 @@
   "min_level": 8,
   "max_level": 25,
   "monster_ids": ["ember_wolf", "sand_scorpion", "magma_golem"],
-  "connections": ["frostpeak_ridge"]
+  "connections": ["frostpeak_ridge"],
+  "palette": ["#D9A066", "#B8542A", "#FF5722"],
+  "band_names": ["Dunes", "Ashflats", "Emberfield", "Magma Rim"]
 }

@@ -59,6 +59,36 @@ func test_load_directory_zones() -> void:
 	assert_eq(result["defs"].size(), 3)
 	assert_true(result["defs"].has("frostpeak_ridge"))
 
+# Per-zone band names + 3-stop palette (ADR-0001 slice C): each zone reads
+# distinctly via its own palette + terrain band names rather than the old
+# hardcoded SAFE/MID/HOT constants.
+func test_every_zone_defines_a_distinct_three_stop_palette_and_band_names() -> void:
+	var result := DataLoader.load_directory("res://data/zones", ZoneDef.from_dict)
+	assert_true(result["ok"], result.get("error", ""))
+	var defs: Dictionary = result["defs"]
+	var seen_palettes: Array = []
+	for zone_id in defs:
+		var zone: ZoneDef = defs[zone_id]
+		assert_eq(zone.palette.size(), 3, "%s palette must have exactly 3 stops" % zone_id)
+		for stop in zone.palette:
+			assert_true(String(stop).begins_with("#") and String(stop).length() == 7, "%s palette stop '%s' should be a #RRGGBB hex color" % [zone_id, stop])
+		assert_true(zone.band_names.size() >= 1, "%s must define at least one band name" % zone_id)
+		assert_false(seen_palettes.has(zone.palette), "%s palette duplicates another zone's palette" % zone_id)
+		seen_palettes.append(zone.palette)
+	assert_eq(defs["verdant_fields"].band_names, ["Meadow", "Thicket", "Bramble", "Thornwall"])
+
+func test_zone_bad_palette_is_rejected() -> void:
+	var path := "res://tests/fixtures/zones_bad_palette/bad.json"
+	var result := DataLoader.load_file(path, ZoneDef.from_dict)
+	assert_false(result["ok"], "non-hex palette entry must be rejected")
+	assert_true(result["error"].contains("palette"), "error should name the palette field: %s" % result["error"])
+
+func test_zone_empty_band_names_is_rejected() -> void:
+	var path := "res://tests/fixtures/zones_bad_band_names/bad.json"
+	var result := DataLoader.load_file(path, ZoneDef.from_dict)
+	assert_false(result["ok"], "empty band_names must be rejected")
+	assert_true(result["error"].contains("band_names"), "error should name the band_names field: %s" % result["error"])
+
 func test_load_directory_weapons() -> void:
 	var result := DataLoader.load_directory("res://data/weapons", WeaponDef.from_dict)
 	assert_true(result["ok"], "expected data/weapons to load cleanly: %s" % result.get("error", ""))
@@ -92,6 +122,52 @@ func test_load_directory_tiers() -> void:
 	assert_almost_eq(params["weight"], 1.0)
 	assert_true(table.tier_params(2).has("level_max"))
 	assert_eq(table.tier_params(99), {})
+
+# All three zones now have tier tables (ADR-0001 slice C: Cinder Dunes and
+# Frostpeak Ridge previously fell back to a single flat tier). Each zone's
+# tier level bands must sit inside that zone's min_level..max_level, and
+# gauge_rate should escalate deeper into the zone to reinforce mounting
+# pressure toward the far/hot edge.
+func test_all_three_zones_have_a_tier_table() -> void:
+	var result := DataLoader.load_directory("res://data/tiers", TierTableDef.from_dict)
+	assert_true(result["ok"], result.get("error", ""))
+	assert_eq(result["defs"].size(), 3)
+	for zone_id in ["verdant_fields", "cinder_dunes", "frostpeak_ridge"]:
+		assert_true(result["defs"].has(zone_id), "expected a tier table for %s" % zone_id)
+
+func test_tier_level_bands_fall_within_each_zones_level_range() -> void:
+	var tier_result := DataLoader.load_directory("res://data/tiers", TierTableDef.from_dict)
+	var zone_result := DataLoader.load_directory("res://data/zones", ZoneDef.from_dict)
+	assert_true(tier_result["ok"], tier_result.get("error", ""))
+	assert_true(zone_result["ok"], zone_result.get("error", ""))
+	for zone_id in tier_result["defs"]:
+		var table: TierTableDef = tier_result["defs"][zone_id]
+		var zone: ZoneDef = zone_result["defs"][zone_id]
+		for tier_id in table.tiers:
+			var params := table.tier_params(tier_id)
+			assert_true(params["level_min"] >= zone.min_level, "%s tier %s level_min below zone min_level" % [zone_id, tier_id])
+			assert_true(params["level_max"] <= zone.max_level, "%s tier %s level_max above zone max_level" % [zone_id, tier_id])
+
+func test_gauge_rate_escalates_deeper_into_each_zone() -> void:
+	var result := DataLoader.load_directory("res://data/tiers", TierTableDef.from_dict)
+	assert_true(result["ok"], result.get("error", ""))
+	for zone_id in result["defs"]:
+		var table: TierTableDef = result["defs"][zone_id]
+		var tier_ids: Array = table.tiers.keys().map(func(k): return int(k))
+		tier_ids.sort()
+		var prev_rate := -INF
+		for tier_id in tier_ids:
+			var rate: float = table.tier_params(tier_id)["gauge_rate"]
+			assert_true(rate > prev_rate, "%s tier %s gauge_rate should exceed the shallower tier" % [zone_id, tier_id])
+			prev_rate = rate
+
+func test_deeper_zones_fill_the_gauge_faster_than_verdant_fields() -> void:
+	var result := DataLoader.load_directory("res://data/tiers", TierTableDef.from_dict)
+	var verdant_max: float = result["defs"]["verdant_fields"].tier_params(2)["gauge_rate"]
+	var cinder_max: float = result["defs"]["cinder_dunes"].tier_params(2)["gauge_rate"]
+	var frostpeak_max: float = result["defs"]["frostpeak_ridge"].tier_params(2)["gauge_rate"]
+	assert_true(cinder_max > verdant_max, "Cinder Dunes hottest gauge_rate should exceed Verdant Fields'")
+	assert_true(frostpeak_max > cinder_max, "Frostpeak Ridge hottest gauge_rate should exceed Cinder Dunes'")
 
 func test_load_file_tier_entry_bad_type_is_rejected() -> void:
 	var path := "res://tests/fixtures/tiers_bad_entry/bad.json"

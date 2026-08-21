@@ -12,6 +12,8 @@ extends Control
 signal combat_finished(result: Dictionary)
 
 const MonsterSpriteSheet = preload("res://src/ui/combat/monster_sprite_sheet.gd")
+# Player walk sheet; its down-idle frame (top-left 64x64 cell) is the combat portrait.
+const PLAYER_SHEET := preload("res://assets/sprites/player_ethan.png")
 
 const ROUND_DURATION := 1.2
 const PERFECT_OFFSET := 0.7 # seconds into the round considered a "perfect" dodge
@@ -100,6 +102,7 @@ func _ready() -> void:
 	monster_hp_bar.max_value = monster_stats["hp_max"]
 	monster_hp_bar.value = monster_stats["hp_max"]
 	_update_player_hp_label()
+	_add_player_portrait()
 
 	monster_info_label.text = "%s   Lv %s" % [monster.name, Big.fmt(monster.level)]
 	monster_element_chip.color = ELEMENT_COLORS.get(monster.element, ELEMENT_COLORS["neutral"])
@@ -365,3 +368,20 @@ func _on_continue_pressed() -> void:
 
 func _update_player_hp_label() -> void:
 	player_hp_label.text = "YOU · %s / %s" % [Big.fmt(player_hp_bar.value), Big.fmt(player_hp_bar.max_value)]
+
+# Drops the hunter's down-idle frame in as a small "YOU" avatar just above the
+# player HP label, so the player is represented in combat (matches the overworld
+# character). Built in code from an AtlasTexture region so no scene edit is needed.
+func _add_player_portrait() -> void:
+	var frame := AtlasTexture.new()
+	frame.atlas = PLAYER_SHEET
+	frame.region = Rect2(0, 0, 64, 64)
+	var portrait := TextureRect.new()
+	portrait.texture = frame
+	portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	portrait.custom_minimum_size = Vector2(0, 72)
+	portrait.size_flags_horizontal = Control.SIZE_FILL
+	var hud: Node = player_hp_label.get_parent()
+	hud.add_child(portrait)
+	hud.move_child(portrait, player_hp_label.get_index())

@@ -63,7 +63,8 @@ loop's verification gate and the definition of "done".
 | `CombatResolver` | Pure dodge/HP-race: dodge timing reduces incoming damage, an unavoidable **chip floor** (`CHIP_FLOOR_FRACTION = 0.35`) always lands, weapon class + element multiplier applied. |
 | `Elements` | 6-element model: Fire/Water/Earth/Thunder/Ice ring (weak ×1.5, resist ×0.66), Neutral ×1.0, rare Dragon ×1.5 vs all. |
 | `EncounterSystem` | Overworld gauge fill from tier params + band-filtered monster pick. `GAUGE_THRESHOLD = 100`. |
-| `OverworldTierLayout` | Buckets a tile into a danger tier by distance from map center (center safe, edges hot). Defines the corner `exit_cell`. |
+| `OverworldTierLayout` | Buckets a tile into a danger tier by **depth along the vertical travel axis** (near/bottom edge safe, far/top edge hot) per ADR-0001 (Deepening Trail, foundation slice built). Also places the near-edge `camp_cell` (spawn), the on-trail `exit_cell` (portal, deepest band), and `trail_x_for_row` (the winding trail spine's column per row). Per-zone tier tables/palettes (slice C) built. |
+| `PoiLayout` | Pure/static points-of-interest placement (ADR-0001 slice B, built): `generate(map_cols, map_rows, sorted_tier_ids, rng)` returns a deterministic Array of `{cell, type}` (camp ×1, portal ×1, den 1–3, forage 1–3, cache 0–2, landmark 0–1), banded by depth thirds and trail proximity. Rendered as code-drawn tinted markers above the tilemap in `overworld_screen.gd`; standing on/adjacent to a den multiplies the tier's `gauge_rate` before it's passed into the unchanged `EncounterSystem.tick`. |
 | `OverworldMovement` | Joystick + keyboard → clamped character step. |
 | `DropSystem` | Weighted drop tables; part-break sharply boosts/guarantees that part's material. |
 | `CraftingSystem` | Fixed recipes consume materials → instanced gear rolling a rarity tier (Common/Uncommon/Rare/Epic). |
@@ -123,8 +124,12 @@ LAUNCH ──▶ OVERWORLD ──▶ COMBAT ──┬─▶ VICTORY ──(push 
 
 - **Zones** (`data/zones/`): Verdant Fields (Lv 1–8) → Cinder Dunes (Lv 8–25) →
   Frostpeak Ridge (Lv 25–60). `connections` drive exit-tile travel.
-- **Tiers** (`data/tiers/`): only `verdant_fields.json` exists (tiers 0/1/2 with
-  `gauge_rate` 6/10/16). Cinder Dunes / Frostpeak have no tier table yet.
+- **Tiers** (`data/tiers/`): all three zones now have a tier table (tiers 0/1/2).
+  `gauge_rate` escalates both within a zone and across zones toward Frostpeak
+  (Verdant 6/10/16, Cinder Dunes 12/19/27, Frostpeak Ridge 20/30/42), reinforcing
+  mounting pressure the deeper you push. Each zone's `data/zones/*.json` also carries
+  a `palette` (3-stop hex: safe/mid/hot) and `band_names` (shallow→deep terrain
+  labels), validated by `ZoneDef` — see ADR-0001 slice C below.
 - **Monsters** (`data/monsters/`, 11): slime, rock_lizard, mossback_turtle,
   thistle_sprite, **voidmaw_devourer** (Lv 9,999,999,999 dragon stat-wall in Verdant
   Fields), ember_wolf, sand_scorpion, magma_golem, frost_wyrm, thunder_stag,
@@ -157,11 +162,48 @@ LAUNCH ──▶ OVERWORLD ──▶ COMBAT ──┬─▶ VICTORY ──(push 
   share the look. Verified two ways: `tests/unit/test_scenes_smoke.gd` (structural, in the gate)
   and `scripts/verify_visual.sh` (pixel invariants, wired into `scripts/test.sh`);
   `scripts/screenshot.sh` renders PNGs for human review.
+- **Overworld map redesign: Deepening Trail foundation built (ADR-0001, slice A).**
+  The old radial danger heatmap (safe center, hot edges, corner exit) is gone.
+  `OverworldTierLayout.tier_for_cell` now buckets by **depth** along the vertical
+  travel axis (`depth_ratio`: near/bottom row = 0.0 safest, far/top row = 1.0 hottest;
+  every column in a row shares the same depth, so danger reads as bands, not a ring).
+  The player spawns at `camp_cell` (centered on the near/bottom edge) instead of map
+  center; `exit_cell` now returns an on-trail tile in the deepest band (top row, at
+  `trail_x_for_row(0, ...)`) instead of the top-right corner — the existing pulsing
+  exit marker just tracks whatever `exit_cell` returns, unchanged. A winding **trail**
+  spine (`trail_x_for_row`, a bounded sine anchored to the camp's x) is painted as a
+  cosmetic dirt-tinted tile blend (`OverworldTileset` trail row) from camp to portal;
+  it's visual only and does not change the tier under it. `EncounterSystem`/gauge math
+  and the tier-bucketing call shape are untouched — only the cell→ratio meaning changed.
+  `scripts/verify_visual.sh`'s overworld invariant now checks red toward the top and
+  green toward the bottom. **Points-of-interest overlay built (slice B):** `PoiLayout`
+  (pure, seeded, unit-tested) places camp/portal/den/forage/cache/landmark markers
+  banded by depth thirds and trail proximity; `overworld_screen.gd` renders them as
+  code-drawn tinted circles above the tilemap and multiplies the tier's `gauge_rate`
+  when the player is on/adjacent to a den, feeding the boosted params into the
+  unchanged `EncounterSystem.tick`. **Per-zone tier tables + band identity built
+  (slice B and C both complete):** `data/tiers/cinder_dunes.json` and
+  `frostpeak_ridge.json` now exist alongside Verdant Fields', each zone's
+  `data/zones/*.json` carries a `palette` (3-stop hex safe/mid/hot) and `band_names`
+  (shallow→deep terrain labels, e.g. Cinder Dunes: Dunes→Ashflats→Emberfield→Magma
+  Rim; Frostpeak Ridge: Snowfield→Ice Shelf→Glacier→Summit), validated by `ZoneDef`.
+  `OverworldTileset.build` paints from the active zone's palette
+  (`OverworldTileset.gradient_color`) instead of hardcoded SAFE/MID/HOT constants,
+  falling back to Verdant's original colours (`DEFAULT_PALETTE`) when none is
+  supplied; the hot-region strip in `overworld_screen.gd` surfaces the current band
+  name. Design pitch + mockups: the "Hunting Grounds" artifact.
 - **Field tiles stay procedural placeholder:** overworld tiles are per-tier colour
   squares with shade jitter (`OverworldTileset`, green→olive→red toward the hot corner).
-  The player is a procedurally-drawn top-down hunter figure (release-polish pass, no
-  external asset). Monster sprites and weapon icons are real AI-generated art; tiles
-  have no hand-authored sprites yet.
+  The player is a Gen-4-style humanoid **walk sheet** (`assets/sprites/player_ethan.png`,
+  a 4×4 grid of 64×64 frames: rows DOWN/UP/LEFT/RIGHT, cols a 4-frame walk cycle).
+  `overworld_screen.gd` region-slices it, picks the facing row from the movement vector
+  (dominant axis) and cycles the walk columns while moving (`WALK_FPS = 8`), holding the
+  idle column when still; nearest-filtered, scaled `1.35×`, feet-anchored via a `-19` y
+  offset. Combat also shows the hunter: `combat_screen.gd` drops his down-idle frame in as
+  a small "YOU" avatar above the player HP bar (built in code from an `AtlasTexture`
+  region, no scene edit). **This is a temporary placeholder (a repurposed reference sprite)
+  to be swapped before any public release.** Monster sprites and weapon icons are real
+  AI-generated art; tiles have no hand-authored sprites yet.
 - **Weapon-class differentiation partially live.** Great Sword / Dual Blades / Hammer
   have distinct attack patterns in `CombatResolver` (charge / demon-meter / stagger-stun)
   and, now that the reflex outcome is authoritative, they affect who wins. Part-break
@@ -183,8 +225,9 @@ LAUNCH ──▶ OVERWORLD ──▶ COMBAT ──┬─▶ VICTORY ──(push 
 
 - **Run / Expedition** — one Lv.1-to-reset cycle. **Hunt** — one fight; a run has ~10.
 - **Zone** — a themed region with a level band and connections. **Tier** — a danger
-  bucket within a zone's overworld (center safe, edges hot). **Exit cell** — the hot
-  corner tile that travels to the connected zone.
+  bucket within a zone's overworld, banded by depth along the travel axis (near edge
+  safe, far edge hot). **Camp** — the near-edge spawn tile. **Portal / exit cell** —
+  the on-trail tile in the deepest band that travels to the connected zone.
 - **Encounter gauge** — fills as you walk hot tiers; on full it spawns a fight.
 - **Chip floor** — the unavoidable fraction of a monster hit that lands regardless of
   dodge skill; what makes far-stronger monsters a hard stat wall.

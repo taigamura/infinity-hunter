@@ -195,4 +195,9 @@ func test_overworld_screen_smoke() -> void:
 	var knob_center: Vector2 = joystick_knob.position + joystick_knob.size / 2.0
 	assert_almost_eq(base_center.x, knob_center.x, 0.01, "joystick knob must rest centred in the base (x)")
 	assert_almost_eq(base_center.y, knob_center.y, 0.01, "joystick knob must rest centred in the base (y)")
+	# POI overlay (ADR-0001 slice B): markers built in code above the tilemap.
+	var poi_layer: Node2D = screen.get_node_or_null("%PoiLayer")
+	assert_not_null(poi_layer, "overworld %PoiLayer must exist")
+	if poi_layer != null:
+		assert_true(poi_layer.get_child_count() > 0, "poi layer must contain at least one marker (camp/portal are always placed)")
 	_cleanup(screen)

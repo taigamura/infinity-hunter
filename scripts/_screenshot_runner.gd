@@ -26,7 +26,14 @@ func _initialize() -> void:
 	if game_state.zones.is_empty():
 		game_state._ready()
 	if needs_run:
-		var zone_id: String = game_state.zones.keys()[0]
+		# Pin to Verdant Fields when available: its green->olive->red palette is
+		# what scripts/_visual_invariants.gd's overworld gradient check asserts
+		# (ADR-0001 slice A). Since ADR-0001 slice C gave every zone its own
+		# distinct palette, `zones.keys()[0]` (directory-listing order, e.g.
+		# alphabetically "cinder_dunes") would render a zone whose palette isn't
+		# green/red and spuriously fail that invariant. Falls back to whatever
+		# zone exists first if Verdant Fields is ever renamed/removed.
+		var zone_id: String = "verdant_fields" if game_state.zones.has("verdant_fields") else game_state.zones.keys()[0]
 		game_state.current_run = RunState.start(zone_id, "", {}, RunState.DEFAULT_HUNTS)
 		var monster_id: String = game_state.monsters.keys()[0]
 		game_state.pending_monster = game_state.monsters[monster_id]
