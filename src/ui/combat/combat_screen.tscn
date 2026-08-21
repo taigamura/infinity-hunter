@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://ihcombat01"]
+[gd_scene load_steps=7 format=3 uid="uid://ihcombat01"]
 
 [ext_resource type="Script" path="res://src/ui/combat/combat_screen.gd" id="1"]
 [ext_resource type="Script" path="res://src/ui/common/screen_background.gd" id="3"]
@@ -15,6 +15,20 @@ corner_radius_top_left = 150
 corner_radius_top_right = 150
 corner_radius_bottom_right = 150
 corner_radius_bottom_left = 150
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xpbar_fill"]
+bg_color = Color(0.96, 0.78, 0.26, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xpbar_bg"]
+bg_color = Color(0.12, 0.14, 0.22, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_banner"]
 content_margin_left = 14.0
@@ -273,6 +287,34 @@ theme_override_font_sizes/font_size = 15
 autowrap_mode = 3
 horizontal_alignment = 1
 text = ""
+
+[node name="XpLevelLabel" type="Label" parent="ResultOverlay/ResultCenter/ResultPanel/ResultVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+text = ""
+
+[node name="XpBar" type="ProgressBar" parent="ResultOverlay/ResultCenter/ResultPanel/ResultVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/fill = SubResource("StyleBoxFlat_xpbar_fill")
+theme_override_styles/background = SubResource("StyleBoxFlat_xpbar_bg")
+min_value = 0.0
+max_value = 1.0
+step = 0.0
+value = 0.0
+show_percentage = false
+
+[node name="LevelUpToasts" type="VBoxContainer" parent="ResultOverlay/ResultCenter/ResultPanel/ResultVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 2
+alignment = 1
 
 [node name="ActionsRow" type="HBoxContainer" parent="ResultOverlay/ResultCenter/ResultPanel/ResultVBox"]
 layout_mode = 2

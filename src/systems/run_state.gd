@@ -4,9 +4,10 @@
 # (forfeit unbanked haul; crafted/equipped gear is never touched here since
 # it isn't part of the run's haul state).
 #
-# Combat resolution here is an explicit stub (power_scaling comparison) per
-# issue #4 — real combat lands in #2 and will replace resolve_fight's guts
-# without touching the run/bank/death bookkeeping.
+# Win/loss here is authoritative from the caller-supplied `combat_outcome`
+# (the reflex-phase HP-race result from the combat screen) when present;
+# it falls back to a level-power comparison (power_scaling) when no outcome
+# is supplied, e.g. headless/test callers that skip the reflex minigame.
 class_name RunState
 extends RefCounted
 
@@ -56,12 +57,16 @@ static func start(zone_id: String, equipped_weapon_id: String = "", equipped_arm
 # `armor_skill_profile` is an optional SkillSystem.build_profile() effects
 # Dictionary from the run's equipped armor (issue #9); its "xp_mult_bonus"
 # scales the XP awarded on a win.
-func resolve_fight(monster: MonsterDef, broken_parts: Array = [], rng: RandomNumberGenerator = null, armor_skill_profile: Dictionary = {}) -> Dictionary:
+func resolve_fight(monster: MonsterDef, broken_parts: Array = [], rng: RandomNumberGenerator = null, armor_skill_profile: Dictionary = {}, combat_outcome: Dictionary = {}) -> Dictionary:
 	assert(status == "active", "cannot fight after the run has ended")
 	hunts_remaining -= 1.0
-	var player_power := XpCurve.power_scaling(level)
-	var monster_power := XpCurve.power_scaling(monster.level)
-	var won := player_power >= monster_power
+	var won: bool
+	if combat_outcome.has("won"):
+		won = combat_outcome["won"]
+	else:
+		var player_power := XpCurve.power_scaling(level)
+		var monster_power := XpCurve.power_scaling(monster.level)
+		won = player_power >= monster_power
 	var result := {"won": won, "died": false, "levels_gained": 0, "xp_awarded": 0.0, "materials_dropped": []}
 
 	if not won:
@@ -69,12 +74,19 @@ func resolve_fight(monster: MonsterDef, broken_parts: Array = [], rng: RandomNum
 		result["died"] = true
 		return result
 
+	var level_before := level
+	var carry_before := xp_carry
 	var xp_mult_bonus: float = armor_skill_profile.get("xp_mult_bonus", 0.0)
-	var xp_result := XpCurve.award_xp(level, xp_carry, monster.xp_reward, xp_mult_bonus)
+	var scaled_reward := XpCurve.gap_scaled_reward(monster.xp_reward, level, monster.level)
+	var xp_result := XpCurve.award_xp(level, xp_carry, scaled_reward, xp_mult_bonus)
 	level = xp_result["level"]
 	xp_carry = xp_result["xp_carry"]
 	result["levels_gained"] = xp_result["levels_gained"]
-	result["xp_awarded"] = monster.xp_reward
+	result["xp_awarded"] = scaled_reward
+	result["level_before"] = level_before
+	result["xp_carry_before"] = carry_before
+	result["level_after"] = level
+	result["xp_carry_after"] = xp_carry
 	essence_unbanked += monster.xp_reward * ESSENCE_PER_XP
 
 	var roll_rng := rng if rng != null else RandomNumberGenerator.new()

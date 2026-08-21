@@ -14,7 +14,7 @@
 class_name SaveManager
 extends RefCounted
 
-const CURRENT_VERSION := 2
+const CURRENT_VERSION := 3
 const DEFAULT_SAVE_PATH := "user://save.json"
 const DEFAULT_BAK_SUFFIX := ".bak"
 const DEFAULT_TMP_SUFFIX := ".tmp"
@@ -34,11 +34,12 @@ static func default_state() -> Dictionary:
 		"essence": 0.0, # Big
 		"materials": {}, # material_id -> int count
 		"consumables": {}, # consumable_id -> int count
-		"gear": [], # [{id, def_id, rolled_stats: {...}}]
+		"gear": [{"id": "gear_1", "def_id": "rusty_greatsword", "rolled_stats": {"rarity": "Common"}}], # [{id, def_id, rolled_stats: {...}}]
 		"captures": [], # [{monster_id, ...}]
 		"bestiary": {}, # monster_id -> {seen: bool, defeated: bool, ...}
 		"unlocks": [], # [unlock_id]
 		"upgrades": {}, # upgrade_id -> int level
+		"unlocked_zones": ["verdant_fields"], # [zone_id], durable zone unlocks
 	}
 
 # ---- migration -------------------------------------------------------------
@@ -51,12 +52,22 @@ static func _migrate_1_to_2(data: Dictionary) -> Dictionary:
 	data["version"] = 2
 	return data
 
+static func _migrate_2_to_3(data: Dictionary) -> Dictionary:
+	if (data.get("gear", []) as Array).is_empty():
+		data["gear"] = [{"id": "gear_1", "def_id": "rusty_greatsword", "rolled_stats": {"rarity": "Common"}}]
+	if not data.has("unlocked_zones"):
+		data["unlocked_zones"] = ["verdant_fields"]
+	data["version"] = 3
+	return data
+
 static func migrate(data: Dictionary) -> Dictionary:
 	var version := int(data.get("version", 1))
 	while version < CURRENT_VERSION:
 		match version:
 			1:
 				data = _migrate_1_to_2(data)
+			2:
+				data = _migrate_2_to_3(data)
 			_:
 				# No migration path defined; stop rather than loop forever.
 				data["version"] = CURRENT_VERSION

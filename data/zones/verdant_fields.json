@@ -4,5 +4,7 @@
   "min_level": 1,
   "max_level": 8,
   "monster_ids": ["slime", "rock_lizard", "mossback_turtle", "thistle_sprite", "voidmaw_devourer"],
-  "connections": ["cinder_dunes"]
+  "connections": ["cinder_dunes"],
+  "palette": ["#408C40", "#86602D", "#CC331A"],
+  "band_names": ["Meadow", "Thicket", "Bramble", "Thornwall"]
 }

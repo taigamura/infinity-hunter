@@ -3,6 +3,8 @@
   "name": "Cinder Dunes",
   "min_level": 8,
   "max_level": 25,
-  "monster_ids": ["ember_wolf", "sand_scorpion", "magma_golem"],
-  "connections": ["frostpeak_ridge"]
+  "monster_ids": ["ember_wolf", "sand_scorpion", "magma_golem", "cinder_wyrm_matriarch"],
+  "connections": ["frostpeak_ridge"],
+  "palette": ["#D9A066", "#B8542A", "#FF5722"],
+  "band_names": ["Dunes", "Ashflats", "Emberfield", "Magma Rim"]
 }

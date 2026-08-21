@@ -12,6 +12,8 @@ extends Control
 signal combat_finished(result: Dictionary)
 
 const MonsterSpriteSheet = preload("res://src/ui/combat/monster_sprite_sheet.gd")
+# Player walk sheet; its down-idle frame (top-left 64x64 cell) is the combat portrait.
+const PLAYER_SHEET := preload("res://assets/sprites/player_ethan.png")
 
 const ROUND_DURATION := 1.2
 const PERFECT_OFFSET := 0.7 # seconds into the round considered a "perfect" dodge
@@ -63,6 +65,9 @@ const DOT_ACTIVE_COLOR := Color(1, 0.8235294, 0.2901961, 1)
 @onready var result_overlay: Control = %ResultOverlay
 @onready var result_title_label: Label = %ResultTitleLabel
 @onready var result_body_label: Label = %ResultBodyLabel
+@onready var xp_level_label: Label = %XpLevelLabel
+@onready var xp_bar: ProgressBar = %XpBar
+@onready var level_up_toasts: VBoxContainer = %LevelUpToasts
 @onready var push_on_button: Button = %PushOnButton
 @onready var bank_button: Button = %BankButton
 @onready var continue_button: Button = %ContinueButton
@@ -79,6 +84,7 @@ var _round_start_ms: int = 0
 var _dodge_tapped_this_round: bool = false
 var _fight_over: bool = false
 var _fight_result: Dictionary = {}
+var _reflex_outcome: Dictionary = {}
 var _elapsed_time: float = 0.0
 var _sprite_base_y: float = 0.0
 
@@ -96,6 +102,7 @@ func _ready() -> void:
 	monster_hp_bar.max_value = monster_stats["hp_max"]
 	monster_hp_bar.value = monster_stats["hp_max"]
 	_update_player_hp_label()
+	_add_player_portrait()
 
 	monster_info_label.text = "%s   Lv %s" % [monster.name, Big.fmt(monster.level)]
 	monster_element_chip.color = ELEMENT_COLORS.get(monster.element, ELEMENT_COLORS["neutral"])
@@ -104,7 +111,14 @@ func _ready() -> void:
 	var weakness := Elements.weakness_of(monster.element)
 	monster_weakness_label.text = "WEAK" if weakness != "" else ""
 
-	monster_sprite.sprite_frames = MonsterSpriteSheet.build(monster.id)
+	if DebugSettings.dots_enabled():
+		# Debug dot mode: monster renders as a single dot marker, but keeps its
+		# per-anim SpriteFrames so play("idle"/"hit"/"attack") + the idle bob all
+		# still run harmlessly against the dot.
+		monster_sprite.sprite_frames = DebugSettings.dot_sprite_frames(SpriteSheetSlicer.ANIMS.keys())
+		monster_sprite.scale = Vector2(DebugSettings.DOT_DISPLAY_SCALE, DebugSettings.DOT_DISPLAY_SCALE)
+	else:
+		monster_sprite.sprite_frames = MonsterSpriteSheet.build(monster.id)
 	monster_sprite.animation_finished.connect(_on_monster_anim_finished)
 	monster_sprite.play("idle")
 	_sprite_base_y = monster_sprite.position.y
@@ -115,6 +129,8 @@ func _ready() -> void:
 	continue_button.pressed.connect(_on_continue_pressed)
 
 	result_overlay.visible = false
+	xp_level_label.visible = false
+	xp_bar.visible = false
 	telegraph_banner.visible = false
 	damage_number_label.visible = false
 	_start_ring_pulse()
@@ -232,6 +248,7 @@ func _on_round_timeout() -> void:
 	telegraph_banner.visible = false
 
 	if outcome["monster_hp"] <= 0.0 or outcome["player_hp"] <= 0.0 or beats.size() >= MAX_ROUNDS:
+		_reflex_outcome = outcome
 		_end_reflex_phase()
 	else:
 		_start_round()
@@ -257,8 +274,20 @@ func _end_reflex_phase() -> void:
 	telegraph_ring.visible = false
 	_update_round_dots()
 
+	var player_hp: float = _reflex_outcome.get("player_hp", 0.0)
+	var monster_hp: float = _reflex_outcome.get("monster_hp", 0.0)
+	var won: bool
+	if monster_hp <= 0.0 and player_hp > 0.0:
+		won = true
+	elif player_hp <= 0.0:
+		won = false
+	else:
+		var p_frac := player_hp / maxf(player_stats["hp_max"], 1.0)
+		var m_frac := monster_hp / maxf(monster_stats["hp_max"], 1.0)
+		won = p_frac >= m_frac
+
 	var run: RunState = GameState.current_run
-	var result := run.resolve_fight(monster, [], null, skill_profile)
+	var result := run.resolve_fight(monster, [], null, skill_profile, {"won": won})
 	_fight_result = result
 
 	push_on_button.visible = false
@@ -270,19 +299,67 @@ func _end_reflex_phase() -> void:
 		result_title_label.text = "Defeated"
 		result_body_label.text = "The run's haul is forfeited."
 		continue_button.visible = true
+		xp_level_label.visible = false
+		xp_bar.visible = false
+		for child in level_up_toasts.get_children():
+			child.queue_free()
 	else:
 		GameState.mark_bestiary_defeated(monster.id, result["materials_dropped"])
 		result_title_label.text = "Victory!"
-		result_body_label.text = "+%s XP, %d level(s) gained. Dropped: %s" % [
-			Big.fmt(result["xp_awarded"]), result["levels_gained"], ", ".join(result["materials_dropped"])
-		]
+		var drops: String = ", ".join(result["materials_dropped"])
+		result_body_label.text = ("Dropped: %s" % drops) if drops != "" else "No drops"
+		xp_level_label.visible = true
+		xp_bar.visible = true
 		if run.status == "active":
 			push_on_button.visible = true
 			bank_button.visible = true
 		else:
 			continue_button.visible = true
+		_animate_xp(result)
 
 	result_overlay.visible = true
+
+func _animate_xp(result: Dictionary) -> void:
+	for child in level_up_toasts.get_children():
+		child.queue_free()
+
+	var segments: Array = XpCurve.fill_segments(
+		result["level_before"], result["xp_carry_before"], result["level_after"], result["xp_carry_after"]
+	)
+	if segments.is_empty():
+		return
+
+	xp_level_label.text = "Lv %d" % int(result["level_before"])
+	xp_bar.value = segments[0]["from"]
+
+	var seg_time: float = clampf(1.2 / float(max(segments.size(), 1)), 0.10, 0.30)
+	var tween := create_tween()
+	for seg in segments:
+		tween.tween_property(xp_bar, "value", seg["to"], seg_time).from(seg["from"]).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tween.tween_callback(_on_xp_segment_finished.bind(seg))
+
+func _on_xp_segment_finished(seg: Dictionary) -> void:
+	if seg["levels_up"]:
+		xp_level_label.text = "Lv %d" % (int(seg["level"]) + 1)
+		_spawn_level_up_toast()
+
+func _spawn_level_up_toast() -> void:
+	var toast := Label.new()
+	toast.text = "LEVEL UP!"
+	toast.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	toast.add_theme_font_size_override("font_size", 15)
+	toast.add_theme_color_override("font_color", Color(1, 0.8235294, 0.2901961, 1))
+	level_up_toasts.add_child(toast)
+	toast.pivot_offset = toast.size / 2.0
+	toast.scale = Vector2(0.6, 0.6)
+	toast.modulate.a = 0.0
+	var start_pos := toast.position
+	toast.position.y += 6.0
+	var tween := create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(toast, "scale", Vector2.ONE, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(toast, "modulate:a", 1.0, 0.15)
+	tween.tween_property(toast, "position:y", start_pos.y, 0.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 func _on_push_on_pressed() -> void:
 	combat_finished.emit(_fight_result)
@@ -298,3 +375,26 @@ func _on_continue_pressed() -> void:
 
 func _update_player_hp_label() -> void:
 	player_hp_label.text = "YOU · %s / %s" % [Big.fmt(player_hp_bar.value), Big.fmt(player_hp_bar.max_value)]
+
+# Drops the hunter's down-idle frame in as a small "YOU" avatar just above the
+# player HP label, so the player is represented in combat (matches the overworld
+# character). Built in code from an AtlasTexture region so no scene edit is needed.
+func _add_player_portrait() -> void:
+	var portrait := TextureRect.new()
+	portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	portrait.size_flags_horizontal = Control.SIZE_FILL
+	if DebugSettings.dots_enabled():
+		# Debug dot mode: the "YOU" avatar is a centered dot square sized to the
+		# real portrait (fits the 72px-tall slot).
+		portrait.texture = DebugSettings.dot_texture(DebugSettings.DOT_COLOR, int(DebugSettings.DOT_DISPLAY_SCALE))
+		portrait.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
+	else:
+		var frame := AtlasTexture.new()
+		frame.atlas = PLAYER_SHEET
+		frame.region = Rect2(0, 0, 64, 64)
+		portrait.texture = frame
+		portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	portrait.custom_minimum_size = Vector2(0, 72)
+	var hud: Node = player_hp_label.get_parent()
+	hud.add_child(portrait)
+	hud.move_child(portrait, player_hp_label.get_index())

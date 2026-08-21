@@ -102,3 +102,14 @@ func test_pick_monster_returns_empty_string_when_zone_has_no_known_monsters() ->
 	var tier := {"level_min": 1, "level_max": 5}
 	var monster_id := EncounterSystem.pick_monster(_verdant, tier, {}, _rng(1))
 	assert_eq(monster_id, "")
+
+# A spike section's tier_params (SectionLayout.generate) opens a level window
+# far above the zone's normal band, up to SPIKE_LEVEL_MAX_SENTINEL. The
+# existing level-window filter should select only the apex pool (here,
+# voidmaw_devourer, the reference apex already listed in verdant_fields'
+# monster_ids) — normal zone species never qualify for a spike-shaped band.
+func test_pick_monster_selects_the_apex_pool_for_a_spike_shaped_band() -> void:
+	var spike_tier := {"level_min": 1000.0, "level_max": 1_000_000_000_000.0, "is_spike": true}
+	for s in range(20):
+		var monster_id := EncounterSystem.pick_monster(_verdant, spike_tier, _monster_defs, _rng(s))
+		assert_eq(monster_id, "voidmaw_devourer", "spike band should only ever select the apex monster")

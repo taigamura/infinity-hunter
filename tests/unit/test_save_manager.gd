@@ -137,3 +137,43 @@ func test_flush_before_due_does_nothing() -> void:
 	mgr.request_autosave({"essence": 1.0}, 0)
 	assert_false(mgr.flush(TEST_PATH, 100))
 	assert_false(FileAccess.file_exists(TEST_PATH))
+
+func test_default_state_grants_starter_weapon_and_starting_zone() -> void:
+	var state := SaveManager.default_state()
+	assert_eq(state["gear"], [{"id": "gear_1", "def_id": "rusty_greatsword", "rolled_stats": {"rarity": "Common"}}])
+	assert_eq(state["unlocked_zones"], ["verdant_fields"])
+
+func test_migration_v2_with_empty_gear_grants_starter_weapon() -> void:
+	var old_blob := {
+		"version": 2,
+		"essence": 5.0,
+		"materials": {},
+		"consumables": {},
+		"gear": [],
+		"captures": [],
+		"bestiary": {},
+		"unlocks": [],
+		"upgrades": {},
+	}
+	var migrated := SaveManager.migrate(old_blob)
+	assert_eq(migrated["version"], SaveManager.CURRENT_VERSION)
+	assert_eq(migrated["gear"], [{"id": "gear_1", "def_id": "rusty_greatsword", "rolled_stats": {"rarity": "Common"}}])
+	assert_true(migrated.has("unlocked_zones"))
+	assert_eq(migrated["unlocked_zones"], ["verdant_fields"])
+
+func test_migration_v2_with_existing_gear_does_not_add_starter_weapon() -> void:
+	var old_blob := {
+		"version": 2,
+		"essence": 5.0,
+		"materials": {},
+		"consumables": {},
+		"gear": [{"id": "gear_1", "def_id": "cinder_hammer", "rolled_stats": {"rarity": "Rare"}}],
+		"captures": [],
+		"bestiary": {},
+		"unlocks": [],
+		"upgrades": {},
+	}
+	var migrated := SaveManager.migrate(old_blob)
+	assert_eq(migrated["version"], SaveManager.CURRENT_VERSION)
+	assert_eq(migrated["gear"].size(), 1, "existing gear should not be duplicated or replaced")
+	assert_eq(migrated["gear"][0]["def_id"], "cinder_hammer")

@@ -1,0 +1,8 @@
+{
+  "zone_id": "frostpeak_ridge",
+  "tiers": {
+    "0": { "level_min": 25, "level_max": 32, "gauge_rate": 20, "weight": 1, "loot_boost": 0 },
+    "1": { "level_min": 30, "level_max": 40, "gauge_rate": 30, "weight": 2, "loot_boost": 0 },
+    "2": { "level_min": 38, "level_max": 60, "gauge_rate": 42, "weight": 1, "loot_boost": 0 }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "zone_id": "cinder_dunes",
+  "tiers": {
+    "0": { "level_min": 8, "level_max": 12, "gauge_rate": 12, "weight": 1, "loot_boost": 0 },
+    "1": { "level_min": 11, "level_max": 18, "gauge_rate": 19, "weight": 2, "loot_boost": 0 },
+    "2": { "level_min": 16, "level_max": 25, "gauge_rate": 27, "weight": 1, "loot_boost": 0 }
+  }
+}
