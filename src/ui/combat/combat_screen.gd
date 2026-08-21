@@ -151,7 +151,7 @@ func _build_round_dots() -> void:
 	_round_dots.clear()
 	for i in range(MAX_ROUNDS):
 		var dot := ColorRect.new()
-		dot.custom_minimum_size = Vector2(14, 14)
+		dot.custom_minimum_size = Vector2(16, 16)
 		dot.color = DOT_PENDING_COLOR
 		round_dots_row.add_child(dot)
 		_round_dots.append(dot)

@@ -58,10 +58,10 @@ unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 16.0
-offset_top = 48.0
-offset_right = -16.0
-offset_bottom = 152.0
+offset_left = 40.0
+offset_top = 44.0
+offset_right = -40.0
+offset_bottom = 158.0
 grow_horizontal = 2
 
 [node name="TopVBox" type="VBoxContainer" parent="TopPanel"]
@@ -83,7 +83,7 @@ text = "Monster"
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_vt323")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 22
 theme_override_colors/font_color = Color(0.54509807, 0.5764706, 0.65882355, 1)
 vertical_alignment = 1
 text = ""
@@ -101,7 +101,7 @@ color = Color(0.6039216, 0.6392157, 0.72156864, 1)
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_vt323")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 22
 theme_override_colors/font_color = Color(0.6039216, 0.6392157, 0.72156864, 1)
 vertical_alignment = 1
 text = ""
@@ -110,14 +110,14 @@ text = ""
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_vt323")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 22
 theme_override_colors/font_color = Color(0.6039216, 0.6392157, 0.72156864, 1)
 vertical_alignment = 1
 text = ""
 
 [node name="MonsterHpBar" type="ProgressBar" parent="TopPanel/TopVBox"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 theme_type_variation = &"MonsterHpBar"
 show_percentage = false
@@ -171,7 +171,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_banner")
 
 [node name="TelegraphBannerLabel" type="Label" parent="TelegraphBanner"]
 unique_name_in_owner = true
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(1, 0.8235294, 0.2901961, 1)
 horizontal_alignment = 1
 text = "INCOMING - TAP TO DODGE"
@@ -180,7 +180,7 @@ text = "INCOMING - TAP TO DODGE"
 unique_name_in_owner = true
 visible = false
 layout_mode = 0
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 34
 theme_override_colors/font_color = Color(1, 0.8784314, 0.5411765, 1)
 theme_override_colors/font_shadow_color = Color(0.5686275, 0.35686275, 0, 1)
 theme_override_constants/shadow_offset_x = 2
@@ -194,30 +194,30 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = -240.0
-offset_right = -16.0
-offset_bottom = -24.0
+offset_left = 40.0
+offset_top = -304.0
+offset_right = -40.0
+offset_bottom = -40.0
 grow_vertical = 0
-theme_override_constants/separation = 10
+theme_override_constants/separation = 12
 
 [node name="RoundDotsRow" type="HBoxContainer" parent="BottomHud"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 alignment = 1
 
 [node name="PlayerHpLabel" type="Label" parent="BottomHud"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 horizontal_alignment = 1
 text = "Your HP"
 
 [node name="PlayerHpBar" type="ProgressBar" parent="BottomHud"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 theme_type_variation = &"PlayerHpBar"
 show_percentage = false
@@ -225,16 +225,16 @@ show_percentage = false
 [node name="DodgeButton" type="Button" parent="BottomHud"]
 unique_name_in_owner = true
 layout_mode = 2
-custom_minimum_size = Vector2(0, 88)
+custom_minimum_size = Vector2(0, 112)
 theme_type_variation = &"DodgeButton"
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 32
 text = "DODGE"
 
 [node name="DodgeSubtitleLabel" type="Label" parent="BottomHud"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_vt323")
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 22
 theme_override_colors/font_color = Color(0.6039216, 0.6392157, 0.72156864, 1)
 horizontal_alignment = 1
 autowrap_mode = 2
