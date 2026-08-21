@@ -7,6 +7,12 @@ extends Control
 @onready var upgrade_list: VBoxContainer = %UpgradeList
 @onready var back_button: Button = %BackButton
 
+# Dense upgrade rows use VT323 (the readable pixel font) rather than the blocky
+# Press Start 2P default, matching the design mockup's font split. VT323 is far
+# narrower so the longest upgrade line fits within the panel.
+const LIST_FONT := preload("res://assets/fonts/vt323/VT323-Regular.woff2")
+const LIST_FONT_SIZE := 22
+
 func _ready() -> void:
 	back_button.pressed.connect(func(): get_tree().change_scene_to_file("res://src/ui/launch/launch_screen.tscn"))
 	_refresh()
@@ -25,6 +31,10 @@ func _refresh() -> void:
 		var max_level: int = MetaProgression.UPGRADES[upgrade_id]["max_level"]
 		var label := Label.new()
 		label.size_flags_horizontal = SIZE_EXPAND_FILL
+		label.size_flags_vertical = SIZE_SHRINK_CENTER
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		label.add_theme_font_override("font", LIST_FONT)
+		label.add_theme_font_size_override("font_size", LIST_FONT_SIZE)
 		if level >= max_level:
 			label.text = "%s: Lv %d/%d (MAX)" % [upgrade_id, level, max_level]
 		else:

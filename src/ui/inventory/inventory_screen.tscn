@@ -35,6 +35,7 @@ text = "Materials"
 [node name="MaterialsScroll" type="ScrollContainer" parent="Margin/VBox"]
 layout_mode = 2
 custom_minimum_size = Vector2(0, 120)
+horizontal_scroll_mode = 0
 
 [node name="MaterialsList" type="VBoxContainer" parent="Margin/VBox/MaterialsScroll"]
 unique_name_in_owner = true
@@ -48,6 +49,7 @@ text = "Gear"
 [node name="GearScroll" type="ScrollContainer" parent="Margin/VBox"]
 layout_mode = 2
 custom_minimum_size = Vector2(0, 120)
+horizontal_scroll_mode = 0
 
 [node name="GearList" type="VBoxContainer" parent="Margin/VBox/GearScroll"]
 unique_name_in_owner = true
@@ -61,6 +63,7 @@ text = "Recipes"
 [node name="RecipesScroll" type="ScrollContainer" parent="Margin/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
 
 [node name="RecipeList" type="VBoxContainer" parent="Margin/VBox/RecipesScroll"]
 unique_name_in_owner = true

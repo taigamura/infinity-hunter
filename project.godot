@@ -15,6 +15,10 @@ config/icon="res://icon.svg"
 
 GameState="*res://src/ui/game_state.gd"
 
+[gui]
+
+theme/custom="res://assets/theme/pixel_theme.tres"
+
 [display]
 
 window/size/viewport_width=720

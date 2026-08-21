@@ -1,6 +1,36 @@
-[gd_scene load_steps=2 format=3 uid="uid://ihcombat01"]
+[gd_scene load_steps=5 format=3 uid="uid://ihcombat01"]
 
 [ext_resource type="Script" path="res://src/ui/combat/combat_screen.gd" id="1"]
+[ext_resource type="Script" path="res://src/ui/common/screen_background.gd" id="3"]
+[ext_resource type="FontFile" path="res://assets/fonts/vt323/VT323-Regular.woff2" id="2_vt323"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ring"]
+draw_center = false
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 0.8235294, 0.2901961, 0.85)
+corner_radius_top_left = 150
+corner_radius_top_right = 150
+corner_radius_bottom_right = 150
+corner_radius_bottom_left = 150
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_banner"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0.16470589, 0.06666667, 0.07450981, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.8235294, 0.2901961, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [node name="CombatScreen" type="Control"]
 layout_mode = 3
@@ -12,70 +42,258 @@ script = ExtResource("1")
 [node name="RoundTimer" type="Timer" parent="."]
 unique_name_in_owner = true
 
-[node name="Margin" type="MarginContainer" parent="."]
+[node name="Background" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 64
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 32
+mouse_filter = 2
+script = ExtResource("3")
+mode = 1
+top_color = Color(0.16470589, 0.20784314, 0.3137255, 1)
+bottom_color = Color(0.07058824, 0.08235294, 0.12156863, 1)
 
-[node name="VBox" type="VBoxContainer" parent="Margin"]
-layout_mode = 2
-theme_override_constants/separation = 20
-
-[node name="SpriteCenter" type="CenterContainer" parent="Margin/VBox"]
-layout_mode = 2
-custom_minimum_size = Vector2(0, 192)
-
-[node name="MonsterSprite" type="AnimatedSprite2D" parent="Margin/VBox/SpriteCenter"]
+[node name="TopPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
-scale = Vector2(3, 3)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 40.0
+offset_top = 44.0
+offset_right = -40.0
+offset_bottom = 158.0
+grow_horizontal = 2
 
-[node name="InfoLabel" type="Label" parent="Margin/VBox"]
+[node name="TopVBox" type="VBoxContainer" parent="TopPanel"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="InfoRow" type="HBoxContainer" parent="TopPanel/TopVBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="MonsterInfoLabel" type="Label" parent="TopPanel/TopVBox/InfoRow"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
 text = "Monster"
 
-[node name="MonsterHpLabel" type="Label" parent="Margin/VBox"]
-layout_mode = 2
-text = "Monster HP"
-
-[node name="MonsterHpBar" type="ProgressBar" parent="Margin/VBox"]
+[node name="MonsterWeaknessLabel" type="Label" parent="TopPanel/TopVBox/InfoRow"]
 unique_name_in_owner = true
 layout_mode = 2
-show_percentage = false
-
-[node name="PlayerHpLabel" type="Label" parent="Margin/VBox"]
-layout_mode = 2
-text = "Your HP"
-
-[node name="PlayerHpBar" type="ProgressBar" parent="Margin/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-show_percentage = false
-
-[node name="StartButton" type="Button" parent="Margin/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Start Fight"
-
-[node name="DodgeButton" type="Button" parent="Margin/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(0, 96)
-text = "DODGE / ATTACK (tap)"
-
-[node name="ResultLabel" type="Label" parent="Margin/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-autowrap_mode = 3
+theme_override_fonts/font = ExtResource("2_vt323")
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.54509807, 0.5764706, 0.65882355, 1)
+vertical_alignment = 1
 text = ""
 
-[node name="ContinueButton" type="Button" parent="Margin/VBox"]
+[node name="MonsterElementChip" type="ColorRect" parent="TopPanel/TopVBox/InfoRow"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(15, 15)
+layout_mode = 2
+size_flags_vertical = 4
+pivot_offset = Vector2(7.5, 7.5)
+rotation_degrees = 45.0
+color = Color(0.6039216, 0.6392157, 0.72156864, 1)
+
+[node name="MonsterElementLabel" type="Label" parent="TopPanel/TopVBox/InfoRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vt323")
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.6039216, 0.6392157, 0.72156864, 1)
+vertical_alignment = 1
+text = ""
+
+[node name="MonsterPartLabel" type="Label" parent="TopPanel/TopVBox/InfoRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vt323")
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.6039216, 0.6392157, 0.72156864, 1)
+vertical_alignment = 1
+text = ""
+
+[node name="MonsterHpBar" type="ProgressBar" parent="TopPanel/TopVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_type_variation = &"MonsterHpBar"
+show_percentage = false
+
+[node name="SpriteAnchor" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -190.0
+offset_right = 150.0
+offset_bottom = 110.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TelegraphRing" type="Panel" parent="SpriteAnchor"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+pivot_offset = Vector2(150, 150)
+theme_override_styles/panel = SubResource("StyleBoxFlat_ring")
+
+[node name="MonsterSprite" type="AnimatedSprite2D" parent="SpriteAnchor"]
+unique_name_in_owner = true
+position = Vector2(150, 150)
+scale = Vector2(5, 5)
+
+[node name="TelegraphBanner" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -230.0
+offset_right = 160.0
+offset_bottom = -196.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_banner")
+
+[node name="TelegraphBannerLabel" type="Label" parent="TelegraphBanner"]
+unique_name_in_owner = true
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(1, 0.8235294, 0.2901961, 1)
+horizontal_alignment = 1
+text = "INCOMING - TAP TO DODGE"
+
+[node name="DamageNumberLabel" type="Label" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+theme_override_font_sizes/font_size = 34
+theme_override_colors/font_color = Color(1, 0.8784314, 0.5411765, 1)
+theme_override_colors/font_shadow_color = Color(0.5686275, 0.35686275, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+text = ""
+
+[node name="BottomHud" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -304.0
+offset_right = -40.0
+offset_bottom = -40.0
+grow_vertical = 0
+theme_override_constants/separation = 12
+
+[node name="RoundDotsRow" type="HBoxContainer" parent="BottomHud"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="PlayerHpLabel" type="Label" parent="BottomHud"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+text = "Your HP"
+
+[node name="PlayerHpBar" type="ProgressBar" parent="BottomHud"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_type_variation = &"PlayerHpBar"
+show_percentage = false
+
+[node name="DodgeButton" type="Button" parent="BottomHud"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 112)
+theme_type_variation = &"DodgeButton"
+theme_override_font_sizes/font_size = 32
+text = "DODGE"
+
+[node name="DodgeSubtitleLabel" type="Label" parent="BottomHud"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vt323")
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.6039216, 0.6392157, 0.72156864, 1)
+horizontal_alignment = 1
+autowrap_mode = 2
+text = "Perfect timing avoids most damage — chip still lands"
+
+[node name="ResultOverlay" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="ResultCenter" type="CenterContainer" parent="ResultOverlay"]
+layout_mode = 2
+
+[node name="ResultPanel" type="PanelContainer" parent="ResultOverlay/ResultCenter"]
+layout_mode = 2
+custom_minimum_size = Vector2(280, 0)
+
+[node name="ResultVBox" type="VBoxContainer" parent="ResultOverlay/ResultCenter/ResultPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ResultTitleLabel" type="Label" parent="ResultOverlay/ResultCenter/ResultPanel/ResultVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+text = ""
+
+[node name="ResultBodyLabel" type="Label" parent="ResultOverlay/ResultCenter/ResultPanel/ResultVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+autowrap_mode = 3
+horizontal_alignment = 1
+text = ""
+
+[node name="ActionsRow" type="HBoxContainer" parent="ResultOverlay/ResultCenter/ResultPanel/ResultVBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PushOnButton" type="Button" parent="ResultOverlay/ResultCenter/ResultPanel/ResultVBox/ActionsRow"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Push On"
+
+[node name="BankButton" type="Button" parent="ResultOverlay/ResultCenter/ResultPanel/ResultVBox/ActionsRow"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Bank Haul"
+
+[node name="ContinueButton" type="Button" parent="ResultOverlay/ResultCenter/ResultPanel/ResultVBox"]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
 text = "Continue"

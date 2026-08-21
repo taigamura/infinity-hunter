@@ -8,6 +8,17 @@ extends Control
 @onready var recipe_list: VBoxContainer = %RecipeList
 @onready var back_button: Button = %BackButton
 
+# Dense list rows use VT323 (the readable pixel font) rather than the blocky
+# Press Start 2P default: the same split the design mockup uses. VT323 is far
+# narrower, so long recipe ingredient lists fit within the panel instead of
+# overflowing horizontally.
+const LIST_FONT := preload("res://assets/fonts/vt323/VT323-Regular.woff2")
+const LIST_FONT_SIZE := 22
+
+func _style_list_label(label: Label) -> void:
+	label.add_theme_font_override("font", LIST_FONT)
+	label.add_theme_font_size_override("font_size", LIST_FONT_SIZE)
+
 func _ready() -> void:
 	back_button.pressed.connect(func(): get_tree().change_scene_to_file("res://src/ui/launch/launch_screen.tscn"))
 	_refresh()
@@ -24,6 +35,7 @@ func _refresh() -> void:
 		var def: MaterialDef = GameState.materials.get(material_id)
 		var label := Label.new()
 		label.text = "%s x%d" % [def.name if def != null else material_id, count]
+		_style_list_label(label)
 		materials_list.add_child(label)
 
 	for instance in GameState.inventory.gear:
@@ -39,6 +51,7 @@ func _refresh() -> void:
 		var label := Label.new()
 		label.text = "%s [%s]" % [def_name, instance["rolled_stats"].get("rarity", "")]
 		label.size_flags_vertical = SIZE_SHRINK_CENTER
+		_style_list_label(label)
 		row.add_child(label)
 		gear_list.add_child(row)
 
@@ -56,6 +69,9 @@ func _add_recipe_row(def) -> void:
 	var label := Label.new()
 	label.text = "%s (%s)" % [def.name, _recipe_text(def.recipe)]
 	label.size_flags_horizontal = SIZE_EXPAND_FILL
+	label.size_flags_vertical = SIZE_SHRINK_CENTER
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_style_list_label(label)
 	row.add_child(label)
 
 	var craft_button := Button.new()

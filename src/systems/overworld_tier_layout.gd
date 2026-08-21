@@ -9,6 +9,17 @@ extends RefCounted
 
 const CORNER_DIST := sqrt(2.0)
 
+# Normalized 0..1 distance of `cell` from the map center (0 = center/safest,
+# 1 = corner/most dangerous). Shared by tier_for_cell (gameplay bucketing)
+# and OverworldTileset (continuous colour gradient) so both read off the
+# same notion of "how far toward the hot corner".
+static func distance_ratio(cell: Vector2i, map_cols: int, map_rows: int) -> float:
+	var center := Vector2(map_cols, map_rows) / 2.0
+	var nx := (cell.x + 0.5 - center.x) / center.x
+	var ny := (cell.y + 0.5 - center.y) / center.y
+	var dist := sqrt(nx * nx + ny * ny)
+	return clampf(dist / CORNER_DIST, 0.0, 1.0)
+
 # Returns the tier id (from `sorted_tier_ids`, ascending by danger) that
 # `cell` falls into, given a `map_cols` x `map_rows` grid. Falls back to 0
 # when `sorted_tier_ids` is empty.
@@ -16,12 +27,7 @@ static func tier_for_cell(cell: Vector2i, map_cols: int, map_rows: int, sorted_t
 	if sorted_tier_ids.is_empty():
 		return 0
 
-	var center := Vector2(map_cols, map_rows) / 2.0
-	var nx := (cell.x + 0.5 - center.x) / center.x
-	var ny := (cell.y + 0.5 - center.y) / center.y
-	var dist := sqrt(nx * nx + ny * ny)
-	var normalized := clampf(dist / CORNER_DIST, 0.0, 1.0)
-
+	var normalized := distance_ratio(cell, map_cols, map_rows)
 	var bucket := int(normalized * sorted_tier_ids.size())
 	bucket = clampi(bucket, 0, sorted_tier_ids.size() - 1)
 	return sorted_tier_ids[bucket]

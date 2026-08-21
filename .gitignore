@@ -68,3 +68,6 @@ assets/weapons/_gen/
 
 # AI monster-sprite generation scratch (candidates/raw gens + Pokemon style refs); finals are assets/sprites/*.png
 assets/sprites/_gen/
+
+# Ralph screenshot/scratch output (visual review harness)
+.ralph_scratch/
