@@ -28,17 +28,27 @@ func _refresh() -> void:
 	_clear(gear_list)
 	_clear(recipe_list)
 
+	var has_materials := false
 	for material_id in GameState.inventory.materials:
 		var count: int = GameState.inventory.materials[material_id]
 		if count <= 0:
 			continue
+		has_materials = true
 		var def: MaterialDef = GameState.materials.get(material_id)
 		var label := Label.new()
 		label.text = "%s x%d" % [def.name if def != null else material_id, count]
 		_style_list_label(label)
 		materials_list.add_child(label)
+	if not has_materials:
+		var empty_label := Label.new()
+		empty_label.text = "None yet — loot monsters to gather materials"
+		_style_list_label(empty_label)
+		empty_label.modulate = Color(1, 1, 1, 0.5)
+		materials_list.add_child(empty_label)
 
+	var has_gear := false
 	for instance in GameState.inventory.gear:
+		has_gear = true
 		var def_id: String = instance["def_id"]
 		var def_name := def_id
 		if GameState.weapons.has(def_id):
@@ -54,6 +64,12 @@ func _refresh() -> void:
 		_style_list_label(label)
 		row.add_child(label)
 		gear_list.add_child(row)
+	if not has_gear:
+		var empty_gear_label := Label.new()
+		empty_gear_label.text = "None yet — craft gear from the recipes below"
+		_style_list_label(empty_gear_label)
+		empty_gear_label.modulate = Color(1, 1, 1, 0.5)
+		gear_list.add_child(empty_gear_label)
 
 	for def_id in GameState.weapons:
 		_add_recipe_row(GameState.weapons[def_id])
@@ -77,6 +93,8 @@ func _add_recipe_row(def) -> void:
 	var craft_button := Button.new()
 	craft_button.text = "Craft"
 	craft_button.disabled = not CraftingSystem.can_craft(def, GameState.inventory)
+	if craft_button.disabled:
+		craft_button.modulate = Color(1, 1, 1, 0.4)
 	craft_button.pressed.connect(_on_craft_pressed.bind(def))
 	row.add_child(craft_button)
 
