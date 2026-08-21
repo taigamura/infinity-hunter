@@ -1,6 +1,6 @@
 # ADR-0001 — Overworld map: the Deepening Trail
 
-- **Status:** Accepted (2026-08-21)
+- **Status:** Superseded by ADR-0002 (Concentric Sections, 2026-08-21)
 - **Area:** Overworld (`src/systems/overworld_tier_layout.gd`, `src/ui/overworld/`, `data/tiers/`, `data/zones/`)
 
 ## Context

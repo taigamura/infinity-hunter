@@ -63,9 +63,9 @@ loop's verification gate and the definition of "done".
 | `CombatResolver` | Pure dodge/HP-race: dodge timing reduces incoming damage, an unavoidable **chip floor** (`CHIP_FLOOR_FRACTION = 0.35`) always lands, weapon class + element multiplier applied. |
 | `Elements` | 6-element model: Fire/Water/Earth/Thunder/Ice ring (weak ×1.5, resist ×0.66), Neutral ×1.0, rare Dragon ×1.5 vs all. |
 | `EncounterSystem` | Overworld gauge fill from tier params + band-filtered monster pick. `GAUGE_THRESHOLD = 100`. |
-| `OverworldTierLayout` | Buckets a tile into a danger tier by **depth along the vertical travel axis** (near/bottom edge safe, far/top edge hot) per ADR-0001 (Deepening Trail, foundation slice built). Also places the near-edge `camp_cell` (spawn), the on-trail `exit_cell` (portal, deepest band), and `trail_x_for_row` (the winding trail spine's column per row). Per-zone tier tables/palettes (slice C) built. Superseded for the overworld screen's own spawn/tile/encounter geometry by `SectionLayout` (#37); still used by `PoiLayout` for POI band placement. |
-| `SectionLayout` | Path-first generator for the Concentric Sections overworld (PRD #36, full generator #39, superseding the #37 tracer-bullet ring bucketing). `generate(cols, rows, min_level, max_level, rng)` carves a straight, always-connected camp→portal path (Bresenham), bands it into 3-4 concentric ring sections with a gently-rising recommended level (guaranteed monotonic outward by construction), then scatters ~5-10 more variable-size **fill** sections (rng seed cells; level = seed's own ring level + jitter, "loosely correlated" with distance) across the rest of the map — 8-14 total sections. `section_for_cell` resolves on-path cells to their ring section and everything else to its nearest fill seed (cheap Voronoi, no precomputed per-cell grid). Each section's `gauge_rate` is derived straight from its own rolled level (`BASE_GAUGE_RATE + level * GAUGE_RATE_PER_LEVEL`) — the overworld no longer reads `gauge_rate`/`level_min`/`level_max` off the zone's `TierTableDef`/`data/tiers/*.json` at all; those files/loader still exist (`GameState.tier_tables`) but are presently unread outside their own loader test. Bounded fill-seed placement retries (like `PoiLayout`) so degenerate map sizes never hang. `overworld_screen.gd` also now paints the path cells with `OverworldTileset`'s repurposed dirt-trail atlas row so the optimal route is visibly rendered. |
-| `PoiLayout` | Pure/static points-of-interest placement (ADR-0001 slice B, built): `generate(map_cols, map_rows, sorted_tier_ids, rng)` returns a deterministic Array of `{cell, type}` (camp ×1, portal ×1, den 1–3, forage 1–3, cache 0–2, landmark 0–1), banded by depth thirds and trail proximity. Rendered as code-drawn tinted markers above the tilemap in `overworld_screen.gd`; standing on/adjacent to a den multiplies the tier's `gauge_rate` before it's passed into the unchanged `EncounterSystem.tick`. Its own camp/portal entries are discarded and replaced with `SectionLayout`'s so markers match where the hunter actually spawns/travels; den/forage/cache/landmark bands are still `OverworldTierLayout`-derived pending a later slice. |
+| `OverworldTierLayout` | ADR-0001's (superseded) depth-along-travel-axis danger bucketing: near/bottom edge safe, far/top edge hot, plus the near-edge `camp_cell`, on-trail `exit_cell`, and `trail_x_for_row` trail spine. Retired from the overworld screen's own geometry and from `PoiLayout` (#41) by ADR-0002 / `SectionLayout`; unused outside its own loader/unit tests. |
+| `SectionLayout` | Path-first generator for the Concentric Sections overworld (ADR-0002, PRD #36; tracer bullet #37 → full generator #39 → spike sections #40 → generated names #41) and the current single source of truth for overworld danger/spawn/portal/gauge-rate geometry. `generate(cols, rows, min_level, max_level, rng, band_names := [])` carves a straight, always-connected camp→portal **path** (Bresenham), bands it into 3-4 concentric ring **sections** with a gently-rising **recommended level** (guaranteed monotonic outward by construction), then scatters ~5-10 more variable-size **fill** sections (rng seed cells; level = seed's own ring level + jitter, "loosely correlated" with distance) across the rest of the map — 8-14 total sections. `section_for_cell` resolves on-path cells to their ring section and everything else to its nearest fill seed (cheap Voronoi, no precomputed per-cell grid). Each section's `gauge_rate` is derived straight from its own rolled level (`BASE_GAUGE_RATE + level * GAUGE_RATE_PER_LEVEL`) — the overworld no longer reads `gauge_rate`/`level_min`/`level_max` off the zone's `TierTableDef`/`data/tiers/*.json` at all; those files/loader still exist (`GameState.tier_tables`) but are presently unread outside their own loader test. Bounded fill-seed placement retries (like `PoiLayout`) so degenerate map sizes never hang. `overworld_screen.gd` also paints the path cells with `OverworldTileset`'s repurposed dirt-trail atlas row so the optimal route is visibly rendered. 1-2 off-path fill sections per map roll a recommended level far above the zone's band and are flagged `is_spike` (**apex / spike section**), so `EncounterSystem.pick_monster`'s unmodified level-window filter surfaces apex/stat-wall species (e.g. `voidmaw_devourer`, `cinder_wyrm_matriarch`) there instead of normal zone monsters. Each section also carries a generated evocative name (zone band-name + rotating geographic suffix, e.g. "Bramble Hollow"), surfaced by an on-enter banner and a persistent recommended-level badge. |
+| `PoiLayout` | Pure/static points-of-interest placement: `generate(map_cols, map_rows, sorted_tier_ids, rng)` returns a deterministic Array of `{cell, type}` (camp ×1, portal ×1, den 1–3, forage 1–3, cache 0–2, landmark 0–1). Re-homed onto `SectionLayout` (#41): den/forage/cache/landmark placement derives from radial distance-from-center and proximity to the visible path instead of the retired `OverworldTierLayout` depth ratio, and camp/portal entries are sourced directly from `SectionLayout` so markers always match where the hunter spawns/travels. Rendered as code-drawn tinted markers above the tilemap in `overworld_screen.gd`; standing on/adjacent to a den multiplies the section's `gauge_rate` before it's passed into the unchanged `EncounterSystem.tick`. |
 | `OverworldMovement` | Joystick + keyboard → clamped character step. |
 | `DropSystem` | Weighted drop tables; part-break sharply boosts/guarantees that part's material. |
 | `CraftingSystem` | Fixed recipes consume materials → instanced gear rolling a rarity tier (Common/Uncommon/Rare/Epic). |
@@ -95,11 +95,15 @@ LAUNCH ──▶ OVERWORLD ──▶ COMBAT ──┬─▶ VICTORY ──(push 
 
 - **Launch:** pick zone + weapon, `GameState.start_run` builds a `RunState` at Lv.1
   (plus meta modifiers), change scene to the overworld.
-- **Overworld:** walk a 30×40 tile field, spawning at the **map center** (#37); each
-  physics frame reads the section under the character (`SectionLayout`, radial distance
-  from center) and ticks `EncounterSystem`. On gauge fire, band-pick a monster and open
-  `CombatScreen` as an overlay (movement/ticking frozen). Reaching the outer-ring
-  **portal cell** unlocks the connected zone and reloads the scene for it.
+- **Overworld:** walk a 30×40 tile field, spawning at the center **camp** (`SectionLayout`,
+  ADR-0002 Concentric Sections); each physics frame reads the **section** under the
+  character (path-first rings + scattered fill sections, radial distance from center)
+  and ticks `EncounterSystem` off that section's `gauge_rate`. On gauge fire,
+  level-window-pick a monster and open `CombatScreen` as an overlay (movement/ticking
+  frozen) — off-path **apex/spike sections** surface stat-wall species instead of
+  normal zone monsters. Reaching the outer-ring **portal** unlocks the connected zone
+  and reloads the scene for it. An on-enter banner and persistent badge show the
+  current section's generated name and recommended level.
 - **Combat:** tap **Dodge** on the monster's telegraph each round; `CombatResolver`
   runs the reflex HP-race, and its result is now the **authoritative** win/loss:
   `CombatScreen` passes the reflex outcome into `RunState.resolve_fight` (via its
@@ -222,6 +226,22 @@ LAUNCH ──▶ OVERWORLD ──▶ COMBAT ──┬─▶ VICTORY ──(push 
   tint row), and `OverworldTileset.TRAIL_BLEND` was tuned down (0.55→0.3) so the trail
   tint over a safe-band tile still reads as green to `verify_visual.sh`'s
   concentric-gradient check, since the path now runs directly through the camp.
+- **Concentric Sections: apex/spike sections + generated names built (PRD #36, issues
+  #40–#41; ADR-0002 supersedes ADR-0001).** `SectionLayout` now flags 1-2 off-path fill
+  sections per map as `is_spike`, rolling a recommended level far above the zone's band
+  (`level_max` opened to a large sentinel) so `EncounterSystem.pick_monster`'s
+  unmodified level-window filter naturally selects apex/stat-wall species there (e.g.
+  `voidmaw_devourer`, and a new `cinder_wyrm_matriarch` for Cinder Dunes) instead of
+  normal zone monsters — no special-casing in combat or encounter code. `SectionLayout.
+  generate` also optionally takes a zone's `band_names` and assigns each section an
+  evocative generated name (band name + rotating suffix, e.g. "Bramble Hollow"),
+  surfaced by an on-enter banner and a persistent recommended-level badge on the
+  overworld HUD. `PoiLayout` was re-homed onto `SectionLayout`: den/forage/cache/
+  landmark placement now derives from radial distance-from-center and proximity to the
+  visible path instead of the retired `OverworldTierLayout` depth ratio, and camp/
+  portal markers are sourced directly from `SectionLayout`. This completes the
+  Deepening Trail → Concentric Sections pivot; `OverworldTierLayout` is retired from
+  all overworld-screen geometry and unused outside its own loader/unit tests.
 - **Field tiles stay procedural placeholder:** overworld tiles are per-tier colour
   squares with shade jitter (`OverworldTileset`, green→olive→red toward the hot corner).
   The player is a Gen-4-style humanoid **walk sheet** (`assets/sprites/player_ethan.png`,
@@ -260,11 +280,29 @@ LAUNCH ──▶ OVERWORLD ──▶ COMBAT ──┬─▶ VICTORY ──(push 
 ## Glossary
 
 - **Run / Expedition** — one Lv.1-to-reset cycle. **Hunt** — one fight; a run has ~10.
-- **Zone** — a themed region with a level band and connections. **Tier** — a danger
-  bucket within a zone's overworld, banded by depth along the travel axis (near edge
-  safe, far edge hot). **Camp** — the near-edge spawn tile. **Portal / exit cell** —
-  the on-trail tile in the deepest band that travels to the connected zone.
-- **Encounter gauge** — fills as you walk hot tiers; on full it spawns a fight.
+- **Zone** — a themed region with a level band and connections.
+- **Section** — a named region of a zone's overworld map (`SectionLayout`, ADR-0002
+  Concentric Sections): either an on-path ring section (part of the guaranteed
+  camp→portal route) or a scattered off-path fill section. Each section has its own
+  **recommended level** and derived encounter gauge rate; danger is per-section, not a
+  map-wide gradient. Carries a generated evocative name (zone band-name + suffix, e.g.
+  "Bramble Hollow"), shown via an on-enter banner and persistent badge.
+- **Recommended level** — a section's rolled difficulty; rises gently and monotonically
+  outward along the path, and loosely correlates with distance-from-center for fill
+  sections (not a hard rule — a fill section can read hotter or calmer than its ring).
+- **Apex / spike section** — an off-path fill section flagged `is_spike`, rolling a
+  recommended level far above the zone's normal band so `EncounterSystem.pick_monster`
+  surfaces apex/stat-wall species there (e.g. `voidmaw_devourer`) instead of normal
+  zone monsters.
+- **The path** — the straight, always-connected camp→portal route `SectionLayout`
+  carves first, banded into the map's ring sections; rendered as a visible dirt-tinted
+  trail. **Camp** — the center spawn point. **Portal** — the rng-angled point on the
+  outer ring that travels to the connected zone on arrival.
+- *(Retired: "Tier" as a depth-banded danger bucket and "trail" as a single linear
+  travel axis, per the superseded ADR-0001 Deepening Trail — replaced by section/
+  recommended level/the path above, per ADR-0002.)*
+- **Encounter gauge** — fills as you walk a section; fill rate is that section's
+  `gauge_rate` (derived from its recommended level); on full it spawns a fight.
 - **Chip floor** — the unavoidable fraction of a monster hit that lands regardless of
   dodge skill; what makes far-stronger monsters a hard stat wall.
 - **Big** — the universal big-number type. **Essence** — permanent currency = f(peak
