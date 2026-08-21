@@ -1,0 +1,16 @@
+{
+  "id": "cinder_wyrm_matriarch",
+  "name": "Cinder Wyrm Matriarch",
+  "level": 8888888888,
+  "element": "fire",
+  "base_hp": 888888888888,
+  "base_attack": 888888888,
+  "xp_reward": 888888888888,
+  "zone_id": "cinder_dunes",
+  "parts": ["maw"],
+  "capturable": false,
+  "capture_hp_threshold": 0.0,
+  "drop_table": [
+    {"material_id": "void_essence", "weight": 100, "part": "maw", "guaranteed_on_break": true}
+  ]
+}

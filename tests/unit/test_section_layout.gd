@@ -112,6 +112,36 @@ func test_generation_is_deterministic_for_a_fixed_seed() -> void:
 	assert_eq(layout_a["path_cells"], layout_b["path_cells"])
 	assert_eq(layout_a["section_ids"], layout_b["section_ids"])
 
+func test_spike_section_count_is_bounded() -> void:
+	var layout := _generate(11)
+	var spike_ids: Array = layout["spike_section_ids"]
+	assert_true(spike_ids.size() >= 1 and spike_ids.size() <= 2, "spike count should be 1-2 per map")
+
+func test_spike_sections_are_off_path_fill_sections() -> void:
+	var layout := _generate(11)
+	var spike_ids: Array = layout["spike_section_ids"]
+	var path_section_ids: Array = layout["path_section_ids"]
+	for spike_id in spike_ids:
+		assert_false(path_section_ids.has(spike_id), "a spike must be an off-path fill section, not a ring")
+
+func test_spike_recommended_level_is_well_above_the_zone_band() -> void:
+	var layout := _generate(11)
+	var params: Dictionary = layout["params"]
+	var spike_ids: Array = layout["spike_section_ids"]
+	assert_true(spike_ids.size() > 0, "expected at least one spike section")
+	for spike_id in spike_ids:
+		assert_true(params[spike_id]["level_min"] > MAX_LEVEL, "spike level_min must exceed the zone's max_level")
+		assert_true(params[spike_id]["is_spike"], "spike section params must be flagged is_spike")
+
+func test_non_spike_sections_are_not_flagged() -> void:
+	var layout := _generate(11)
+	var params: Dictionary = layout["params"]
+	var spike_ids: Array = layout["spike_section_ids"]
+	for section_id in layout["section_ids"]:
+		if spike_ids.has(section_id):
+			continue
+		assert_false(params[section_id]["is_spike"], "non-spike section must not be flagged is_spike")
+
 func test_degenerate_tiny_map_never_hangs() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 1

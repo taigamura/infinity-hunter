@@ -21,6 +21,22 @@ const MAX_RINGS := 4
 const MIN_FILL_SECTIONS := 5
 const MAX_FILL_SECTIONS := 10
 
+# Off-path spike sections (PRD issue #40): a bounded 1-2 fill sections per map
+# roll a recommended level far above the zone's band and are flagged
+# `is_spike`, so EncounterSystem.pick_monster's existing level-window filter
+# selects from the apex pool (e.g. voidmaw_devourer) instead of normal zone
+# species. `SPIKE_LEVEL_MULTIPLIER` sets how far "well above" means, scaled by
+# the zone's own level span so it holds for both tiny (verdant_fields) and
+# wide (frostpeak_ridge) spans; the band's upper bound is left open (up to
+# SPIKE_LEVEL_MAX_SENTINEL) so any absurdly-leveled apex monster is caught
+# regardless of its exact value.
+const MIN_SPIKE_SECTIONS := 1
+const MAX_SPIKE_SECTIONS := 2
+const SPIKE_LEVEL_MULTIPLIER := 10.0
+# Finite (not INF) so UI level-range labels stay printable; still far above
+# any realistically-authored apex monster level.
+const SPIKE_LEVEL_MAX_SENTINEL := 1_000_000_000_000.0
+
 # Bounded retries when hunting for a free fill-seed cell, so a pathological
 # map size can never hang generation (same precedent as PoiLayout).
 const MAX_PLACEMENT_ATTEMPTS := 300
@@ -73,8 +89,9 @@ static func portal_cell(map_cols: int, map_rows: int, rng: RandomNumberGenerator
 #   "path_cells": Array[Vector2i]  (ordered camp -> portal, for trail render),
 #   "ring_count": int,
 #   "path_section_ids": Array[int] (ascending by ring/level, index == ring),
-#   "fill_sections": Array[{"id": int, "seed": Vector2i, "level": float}],
-#   "params": Dictionary  (section id -> {level_min, level_max, gauge_rate}),
+#   "fill_sections": Array[{"id": int, "seed": Vector2i, "level": float, "is_spike": bool}],
+#   "spike_section_ids": Array[int]  (1-2 off-path fill sections, apex encounters),
+#   "params": Dictionary  (section id -> {level_min, level_max, gauge_rate, is_spike}),
 #   "section_ids": Array[int]  (every section id, ascending by level),
 # }
 static func generate(map_cols: int, map_rows: int, min_level: float, max_level: float, rng: RandomNumberGenerator) -> Dictionary:
@@ -113,8 +130,21 @@ static func generate(map_cols: int, map_rows: int, min_level: float, max_level: 
 		var level := clampf(base_level + rng.randf_range(-jitter, jitter), min_level, max_level)
 		var section_id := next_id
 		next_id += 1
-		fill_sections.append({"id": section_id, "seed": seed_cell, "level": level})
+		fill_sections.append({"id": section_id, "seed": seed_cell, "level": level, "is_spike": false})
 		params[section_id] = _section_params(level, level_span, ring_count)
+
+	var spike_section_ids := _pick_spike_section_ids(rng, fill_sections)
+	var spike_set := {}
+	for spike_id in spike_section_ids:
+		spike_set[spike_id] = true
+	var spike_offset := maxf(level_span, 1.0) * SPIKE_LEVEL_MULTIPLIER
+	var spike_level := max_level + spike_offset
+	for fill in fill_sections:
+		if not spike_set.has(fill["id"]):
+			continue
+		fill["is_spike"] = true
+		fill["level"] = spike_level
+		params[fill["id"]] = _section_params(spike_level, level_span, ring_count, true)
 
 	var section_ids: Array = path_section_ids.duplicate()
 	for fill in fill_sections:
@@ -129,6 +159,7 @@ static func generate(map_cols: int, map_rows: int, min_level: float, max_level: 
 		"ring_count": ring_count,
 		"path_section_ids": path_section_ids,
 		"fill_sections": fill_sections,
+		"spike_section_ids": spike_section_ids,
 		"params": params,
 		"section_ids": section_ids,
 	}
@@ -169,16 +200,41 @@ static func section_for_cell(cell: Vector2i, map_cols: int, map_rows: int, layou
 
 # level_min/level_max/gauge_rate for a section rolled at `level`. Spread is a
 # ring-width's worth of levels either side (bounded to at least 1) so bands
-# overlap gently like the old hand-authored tier tables did.
-static func _section_params(level: float, level_span: float, ring_count: int) -> Dictionary:
+# overlap gently like the old hand-authored tier tables did. A spike section
+# (`is_spike`) opens level_max up to SPIKE_LEVEL_MAX_SENTINEL instead of a
+# narrow band, so EncounterSystem.pick_monster's level-window filter catches
+# an apex monster regardless of how absurdly high its authored level is.
+static func _section_params(level: float, level_span: float, ring_count: int, is_spike: bool = false) -> Dictionary:
 	var spread := maxf(1.0, level_span / float(maxi(ring_count, 1)))
 	var level_min := maxf(1.0, level - spread / 2.0)
 	var level_max := level_min + spread
+	if is_spike:
+		level_max = SPIKE_LEVEL_MAX_SENTINEL
 	return {
 		"level_min": level_min,
 		"level_max": level_max,
 		"gauge_rate": BASE_GAUGE_RATE + level * GAUGE_RATE_PER_LEVEL,
+		"is_spike": is_spike,
 	}
+
+# Bounded 1-2 fill sections (never more than exist) chosen as off-path
+# spikes, picked without replacement via a seeded Fisher-Yates shuffle so
+# results stay deterministic for a fixed rng. Returns an Array[int] of the
+# chosen sections' ids, empty when there are no fill sections at all.
+static func _pick_spike_section_ids(rng: RandomNumberGenerator, fill_sections: Array) -> Array:
+	if fill_sections.is_empty():
+		return []
+	var spike_count := clampi(rng.randi_range(MIN_SPIKE_SECTIONS, MAX_SPIKE_SECTIONS), 1, fill_sections.size())
+	var indices: Array = range(fill_sections.size())
+	for i in range(indices.size() - 1, 0, -1):
+		var j := rng.randi_range(0, i)
+		var tmp = indices[i]
+		indices[i] = indices[j]
+		indices[j] = tmp
+	var chosen: Array = []
+	for k in range(spike_count):
+		chosen.append(fill_sections[indices[k]]["id"])
+	return chosen
 
 # Random-samples cells until one is free of `occupied`, or gives up after
 # MAX_PLACEMENT_ATTEMPTS and returns the (-1, -1) sentinel for "couldn't
