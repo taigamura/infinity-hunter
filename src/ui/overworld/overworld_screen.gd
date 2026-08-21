@@ -42,6 +42,11 @@ const GAUGE_COLOR_HIGH := Color("#f5c542")
 const EXIT_PULSE_PERIOD := 1.1
 const MARKER_EDGE_MARGIN := 28.0
 
+# Section banner (issue #38): how long the on-enter banner holds fully
+# visible after sliding in before it fades back out.
+const SECTION_BANNER_HOLD := 1.6
+const SECTION_BANNER_FADE := 0.35
+
 # POI overlay (ADR-0001 slice B): small code-drawn tinted markers, one per
 # PoiLayout.generate() entry, rendered above the tilemap. No new art assets.
 const POI_MARKER_SIZE := 20
@@ -69,6 +74,8 @@ const DEN_GAUGE_MULTIPLIER := 1.5
 @onready var retreat_button: Button = %RetreatButton
 @onready var gauge_bar: ProgressBar = %GaugeBar
 @onready var hot_strip_label: Label = %HotStripLabel
+@onready var section_banner: Control = %SectionBanner
+@onready var section_banner_label: Label = %SectionBannerLabel
 @onready var exit_marker: Control = %ExitMarker
 @onready var exit_marker_label: Label = %ExitMarkerLabel
 @onready var ui_layer: CanvasLayer = %UI
@@ -89,6 +96,8 @@ var _anim_accum := 0.0
 var _pois: Array = []
 var _den_cells: Array = []
 var _zone_def: ZoneDef = null
+var _current_section_id := -1
+var _section_banner_tween: Tween = null
 
 func _ready() -> void:
 	var run: RunState = GameState.current_run
@@ -123,12 +132,17 @@ func _ready() -> void:
 	gauge_bar.value = 0.0
 	_build_gauge_style()
 	hot_strip_label.visible = false
+	section_banner.visible = false
 	var exit_zone: ZoneDef = GameState.zones.get(_travel_target_zone_id)
 	exit_marker_label.text = "EXIT\n%s" % (exit_zone.name if exit_zone != null else "???")
 	exit_marker.visible = _travel_target_zone_id != ""
 	_start_exit_pulse()
 	_update_exit_marker()
-	_update_hot_strip(SectionLayout.section_for_cell(tile_map.local_to_map(character.position), MAP_COLS, MAP_ROWS, _tier_ids))
+	# Spawn is inside a section already; establish it as the current section
+	# and show the persistent badge, but don't fire the on-enter banner —
+	# that's reserved for actually crossing a border during play.
+	_current_section_id = SectionLayout.section_for_cell(tile_map.local_to_map(character.position), MAP_COLS, MAP_ROWS, _tier_ids)
+	_update_hot_strip(_current_section_id)
 
 # Positions the exit marker over the exit cell's on-screen location, clamped
 # to the viewport edges so it reads as a directional pointer toward the hot
@@ -268,15 +282,50 @@ func _build_gauge_style() -> void:
 	fill.texture = texture
 	gauge_bar.add_theme_stylebox_override("fill", fill)
 
+# Section name + recommended level for `tier_id` (a section id), e.g.
+# "Cinder Dunes  Lv 4-7". Falls back to "" when the tier/zone data isn't
+# resolvable (defensive; every painted cell has a known tier in practice).
+func _section_label(tier_id: int) -> String:
+	var index := _tier_ids.find(tier_id)
+	if index == -1 or _zone_def == null:
+		return ""
+	var band_name := _zone_def.band_name_for_tier_index(index, _tier_ids.size())
+	var tier_params: Dictionary = _tier_table.tier_params(tier_id) if _tier_table != null else {}
+	var level_min := int(tier_params.get("level_min", 0))
+	var level_max := int(tier_params.get("level_max", 0))
+	return "%s  Lv %d-%d" % [band_name, level_min, level_max]
+
+# Persistent HUD badge (issue #38): reuses the hot-strip slot to always show
+# the section the hunter currently stands in, not just its former "hot
+# region" warning. Still intensifies the ⚠ marker once the section is in the
+# upper half of the zone's danger tiers, matching the prior hot-strip cue.
 func _update_hot_strip(tier_id: int) -> void:
 	var index := _tier_ids.find(tier_id)
-	if index == -1:
+	var label := _section_label(tier_id)
+	if index == -1 or label == "":
 		hot_strip_label.visible = false
 		return
-	hot_strip_label.visible = index >= int(ceili(_tier_ids.size() / 2.0))
-	if hot_strip_label.visible and _zone_def != null:
-		var band_name := _zone_def.band_name_for_tier_index(index, _tier_ids.size())
-		hot_strip_label.text = "⚠ %s" % band_name if band_name != "" else ""
+	var is_hot := index >= int(ceili(_tier_ids.size() / 2.0))
+	hot_strip_label.visible = true
+	hot_strip_label.text = "%s %s" % ["⚠" if is_hot else "▸", label]
+
+# On-enter banner (issue #38): slides in over the map when a border crossing
+# resolves the hunter into a new section, holds briefly, then fades out.
+# Killing/replacing any in-flight tween lets rapid border hops (e.g. walking
+# back and forth on a boundary) restart cleanly instead of stacking tweens.
+func _show_section_banner(tier_id: int) -> void:
+	var label := _section_label(tier_id)
+	if label == "":
+		return
+	section_banner_label.text = label
+	section_banner.visible = true
+	section_banner.modulate.a = 1.0
+	if _section_banner_tween != null and _section_banner_tween.is_valid():
+		_section_banner_tween.kill()
+	_section_banner_tween = create_tween()
+	_section_banner_tween.tween_interval(SECTION_BANNER_HOLD)
+	_section_banner_tween.tween_property(section_banner, "modulate:a", 0.0, SECTION_BANNER_FADE)
+	_section_banner_tween.tween_callback(func(): section_banner.visible = false)
 
 # Player character sprite: a Gen-4-style humanoid overworld walk sheet
 # (assets/sprites/player_ethan.png, a 4x4 grid of 64x64 frames — rows are
@@ -354,7 +403,12 @@ func _physics_process(delta: float) -> void:
 
 func _tick_encounter() -> void:
 	var cell := tile_map.local_to_map(character.position)
-	var tier_id := tile_map.get_cell_source_id(0, cell)
+	var tier_id := SectionLayout.section_for_cell(cell, MAP_COLS, MAP_ROWS, _tier_ids)
+	if tier_id != _current_section_id:
+		_current_section_id = tier_id
+		_gauge = 0.0
+		gauge_bar.value = 0.0
+		_show_section_banner(tier_id)
 	var tier_params: Dictionary = _tier_table.tier_params(tier_id) if _tier_table != null else {}
 	tier_params = _apply_den_bias(tier_params, cell)
 

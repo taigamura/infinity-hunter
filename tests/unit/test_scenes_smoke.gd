@@ -180,6 +180,13 @@ func test_overworld_screen_smoke() -> void:
 	assert_not_null(gauge_bar, "overworld %GaugeBar must exist")
 	var hot_strip_label: Label = screen.get_node("%HotStripLabel")
 	assert_not_null(hot_strip_label, "overworld %HotStripLabel must exist")
+	assert_true(hot_strip_label.visible, "the persistent section badge (reusing the hot-strip slot) must be visible on spawn")
+	assert_true(hot_strip_label.text != "", "section badge must show the current section's recommended level")
+	var section_banner: Control = screen.get_node("%SectionBanner")
+	assert_not_null(section_banner, "overworld %SectionBanner must exist")
+	assert_false(section_banner.visible, "the on-enter banner must be hidden until a border is crossed")
+	var section_banner_label: Label = screen.get_node("%SectionBannerLabel")
+	assert_not_null(section_banner_label, "overworld %SectionBannerLabel must exist")
 	var exit_marker: Control = screen.get_node("%ExitMarker")
 	assert_not_null(exit_marker, "overworld %ExitMarker must exist")
 	var exit_marker_label: Label = screen.get_node("%ExitMarkerLabel")
@@ -200,4 +207,29 @@ func test_overworld_screen_smoke() -> void:
 	assert_not_null(poi_layer, "overworld %PoiLayer must exist")
 	if poi_layer != null:
 		assert_true(poi_layer.get_child_count() > 0, "poi layer must contain at least one marker (camp/portal are always placed)")
+	_cleanup(screen)
+
+func test_overworld_section_border_crossing_resets_gauge_and_shows_banner() -> void:
+	_setup_minimal_run()
+	var screen: Node2D = _instantiate(OVERWORLD_SCENE)
+	var gauge_bar: ProgressBar = screen.get_node("%GaugeBar")
+	var section_banner: Control = screen.get_node("%SectionBanner")
+
+	# Fake a partway-filled gauge, then move the character to the outer ring
+	# (a different section than the center camp spawn) and tick the encounter
+	# system directly, the same call _physics_process makes every frame the
+	# hunter moves.
+	screen._gauge = 50.0
+	gauge_bar.value = 50.0
+	var outer_cell := Vector2i(screen.MAP_COLS / 2, 0)
+	screen.character.position = Vector2(outer_cell) * float(screen.TILE_SIZE)
+	screen._tick_encounter()
+
+	# The border-crossing reset zeroes the gauge before EncounterSystem.tick
+	# advances it by one tier tick, so post-tick it must be far below the
+	# pre-crossing 50 (a full tick alone can't span that gap) rather than
+	# carrying the old fill forward.
+	assert_lt(screen._gauge, 50.0, "crossing a section border must reset the encounter gauge before ticking")
+	assert_eq(gauge_bar.value, screen._gauge, "the gauge bar must reflect the reset")
+	assert_true(section_banner.visible, "crossing a section border must show the on-enter banner")
 	_cleanup(screen)
