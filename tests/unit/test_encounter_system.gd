@@ -25,6 +25,20 @@ func test_tick_accumulates_and_does_not_fire_below_threshold() -> void:
 	assert_false(result["fired"])
 	assert_almost_eq(result["gauge"], 10.0)
 
+func test_dt_scales_the_advance_as_a_per_second_rate() -> void:
+	# gauge_rate reads as "per second": a frame delta scales it down so the
+	# gauge fills over seconds of walking, not in a single 60Hz physics frame.
+	var tier := {"gauge_rate": 6.0}
+	var frame := EncounterSystem.tick(tier, 0.0, _rng(1), 1.0 / 60.0)
+	assert_false(frame["fired"], "a single 60Hz frame must not fire a calm section")
+	assert_almost_eq(frame["gauge"], 0.1)
+
+	# One full simulated second of frames advances by the whole per-second rate.
+	var gauge := 0.0
+	for _i in range(60):
+		gauge = EncounterSystem.tick(tier, gauge, _rng(_i), 1.0 / 60.0)["gauge"]
+	assert_almost_eq(gauge, 6.0)
+
 func test_higher_rate_tier_fires_in_fewer_ticks() -> void:
 	var slow_tier := {"gauge_rate": 5.0}
 	var fast_tier := {"gauge_rate": 25.0}

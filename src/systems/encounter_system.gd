@@ -12,13 +12,19 @@ const DEFAULT_JITTER := 0.0
 # (tier_params["jitter"], default 0). Returns {"gauge": float, "fired": bool}.
 # When the advanced gauge reaches or exceeds GAUGE_THRESHOLD, fired is true
 # and the returned gauge resets to 0.
-static func tick(tier_params: Dictionary, gauge: float, rng: RandomNumberGenerator) -> Dictionary:
+#
+# `dt` scales the advance so `gauge_rate`/`jitter` read as per-second values:
+# the overworld calls this every physics frame and passes the frame delta, so
+# a section fills over seconds of walking rather than instantly. Defaults to
+# 1.0, which preserves the original per-tick semantics for existing callers
+# and unit tests.
+static func tick(tier_params: Dictionary, gauge: float, rng: RandomNumberGenerator, dt: float = 1.0) -> Dictionary:
 	var rate: float = tier_params.get("gauge_rate", 0.0)
 	var jitter: float = tier_params.get("jitter", DEFAULT_JITTER)
 	var delta := rate
 	if jitter > 0.0:
 		delta += rng.randf_range(-jitter, jitter)
-	delta = maxf(delta, 0.0)
+	delta = maxf(delta, 0.0) * dt
 
 	var new_gauge := gauge + delta
 	if new_gauge >= GAUGE_THRESHOLD:

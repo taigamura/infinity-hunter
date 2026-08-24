@@ -405,9 +405,9 @@ func _physics_process(delta: float) -> void:
 	if _travel_target_zone_id != "" and tile_map.local_to_map(character.position) == _exit_cell:
 		_travel_deeper()
 		return
-	_tick_encounter()
+	_tick_encounter(delta)
 
-func _tick_encounter() -> void:
+func _tick_encounter(delta: float) -> void:
 	var cell := tile_map.local_to_map(character.position)
 	var tier_id := SectionLayout.section_for_cell(cell, MAP_COLS, MAP_ROWS, _section_layout)
 	if tier_id != _current_section_id:
@@ -418,7 +418,7 @@ func _tick_encounter() -> void:
 	var tier_params: Dictionary = _section_layout.get("params", {}).get(tier_id, {})
 	tier_params = _apply_den_bias(tier_params, cell)
 
-	var result := EncounterSystem.tick(tier_params, _gauge, _rng)
+	var result := EncounterSystem.tick(tier_params, _gauge, _rng, delta)
 	_gauge = result["gauge"]
 	gauge_bar.value = _gauge
 	_update_hot_strip(tier_id)

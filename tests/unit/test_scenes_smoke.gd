@@ -223,7 +223,7 @@ func test_overworld_section_border_crossing_resets_gauge_and_shows_banner() -> v
 	gauge_bar.value = 50.0
 	var outer_cell := Vector2i(screen.MAP_COLS / 2, 0)
 	screen.character.position = Vector2(outer_cell) * float(screen.TILE_SIZE)
-	screen._tick_encounter()
+	screen._tick_encounter(1.0)
 
 	# The border-crossing reset zeroes the gauge before EncounterSystem.tick
 	# advances it by one tier tick, so post-tick it must be far below the
