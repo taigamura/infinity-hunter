@@ -38,7 +38,7 @@ const FACE_RIGHT := 3
 # the zone's danger tiers, driving the warning strip. Purely cosmetic — the
 # gauge/encounter math it decorates is untouched (EncounterSystem.tick).
 const GAUGE_COLOR_LOW := Color("#57c964")
-const GAUGE_COLOR_HIGH := Color("#f5c542")
+const GAUGE_COLOR_HIGH := Color("#f5b942")
 const EXIT_PULSE_PERIOD := 1.1
 const MARKER_EDGE_MARGIN := 28.0
 
@@ -52,7 +52,7 @@ const SECTION_BANNER_FADE := 0.35
 const POI_MARKER_SIZE := 20
 const POI_MARKER_COLORS := {
 	"camp": Color("#4fd1c5"),
-	"portal": Color("#f5c542"),
+	"portal": Color("#f5b942"),
 	"den": Color("#e05263"),
 	"forage": Color("#8bd17c"),
 	"cache": Color("#c9a13b"),

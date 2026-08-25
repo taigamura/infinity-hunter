@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; font-family: 'Press Start 2P', ui-monospace, monospace; }
+    a { color: #8fb3ff; } a:hover { color: #b9d0ff; }
+    .spr {
+      width: 128px; height: 128px;
+      background-repeat: no-repeat;
+      background-size: 2048px 128px;              /* 16 frames * 128px */
+      image-rendering: pixelated;
+      animation: walk var(--spd, 1.6s) steps(16) infinite;
+    }
+    @keyframes walk { from { background-position: 0 0; } to { background-position: -2048px 0; } }
+    .dirs { image-rendering: pixelated; height: 44px; width: 176px; display: block; }
+  </style>
+</helmet>
+<div style="--spd: {{spd}}; background: {{bg}}; padding: 30px 34px 40px; min-height: 720px; color: #e9ecfa;">
+  <div style="font-size: 18px; letter-spacing: 1px; color: #ffffff;">Infinity Hunter, character placeholders</div>
+  <div style="font-family: 'VT323', monospace; font-size: 21px; color: #aeb6d4; margin-top: 10px; line-height: 1.35;">
+    10 humanoid overworld trainers, each with a 4-frame walk cycle and all four facings (down / up / left / right).
+    Temporary dev placeholders (real Pokemon pixels), to be swapped before any release.
+    Green check = clean 4-direction walk. Amber star = strongest fit for a hunter/ranger protagonist.
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px; margin-top: 26px;">
+
+    <!-- hiker -->
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.10); border-radius: 8px; padding: 14px 8px;">
+      <div style="display: flex; align-items: center; justify-content: center; width: 140px; height: 140px; background: rgba(0,0,0,0.18); border-radius: 6px;">
+        <div class="spr" style="background-image: url(anim_hiker.png);"></div>
+      </div>
+      <img class="dirs" src="dirs_hiker.png" alt="4 directions">
+      <div style="font-size: 11px; color: #ffffff;">Hiker</div>
+      <div style="font-family:'VT323',monospace; font-size: 18px; color: #f0c862;">star hunter-fit</div>
+    </div>
+
+    <!-- camper -->
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.10); border-radius: 8px; padding: 14px 8px;">
+      <div style="display: flex; align-items: center; justify-content: center; width: 140px; height: 140px; background: rgba(0,0,0,0.18); border-radius: 6px;">
+        <div class="spr" style="background-image: url(anim_camper.png);"></div>
+      </div>
+      <img class="dirs" src="dirs_camper.png" alt="4 directions">
+      <div style="font-size: 11px; color: #ffffff;">Camper</div>
+      <div style="font-family:'VT323',monospace; font-size: 18px; color: #f0c862;">star hunter-fit</div>
+    </div>
+
+    <!-- lucas -->
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.10); border-radius: 8px; padding: 14px 8px;">
+      <div style="display: flex; align-items: center; justify-content: center; width: 140px; height: 140px; background: rgba(0,0,0,0.18); border-radius: 6px;">
+        <div class="spr" style="background-image: url(anim_lucas.png);"></div>
+      </div>
+      <img class="dirs" src="dirs_lucas.png" alt="4 directions">
+      <div style="font-size: 11px; color: #ffffff;">Lucas (hero)</div>
+      <div style="font-family:'VT323',monospace; font-size: 18px; color: #f0c862;">star hunter-fit</div>
+    </div>
+
+    <!-- ethan -->
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.10); border-radius: 8px; padding: 14px 8px;">
+      <div style="display: flex; align-items: center; justify-content: center; width: 140px; height: 140px; background: rgba(0,0,0,0.18); border-radius: 6px;">
+        <div class="spr" style="background-image: url(anim_ethan.png);"></div>
+      </div>
+      <img class="dirs" src="dirs_ethan.png" alt="4 directions">
+      <div style="font-size: 11px; color: #ffffff;">Ethan (hero)</div>
+      <div style="font-family:'VT323',monospace; font-size: 18px; color: #f0c862;">star hunter-fit</div>
+    </div>
+
+    <!-- dawn -->
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.10); border-radius: 8px; padding: 14px 8px;">
+      <div style="display: flex; align-items: center; justify-content: center; width: 140px; height: 140px; background: rgba(0,0,0,0.18); border-radius: 6px;">
+        <div class="spr" style="background-image: url(anim_dawn.png);"></div>
+      </div>
+      <img class="dirs" src="dirs_dawn.png" alt="4 directions">
+      <div style="font-size: 11px; color: #ffffff;">Dawn (hero)</div>
+      <div style="font-family:'VT323',monospace; font-size: 18px; color: #7ee08a;">check 4-dir</div>
+    </div>
+
+    <!-- ace_m -->
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.10); border-radius: 8px; padding: 14px 8px;">
+      <div style="display: flex; align-items: center; justify-content: center; width: 140px; height: 140px; background: rgba(0,0,0,0.18); border-radius: 6px;">
+        <div class="spr" style="background-image: url(anim_ace_m.png);"></div>
+      </div>
+      <img class="dirs" src="dirs_ace_m.png" alt="4 directions">
+      <div style="font-size: 11px; color: #ffffff;">Ace Trainer M</div>
+      <div style="font-family:'VT323',monospace; font-size: 18px; color: #7ee08a;">check 4-dir</div>
+    </div>
+
+    <!-- ace_f -->
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.10); border-radius: 8px; padding: 14px 8px;">
+      <div style="display: flex; align-items: center; justify-content: center; width: 140px; height: 140px; background: rgba(0,0,0,0.18); border-radius: 6px;">
+        <div class="spr" style="background-image: url(anim_ace_f.png);"></div>
+      </div>
+      <img class="dirs" src="dirs_ace_f.png" alt="4 directions">
+      <div style="font-size: 11px; color: #ffffff;">Ace Trainer F</div>
+      <div style="font-family:'VT323',monospace; font-size: 18px; color: #7ee08a;">check 4-dir</div>
+    </div>
+
+    <!-- blackbelt -->
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.10); border-radius: 8px; padding: 14px 8px;">
+      <div style="display: flex; align-items: center; justify-content: center; width: 140px; height: 140px; background: rgba(0,0,0,0.18); border-radius: 6px;">
+        <div class="spr" style="background-image: url(anim_blackbelt.png);"></div>
+      </div>
+      <img class="dirs" src="dirs_blackbelt.png" alt="4 directions">
+      <div style="font-size: 11px; color: #ffffff;">Black Belt</div>
+      <div style="font-family:'VT323',monospace; font-size: 18px; color: #7ee08a;">check 4-dir</div>
+    </div>
+
+    <!-- cowgirl -->
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.10); border-radius: 8px; padding: 14px 8px;">
+      <div style="display: flex; align-items: center; justify-content: center; width: 140px; height: 140px; background: rgba(0,0,0,0.18); border-radius: 6px;">
+        <div class="spr" style="background-image: url(anim_cowgirl.png);"></div>
+      </div>
+      <img class="dirs" src="dirs_cowgirl.png" alt="4 directions">
+      <div style="font-size: 11px; color: #ffffff;">Cowgirl</div>
+      <div style="font-family:'VT323',monospace; font-size: 18px; color: #7ee08a;">check 4-dir</div>
+    </div>
+
+    <!-- youngster -->
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.10); border-radius: 8px; padding: 14px 8px;">
+      <div style="display: flex; align-items: center; justify-content: center; width: 140px; height: 140px; background: rgba(0,0,0,0.18); border-radius: 6px;">
+        <div class="spr" style="background-image: url(anim_youngster.png);"></div>
+      </div>
+      <img class="dirs" src="dirs_youngster.png" alt="4 directions">
+      <div style="font-size: 11px; color: #ffffff;">Youngster</div>
+      <div style="font-family:'VT323',monospace; font-size: 18px; color: #7ee08a;">check 4-dir</div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"backdrop":{"editor":"enum","options":["navy","grass","snow"],"default":"navy","section":"Preview"},"speed":{"editor":"enum","options":["slow","normal","fast"],"default":"normal","section":"Preview"}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const bd = this.props.backdrop ?? 'navy';
+    const bg = bd === 'grass' ? '#4c7a44' : (bd === 'snow' ? '#c9d6e4' : '#181c2c');
+    const sp = this.props.speed ?? 'normal';
+    const spd = sp === 'slow' ? '2.6s' : (sp === 'fast' ? '1.0s' : '1.6s');
+    return { bg, spd };
+  }
+}
+</script>
+</body>
+</html>

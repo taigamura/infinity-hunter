@@ -1,63 +1,41 @@
 # Builds assets/theme/pixel_theme.tres — the project-wide pixel-art Theme
-# (issue #28). Constructed in code (rather than hand-writing the .tres text
-# format) so the StyleBox/font wiring is easy to review and regenerate; run
-# once via:
+# (issue #28, retuned to the "Signal" direction). Constructed in code (rather
+# than hand-writing the .tres text format) so the StyleBox/font wiring is easy
+# to review and regenerate; run once via:
 #   godot --headless --path . --script res://assets/theme/_gen/build_theme.gd
 # Mirrors the assets/weapons/_gen/ convention: a small generator kept next to
 # its output for reproducibility.
+#
+# SIGNAL SYSTEM (locked direction): one cool-dark ground, no bevels, no
+# gradients on chrome, no rounded cards. Panels become surfaces separated by
+# 1px rules (corner radius 14 -> 3). Amber is the ONLY action color; red is
+# threat/low, teal is you/good. See the "Signal UI Kit" design artifact.
 extends SceneTree
 
 const PRESS_START := "res://assets/fonts/press_start_2p/PressStart2P-Regular.woff2"
 const VT323 := "res://assets/fonts/vt323/VT323-Regular.woff2"
 const OUT_PATH := "res://assets/theme/pixel_theme.tres"
 
-# Dark-navy panel palette, gold #f5c542 primary accent.
-const COLOR_BG_NAVY := Color("#0e1220")
-const COLOR_PANEL := Color("#121a2c")
-const COLOR_PANEL_BORDER := Color("#33415e")
-const COLOR_GOLD := Color("#f5c542")
-const COLOR_GOLD_DIM := Color("#c79a2e")
-const COLOR_TEXT := Color("#e7e9f0")
-const COLOR_TEXT_DIM := Color("#9aa3b8")
-const COLOR_BUTTON_NORMAL := Color("#1c273f")
-const COLOR_BUTTON_HOVER := Color("#26355a")
-const COLOR_BUTTON_PRESSED := Color("#0f1626")
-const COLOR_BUTTON_DISABLED := Color("#161d2e")
+# --- Signal palette (6 load-bearing tokens + neutrals). ---
+const COLOR_GROUND := Color("#12151c")    # base background (passes the navy gate: dark + blue-leaning)
+const COLOR_SURFACE := Color("#171b24")   # raised surface (panels, buttons, rows)
+const COLOR_RULE := Color("#232834")      # hairline rule / border
+const COLOR_BORDER := Color("#2a3140")    # ghost-button / interactive outline
+const COLOR_AMBER := Color("#f5b942")     # the one action color
+const COLOR_AMBER_HI := Color("#ffca5c")  # amber hover
+const COLOR_AMBER_LO := Color("#d89f2e")  # amber pressed
+const COLOR_INK := Color("#12151c")       # text on top of amber
+const COLOR_RED := Color("#ff5147")       # threat / monster HP / low
+const COLOR_TEAL := Color("#4bd4a0")      # you / player HP / good
+const COLOR_TEXT := Color("#e8eaed")
+const COLOR_TEXT_DIM := Color("#79808f")
+const COLOR_TRACK := Color("#222834")     # bar/segment track
 
-# Card family (issue #32 fidelity pass) — bg/border shared by all
-# Panel/PanelContainer instances (zone/weapon cards, combat top panel,
-# result overlay, etc).
-const COLOR_CARD_BG := Color("#1b2030")
-const COLOR_CARD_BORDER := Color("#39415a")
-
-# Essence pill (issue #32).
-const COLOR_PILL_BG := Color("#1c2130")
-const COLOR_PILL_BORDER := Color("#39415a")
-
-# HP bar track (issue #32) — shared by the monster/player gradient fills.
-const COLOR_HP_TRACK_BG := Color("#0c0f16")
-const COLOR_HP_TRACK_BORDER := Color("#495168")
-
-# Builds a two/three-stop vertical (or custom-direction) gradient texture,
-# used where StyleBoxFlat's flat bg_color can't express a gradient fill
-# (START button, HP bars).
-static func _gradient_texture(stops: Array, tex_size: Vector2i, fill_from: Vector2, fill_to: Vector2) -> GradientTexture2D:
-	var grad := Gradient.new()
-	var colors := PackedColorArray()
-	var offsets := PackedFloat32Array()
-	for stop in stops:
-		offsets.append(stop[0])
-		colors.append(stop[1])
-	grad.offsets = offsets
-	grad.colors = colors
-	var tex := GradientTexture2D.new()
-	tex.gradient = grad
-	tex.width = tex_size.x
-	tex.height = tex_size.y
-	tex.fill = GradientTexture2D.FILL_LINEAR
-	tex.fill_from = fill_from
-	tex.fill_to = fill_to
-	return tex
+# Button interaction backgrounds (flat, no bevel).
+const COLOR_BTN_NORMAL := COLOR_SURFACE
+const COLOR_BTN_HOVER := Color("#1d2431")
+const COLOR_BTN_PRESSED := Color("#0e1119")
+const COLOR_BTN_DISABLED := Color("#14171f")
 
 func _initialize() -> void:
 	var theme := Theme.new()
@@ -69,9 +47,10 @@ func _initialize() -> void:
 		quit(1)
 		return
 
-	# Default: Press Start 2P everywhere (headers/labels/buttons). VT323 is
-	# applied to RichTextLabel, which is the one control this UI uses for
-	# larger blocks of descriptive text.
+	# NOTE (typography): the Signal direction calls for a crisp sans (Inter) as
+	# the UI face, with Press Start 2P reserved for the wordmark only. That swap
+	# needs a vendored Inter asset and is a separate step; this pass keeps the
+	# existing Press Start 2P / VT323 wiring and only reskins the chrome.
 	theme.default_font = press_font
 	theme.default_font_size = 12
 
@@ -82,8 +61,8 @@ func _initialize() -> void:
 	theme.set_font("font", "Button", press_font)
 	theme.set_font_size("font_size", "Button", 12)
 	theme.set_color("font_color", "Button", COLOR_TEXT)
-	theme.set_color("font_hover_color", "Button", COLOR_GOLD)
-	theme.set_color("font_pressed_color", "Button", COLOR_GOLD)
+	theme.set_color("font_hover_color", "Button", COLOR_AMBER)
+	theme.set_color("font_pressed_color", "Button", COLOR_AMBER)
 	theme.set_color("font_disabled_color", "Button", COLOR_TEXT_DIM)
 
 	theme.set_font("font", "RichTextLabel", vt_font)
@@ -98,42 +77,40 @@ func _initialize() -> void:
 	theme.set_font_size("font_size", "LineEdit", 18)
 	theme.set_color("font_color", "LineEdit", COLOR_TEXT)
 
-	# --- Panel: card-navy fill, lighter border, rounded corners. ---
+	# --- Panel: flat surface separated by a 1px rule, small radius (no cards). ---
 	var panel_box := StyleBoxFlat.new()
-	panel_box.bg_color = COLOR_CARD_BG
-	panel_box.border_color = COLOR_CARD_BORDER
-	panel_box.set_border_width_all(2)
-	panel_box.set_corner_radius_all(14)
-	panel_box.set_content_margin_all(10)
+	panel_box.bg_color = COLOR_SURFACE
+	panel_box.border_color = COLOR_RULE
+	panel_box.set_border_width_all(1)
+	panel_box.set_corner_radius_all(3)
+	panel_box.set_content_margin_all(12)
 	theme.set_stylebox("panel", "Panel", panel_box)
 
 	var panel_container_box := panel_box.duplicate()
 	theme.set_stylebox("panel", "PanelContainer", panel_container_box)
 
-	# --- Button: beveled look via normal/hover/pressed/disabled StyleBoxFlats. ---
+	# --- Button: flat fill, 1px outline, small radius, NO bevel. ---
 	var btn_normal := StyleBoxFlat.new()
-	btn_normal.bg_color = COLOR_BUTTON_NORMAL
-	btn_normal.border_color = COLOR_GOLD_DIM
-	btn_normal.set_border_width_all(2)
-	btn_normal.border_width_bottom = 4 # beveled: thicker bottom edge reads as depth
-	btn_normal.set_corner_radius_all(6)
-	btn_normal.set_content_margin_all(10)
+	btn_normal.bg_color = COLOR_BTN_NORMAL
+	btn_normal.border_color = COLOR_BORDER
+	btn_normal.set_border_width_all(1)
+	btn_normal.set_corner_radius_all(3)
+	btn_normal.set_content_margin_all(11)
 
 	var btn_hover := btn_normal.duplicate()
-	btn_hover.bg_color = COLOR_BUTTON_HOVER
-	btn_hover.border_color = COLOR_GOLD
+	btn_hover.bg_color = COLOR_BTN_HOVER
+	btn_hover.border_color = COLOR_AMBER
 
 	var btn_pressed := btn_normal.duplicate()
-	btn_pressed.bg_color = COLOR_BUTTON_PRESSED
-	btn_pressed.border_width_bottom = 2
-	btn_pressed.border_width_top = 4 # pressed: bevel flips (looks "pushed in")
+	btn_pressed.bg_color = COLOR_BTN_PRESSED
+	btn_pressed.border_color = COLOR_AMBER
 
 	var btn_disabled := btn_normal.duplicate()
-	btn_disabled.bg_color = COLOR_BUTTON_DISABLED
-	btn_disabled.border_color = COLOR_PANEL_BORDER
+	btn_disabled.bg_color = COLOR_BTN_DISABLED
+	btn_disabled.border_color = COLOR_RULE
 
 	var btn_focus := btn_normal.duplicate()
-	btn_focus.border_color = COLOR_GOLD
+	btn_focus.border_color = COLOR_AMBER
 	btn_focus.draw_center = false
 
 	theme.set_stylebox("normal", "Button", btn_normal)
@@ -142,25 +119,23 @@ func _initialize() -> void:
 	theme.set_stylebox("disabled", "Button", btn_disabled)
 	theme.set_stylebox("focus", "Button", btn_focus)
 
-	# OptionButton reuses the same beveled family.
+	# OptionButton reuses the same flat family.
 	theme.set_stylebox("normal", "OptionButton", btn_normal)
 	theme.set_stylebox("hover", "OptionButton", btn_hover)
 	theme.set_stylebox("pressed", "OptionButton", btn_pressed)
 	theme.set_stylebox("disabled", "OptionButton", btn_disabled)
 	theme.set_stylebox("focus", "OptionButton", btn_focus)
 
-	# --- ProgressBar: bordered fill + background. ---
+	# --- ProgressBar: flat track + flat amber fill, radius 1 (no gradient). ---
 	var progress_bg := StyleBoxFlat.new()
-	progress_bg.bg_color = COLOR_BG_NAVY
-	progress_bg.border_color = COLOR_PANEL_BORDER
-	progress_bg.set_border_width_all(2)
-	progress_bg.set_corner_radius_all(4)
+	progress_bg.bg_color = COLOR_TRACK
+	progress_bg.border_color = COLOR_RULE
+	progress_bg.set_border_width_all(1)
+	progress_bg.set_corner_radius_all(1)
 
 	var progress_fill := StyleBoxFlat.new()
-	progress_fill.bg_color = COLOR_GOLD
-	progress_fill.border_color = COLOR_GOLD_DIM
-	progress_fill.set_border_width_all(2)
-	progress_fill.set_corner_radius_all(4)
+	progress_fill.bg_color = COLOR_AMBER
+	progress_fill.set_corner_radius_all(1)
 
 	theme.set_stylebox("background", "ProgressBar", progress_bg)
 	theme.set_stylebox("fill", "ProgressBar", progress_fill)
@@ -168,67 +143,68 @@ func _initialize() -> void:
 	theme.set_font_size("font_size", "ProgressBar", 10)
 	theme.set_color("font_color", "ProgressBar", COLOR_TEXT)
 
-	# --- EssencePill: distinct pill bg/border via a PanelContainer type variation. ---
-	var pill_box := StyleBoxFlat.new()
-	pill_box.bg_color = COLOR_PILL_BG
-	pill_box.border_color = COLOR_PILL_BORDER
-	pill_box.set_border_width_all(2)
-	pill_box.set_corner_radius_all(10)
-	pill_box.set_content_margin_all(8)
+	# --- EssencePill: flattened to a plain label (no pill bg/border). ---
+	var pill_box := StyleBoxEmpty.new()
+	pill_box.set_content_margin_all(4)
 	theme.set_type_variation("EssencePill", "PanelContainer")
 	theme.set_stylebox("panel", "EssencePill", pill_box)
 
-	# --- StartButton: green gradient fill w/ darker bottom edge (issue #32). ---
-	var start_tex := _gradient_texture([
-		[0.0, Color("#6ce27a")],
-		[0.82, Color("#46b357")],
-		[1.0, Color("#2f7a3a")],
-	], Vector2i(4, 32), Vector2(0.5, 0.0), Vector2(0.5, 1.0))
-	var start_normal := StyleBoxTexture.new()
-	start_normal.texture = start_tex
-	start_normal.set_content_margin_all(10)
-	var start_hover := StyleBoxTexture.new()
-	start_hover.texture = start_tex
-	start_hover.set_content_margin_all(10)
-	start_hover.modulate_color = Color(1.08, 1.08, 1.08)
-	var start_pressed := StyleBoxTexture.new()
-	start_pressed.texture = start_tex
-	start_pressed.set_content_margin_all(10)
-	start_pressed.modulate_color = Color(0.85, 0.85, 0.85)
+	# --- StartButton: flat amber fill, ink text, small radius (no gradient/bevel). ---
+	var start_normal := StyleBoxFlat.new()
+	start_normal.bg_color = COLOR_AMBER
+	start_normal.set_corner_radius_all(3)
+	start_normal.set_content_margin_all(12)
+
+	var start_hover := start_normal.duplicate()
+	start_hover.bg_color = COLOR_AMBER_HI
+
+	var start_pressed := start_normal.duplicate()
+	start_pressed.bg_color = COLOR_AMBER_LO
+
+	var start_disabled := start_normal.duplicate()
+	start_disabled.bg_color = COLOR_BTN_DISABLED
 
 	theme.set_type_variation("StartButton", "Button")
 	theme.set_stylebox("normal", "StartButton", start_normal)
 	theme.set_stylebox("hover", "StartButton", start_hover)
 	theme.set_stylebox("pressed", "StartButton", start_pressed)
-	theme.set_stylebox("disabled", "StartButton", start_normal)
+	theme.set_stylebox("disabled", "StartButton", start_disabled)
 	theme.set_stylebox("focus", "StartButton", start_normal)
 	theme.set_font("font", "StartButton", press_font)
 	theme.set_font_size("font_size", "StartButton", 16)
-	theme.set_color("font_color", "StartButton", Color("#12261a"))
-	theme.set_color("font_hover_color", "StartButton", Color("#12261a"))
-	theme.set_color("font_pressed_color", "StartButton", Color("#12261a"))
+	theme.set_color("font_color", "StartButton", COLOR_INK)
+	theme.set_color("font_hover_color", "StartButton", COLOR_INK)
+	theme.set_color("font_pressed_color", "StartButton", COLOR_INK)
+	theme.set_color("font_disabled_color", "StartButton", COLOR_TEXT_DIM)
 
-	# --- HP bars: shared dark track + red (monster) / green (player)
-	# gradient fills, exposed as ProgressBar type variations. ---
+	# --- DodgeButton: the combat primary action, amber fill like StartButton
+	# (the scene references this type variation for the big Dodge tap target). ---
+	theme.set_type_variation("DodgeButton", "Button")
+	theme.set_stylebox("normal", "DodgeButton", start_normal)
+	theme.set_stylebox("hover", "DodgeButton", start_hover)
+	theme.set_stylebox("pressed", "DodgeButton", start_pressed)
+	theme.set_stylebox("disabled", "DodgeButton", start_disabled)
+	theme.set_stylebox("focus", "DodgeButton", start_normal)
+	theme.set_font("font", "DodgeButton", press_font)
+	theme.set_color("font_color", "DodgeButton", COLOR_INK)
+	theme.set_color("font_hover_color", "DodgeButton", COLOR_INK)
+	theme.set_color("font_pressed_color", "DodgeButton", COLOR_INK)
+
+	# --- HP bars: shared flat dark track + flat red (monster) / teal (player)
+	# fills, exposed as ProgressBar type variations (no gradients). ---
 	var hp_track := StyleBoxFlat.new()
-	hp_track.bg_color = COLOR_HP_TRACK_BG
-	hp_track.border_color = COLOR_HP_TRACK_BORDER
-	hp_track.set_border_width_all(2)
-	hp_track.set_corner_radius_all(4)
+	hp_track.bg_color = COLOR_TRACK
+	hp_track.border_color = COLOR_RULE
+	hp_track.set_border_width_all(1)
+	hp_track.set_corner_radius_all(1)
 
-	var monster_hp_tex := _gradient_texture([
-		[0.0, Color("#ff5a3c")],
-		[1.0, Color("#cc331a")],
-	], Vector2i(4, 32), Vector2(0.5, 0.0), Vector2(0.5, 1.0))
-	var monster_hp_fill := StyleBoxTexture.new()
-	monster_hp_fill.texture = monster_hp_tex
+	var monster_hp_fill := StyleBoxFlat.new()
+	monster_hp_fill.bg_color = COLOR_RED
+	monster_hp_fill.set_corner_radius_all(1)
 
-	var player_hp_tex := _gradient_texture([
-		[0.0, Color("#6ce27a")],
-		[1.0, Color("#46b357")],
-	], Vector2i(4, 32), Vector2(0.5, 0.0), Vector2(0.5, 1.0))
-	var player_hp_fill := StyleBoxTexture.new()
-	player_hp_fill.texture = player_hp_tex
+	var player_hp_fill := StyleBoxFlat.new()
+	player_hp_fill.bg_color = COLOR_TEAL
+	player_hp_fill.set_corner_radius_all(1)
 
 	theme.set_type_variation("MonsterHpBar", "ProgressBar")
 	theme.set_stylebox("background", "MonsterHpBar", hp_track)
@@ -244,7 +220,7 @@ func _initialize() -> void:
 
 	# --- PanelContainer/Control background convenience for full-screen roots. ---
 	var root_box := StyleBoxFlat.new()
-	root_box.bg_color = COLOR_BG_NAVY
+	root_box.bg_color = COLOR_GROUND
 	theme.set_stylebox("panel", "root_background", root_box)
 
 	var err := ResourceSaver.save(theme, OUT_PATH)

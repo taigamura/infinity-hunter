@@ -17,8 +17,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("99_bg")
-top_color = Color(0.08235294, 0.09411765, 0.13333334, 1)
-bottom_color = Color(0.05882353, 0.07058824, 0.10196079, 1)
+top_color = Color(0.078431, 0.090196, 0.121569, 1)
+bottom_color = Color(0.058824, 0.070588, 0.094118, 1)
 
 [node name="Margin" type="MarginContainer" parent="."]
 layout_mode = 1

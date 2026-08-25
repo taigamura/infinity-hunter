@@ -1,13 +1,13 @@
 {
   "version": "1.0",
   "created_at": "2026-08-19T01:49:13+00:00",
-  "updated_at": "2026-08-19T07:35:11+00:00",
+  "updated_at": "2026-08-21T09:45:08+00:00",
   "repository": "",
   "queue": [
     {
       "source": "github",
-      "issue_number": 17,
-      "title": "EncounterSystem: pure gauge fill + band-filtered monster pick",
+      "issue_number": 32,
+      "title": "UI fidelity foundation: navy backgrounds, launch polish, gradient bar styles + pixel-invariant visual gate",
       "priority": "P0",
       "labels": [
         {
@@ -25,135 +25,17 @@
       ],
       "milestone": null,
       "dependencies": [],
-      "id": "github-17",
+      "id": "github-32",
       "status": "completed",
-      "added_at": "2026-08-19T07:17:45+00:00",
-      "started_at": "2026-08-19T07:19:22+00:00",
-      "completed_at": "2026-08-19T07:20:53+00:00",
+      "added_at": "2026-08-20T15:17:02+00:00",
+      "started_at": "2026-08-20T15:17:16+00:00",
+      "completed_at": "2026-08-20T15:22:26+00:00",
       "error_message": ""
     },
     {
       "source": "github",
-      "issue_number": 18,
-      "title": "Region/tier data model: danger tiers for Verdant Fields, loader + validation",
-      "priority": "P0",
-      "labels": [
-        {
-          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
-          "name": "ready-for-agent",
-          "description": "",
-          "color": "0e8a16"
-        },
-        {
-          "id": "LA_kwDOT88E3c8AAAACxCfTrg",
-          "name": "P0",
-          "description": "",
-          "color": "b60205"
-        }
-      ],
-      "milestone": null,
-      "dependencies": [],
-      "id": "github-18",
-      "status": "completed",
-      "added_at": "2026-08-19T07:18:22+00:00",
-      "started_at": "2026-08-19T07:20:53+00:00",
-      "completed_at": "2026-08-19T07:23:38+00:00",
-      "error_message": ""
-    },
-    {
-      "source": "github",
-      "issue_number": 19,
-      "title": "Overworld scene + launch redirect: walk Verdant Fields with joystick + follow-camera",
-      "priority": "P0",
-      "labels": [
-        {
-          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
-          "name": "ready-for-agent",
-          "description": "",
-          "color": "0e8a16"
-        },
-        {
-          "id": "LA_kwDOT88E3c8AAAACxCfTrg",
-          "name": "P0",
-          "description": "",
-          "color": "b60205"
-        }
-      ],
-      "milestone": null,
-      "dependencies": [],
-      "id": "github-19",
-      "status": "completed",
-      "added_at": "2026-08-19T07:18:23+00:00",
-      "started_at": "2026-08-19T07:23:38+00:00",
-      "completed_at": "2026-08-19T07:28:03+00:00",
-      "error_message": ""
-    },
-    {
-      "source": "github",
-      "issue_number": 20,
-      "title": "Gauge wiring: tier-under-character drives EncounterSystem tick + gauge HUD",
-      "priority": "P0",
-      "labels": [
-        {
-          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
-          "name": "ready-for-agent",
-          "description": "",
-          "color": "0e8a16"
-        },
-        {
-          "id": "LA_kwDOT88E3c8AAAACxCfTrg",
-          "name": "P0",
-          "description": "",
-          "color": "b60205"
-        }
-      ],
-      "milestone": null,
-      "dependencies": [
-        17,
-        18,
-        19
-      ],
-      "id": "github-20",
-      "status": "completed",
-      "added_at": "2026-08-19T07:18:24+00:00",
-      "started_at": "2026-08-19T07:28:03+00:00",
-      "completed_at": "2026-08-19T07:31:17+00:00",
-      "error_message": ""
-    },
-    {
-      "source": "github",
-      "issue_number": 21,
-      "title": "Combat overlay: combat_screen emits combat_finished, fight renders over paused map",
-      "priority": "P0",
-      "labels": [
-        {
-          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
-          "name": "ready-for-agent",
-          "description": "",
-          "color": "0e8a16"
-        },
-        {
-          "id": "LA_kwDOT88E3c8AAAACxCfTrg",
-          "name": "P0",
-          "description": "",
-          "color": "b60205"
-        }
-      ],
-      "milestone": null,
-      "dependencies": [
-        20
-      ],
-      "id": "github-21",
-      "status": "completed",
-      "added_at": "2026-08-19T07:18:25+00:00",
-      "started_at": "2026-08-19T07:31:17+00:00",
-      "completed_at": "2026-08-19T07:35:11+00:00",
-      "error_message": ""
-    },
-    {
-      "source": "github",
-      "issue_number": 22,
-      "title": "Exit-tile travel: reach an exit in a hot region to unlock + travel deeper",
+      "issue_number": 33,
+      "title": "Combat fidelity: filled HP bars, detail line, telegraph/damage/banner juice, DODGE style, timer-in-tree fix",
       "priority": "P1",
       "labels": [
         {
@@ -171,19 +53,19 @@
       ],
       "milestone": null,
       "dependencies": [
-        21
+        32
       ],
-      "id": "github-22",
-      "status": "processing",
-      "added_at": "2026-08-19T07:18:26+00:00",
-      "started_at": "2026-08-19T07:35:11+00:00",
-      "completed_at": null,
+      "id": "github-33",
+      "status": "completed",
+      "added_at": "2026-08-20T15:17:03+00:00",
+      "started_at": "2026-08-20T15:22:26+00:00",
+      "completed_at": "2026-08-20T15:30:26+00:00",
       "error_message": ""
     },
     {
       "source": "github",
-      "issue_number": 23,
-      "title": "Retire node-map: delete NodeMap/node_map_screen, drop RunState.node_map",
+      "issue_number": 34,
+      "title": "Overworld fidelity: tier green->red danger gradient, hot-region strip, styled gauge/retreat, joystick centering",
       "priority": "P1",
       "labels": [
         {
@@ -201,13 +83,192 @@
       ],
       "milestone": null,
       "dependencies": [
-        22
+        32
       ],
-      "id": "github-23",
-      "status": "pending",
-      "added_at": "2026-08-19T07:18:27+00:00",
-      "started_at": null,
-      "completed_at": null,
+      "id": "github-34",
+      "status": "completed",
+      "added_at": "2026-08-20T15:17:04+00:00",
+      "started_at": "2026-08-20T15:30:26+00:00",
+      "completed_at": "2026-08-20T15:41:57+00:00",
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 37,
+      "title": "SectionLayout foundation: center spawn + section-driven encounters end-to-end",
+      "priority": "P0",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTrg",
+          "name": "P0",
+          "description": "",
+          "color": "b60205"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [],
+      "id": "github-37",
+      "status": "completed",
+      "added_at": "2026-08-21T09:00:50+00:00",
+      "started_at": "2026-08-21T09:01:29+00:00",
+      "completed_at": "2026-08-21T09:20:08+00:00",
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 38,
+      "title": "Recommended-level UI: on-enter banner + persistent badge + border grace reset",
+      "priority": "P0",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTrg",
+          "name": "P0",
+          "description": "",
+          "color": "b60205"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        37
+      ],
+      "id": "github-38",
+      "status": "completed",
+      "added_at": "2026-08-21T09:00:51+00:00",
+      "started_at": "2026-08-21T09:20:08+00:00",
+      "completed_at": "2026-08-21T09:23:23+00:00",
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 39,
+      "title": "Path-first section generation + visible optimal path + rate-scaling",
+      "priority": "P0",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTrg",
+          "name": "P0",
+          "description": "",
+          "color": "b60205"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        37
+      ],
+      "id": "github-39",
+      "status": "completed",
+      "added_at": "2026-08-21T09:00:52+00:00",
+      "started_at": "2026-08-21T09:23:23+00:00",
+      "completed_at": "2026-08-21T09:31:44+00:00",
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 40,
+      "title": "Off-path spike sections + apex stat-wall species pool",
+      "priority": "P1",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTuQ",
+          "name": "P1",
+          "description": "",
+          "color": "d93f0b"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        39
+      ],
+      "id": "github-40",
+      "status": "completed",
+      "added_at": "2026-08-21T09:00:53+00:00",
+      "started_at": "2026-08-21T09:31:44+00:00",
+      "completed_at": "2026-08-21T09:37:08+00:00",
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 41,
+      "title": "Carryover: dens/forage/cache/landmark + per-zone palette tint + section names",
+      "priority": "P1",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfTuQ",
+          "name": "P1",
+          "description": "",
+          "color": "d93f0b"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        39
+      ],
+      "id": "github-41",
+      "status": "completed",
+      "added_at": "2026-08-21T09:00:53+00:00",
+      "started_at": "2026-08-21T09:37:08+00:00",
+      "completed_at": "2026-08-21T09:42:59+00:00",
+      "error_message": ""
+    },
+    {
+      "source": "github",
+      "issue_number": 42,
+      "title": "ADR + CONTEXT/glossary update for the Concentric Sections pivot",
+      "priority": "P2",
+      "labels": [
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfAIQ",
+          "name": "P2",
+          "description": "",
+          "color": "fbca04"
+        },
+        {
+          "id": "LA_kwDOT88E3c8AAAACxCfJxQ",
+          "name": "ready-for-agent",
+          "description": "",
+          "color": "0e8a16"
+        }
+      ],
+      "milestone": null,
+      "dependencies": [
+        38,
+        39
+      ],
+      "id": "github-42",
+      "status": "completed",
+      "added_at": "2026-08-21T09:00:54+00:00",
+      "started_at": "2026-08-21T09:42:59+00:00",
+      "completed_at": "2026-08-21T09:45:08+00:00",
       "error_message": ""
     }
   ]

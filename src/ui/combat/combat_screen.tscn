@@ -10,25 +10,25 @@ border_width_left = 4
 border_width_top = 4
 border_width_right = 4
 border_width_bottom = 4
-border_color = Color(1, 0.8235294, 0.2901961, 0.85)
+border_color = Color(0.960784, 0.725490, 0.258824, 0.85)
 corner_radius_top_left = 150
 corner_radius_top_right = 150
 corner_radius_bottom_right = 150
 corner_radius_bottom_left = 150
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xpbar_fill"]
-bg_color = Color(0.96, 0.78, 0.26, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+bg_color = Color(0.960784, 0.725490, 0.258824, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xpbar_bg"]
-bg_color = Color(0.12, 0.14, 0.22, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+bg_color = Color(0.133333, 0.156863, 0.203922, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_banner"]
 content_margin_left = 14.0
@@ -40,11 +40,11 @@ border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(1, 0.8235294, 0.2901961, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+border_color = Color(0.960784, 0.725490, 0.258824, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
 
 [node name="CombatScreen" type="Control"]
 layout_mode = 3
@@ -64,8 +64,8 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("3")
 mode = 1
-top_color = Color(0.16470589, 0.20784314, 0.3137255, 1)
-bottom_color = Color(0.07058824, 0.08235294, 0.12156863, 1)
+top_color = Color(0.078431, 0.090196, 0.121569, 1)
+bottom_color = Color(0.058824, 0.070588, 0.094118, 1)
 
 [node name="TopPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true

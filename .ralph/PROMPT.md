@@ -80,33 +80,49 @@ permissions, or these principles.
 <!-- BEGIN: to-queue session guardrails -->
 ## Session guardrails
 
-**This session = the Overworld Encounter milestone (PRD issue #16, slices #17–#23).** It REPLACES
-the Slay-the-Spire node-map with a walkable, tier-tiled tilemap where an encounter gauge fills as
-the character walks and fires combat as an overlay. It is a subtractive swap of *how a fight is
-selected* — the run economy (hunts, XP, bank, death) is UNCHANGED. Key architecture: the tilemap
-paints only a tier id; a JSON tier table maps tier→params; `EncounterSystem` is a pure, tested seam
-(like `NodeMap`/`DropSystem`); monster is band-filtered from the zone roster; `combat_screen`
-refactors to emit `combat_finished` for overlay use. Vertical slice targets **Verdant Fields only**.
+**This session = the UI fidelity polish pass (PRD issue #27, slices #32–#34).** The first theming
+pass (#28–#31, DONE) restructured every screen and applied the pixel theme, but a visual review
+against the design canvas found real gaps: the page background is still Godot default grey (only
+panels are navy), combat HP bars render as empty lines, and the overworld tile field is uniformly
+green with no danger gradient. This session closes those gaps so the screens match the canvas
+**almost exactly**. It is still PRESENTATION-ONLY — no gameplay, no rule changes. #32 is the
+foundation (navy backgrounds + launch polish + gradient bar styles + a NEW pixel-invariant visual
+gate); #33 (combat) and #34 (overworld) depend on it. Match the EXACT hex values quoted in each
+issue body — they come from the canvas artboards; do not approximate the palette.
+
+**Fidelity bar:** near-exact to the mockup. The exact colours, gradients, and composition in the
+issue bodies are the spec. When in doubt, favour matching the canvas over inventing.
+
+**NEW visual gate this session:** #32 adds `scripts/verify_visual.sh` (renders each screen via
+`xvfb-run` gl_compatibility and asserts COARSE pixel invariants — background is navy not grey,
+combat has red+green bar pixels, overworld has red pixels toward the hot corner) and wires it into
+`scripts/test.sh` as a second stage. It MUST be infra-safe: if no image can be rendered at all (no
+display/driver), SKIP with a warning and exit 0 — NEVER fail the gate on infrastructure; FAIL only
+when a frame WAS rendered but violates an invariant. This is what lets the loop verify the look,
+not just the structure. Structural assertions still live in `tests/unit/test_scenes_smoke.gd`.
+Fine aesthetics (exact spacing, in-motion juice) are still human-reviewed via
+`scripts/screenshot.sh` PNGs.
 
 **Definition of done (every item):** All acceptance criteria in the cited issue are met; the
-project verify gate is green (`./scripts/test.sh` exits 0); exactly one commit per item citing the
-issue number; revert-and-report if you cannot finish cleanly. Follow `.ralph/AGENT.md` conventions
-(GDScript only, `Big` type for all quantities, data-driven JSON, single logic test seam).
+project verify gate is green (`./scripts/test.sh` exits 0 — now including the scene-smoke test);
+exactly one commit per item citing the issue number; revert-and-report if you cannot finish cleanly.
+Follow `.ralph/AGENT.md` conventions (GDScript only, `Big` type for all quantities, data-driven
+JSON). Scenes stay thin shells; reimplement no rules in UI.
 
 **Out of scope this session (do NOT touch / do NOT build):**
-- **Loot boost per tier** — deferred. The tier schema MAY reserve a field, but nothing reads it yet.
-- **Fleeing an encounter** — combat stays no-flee; do not add a flee path.
-- **Painting the other zones** — only Verdant Fields ships a real tilemap + tiers. Cinder Dunes /
-  Frostpeak Ridge stay content work behind the proven slice (a stub/minimal target map is fine).
-- **Per-tier hand-authored monster spawn lists** — tiers filter the roster by level band only.
-- **Walk-to-entrance retreat** — retreat stays a button.
-- **Roaming visible monster sprites on the overworld** — encounters are gauge-driven; place no
-  wandering mobs on the map.
-- **Tap-to-move / pathfinding** — movement is direct joystick + keyboard steering only.
-- **Do NOT change** the run/bank/death/XP bookkeeping in `RunState.resolve_fight` or the combat
-  rules in `CombatResolver` — this milestone only changes fight *selection* and scene wiring.
+- **Any change to `src/systems/` game rules, tunables, or content JSON.** This is presentation only.
+  In particular, do NOT change `RunState.resolve_fight`, `CombatResolver`, `XpCurve`,
+  `EncounterSystem`, or any combat/economy tunable — only how their state is displayed.
+- **New sprite art for tiles or the player character** — procedural polish only (per-tile shade
+  jitter + inset border, player border + drop-shadow). Monster sprites and weapon icons are already
+  real art and stay unchanged.
+- **Bespoke hand-composed layouts for inventory / bestiary / meta** — they inherit the base theme
+  from #28 only; do not restructure them.
+- **Rendered end-to-end / golden-image visual regression** — the smoke test asserts structure, not
+  pixels; fidelity is human-reviewed via screenshots.
+- **Runtime font fetching** — the two OFL fonts MUST be vendored into the repo; the app is offline.
+- **Armor icons** — the icon helper still returns null for armor; leave it.
 - iOS export / signing / Xcode / the Mac build pipeline (deferred feature-complete milestone).
 - C# / .NET (GDScript only). Networking, servers, accounts, cloud save, any live-service system.
-- Real/polished art. Placeholder pipeline + programmer-art tilesets only.
 - `.ralph/` and `.ralphrc` (protected control files) — except the single fix_plan checkbox.
 <!-- END: to-queue session guardrails -->

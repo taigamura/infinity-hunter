@@ -43,9 +43,11 @@ const ELEMENT_COLORS := {
 	"neutral": Color("#8a93a8"),
 }
 
-const DOT_PENDING_COLOR := Color(0.16470589, 0.19215687, 0.27058825, 1)
-const DOT_RESOLVED_COLOR := Color(0.27450982, 0.7019608, 0.34117648, 1)
-const DOT_ACTIVE_COLOR := Color(1, 0.8235294, 0.2901961, 1)
+# Signal round-segments: track / teal (resolved) / amber (now). A discrete
+# round meter, not decorative dots.
+const DOT_PENDING_COLOR := Color(0.133333, 0.156863, 0.203922, 1)  # #222834 track
+const DOT_RESOLVED_COLOR := Color(0.294118, 0.831373, 0.627451, 1) # #4bd4a0 teal (you)
+const DOT_ACTIVE_COLOR := Color(0.960784, 0.725490, 0.258824, 1)   # #f5b942 amber (now)
 
 @onready var timer: Timer = %RoundTimer
 @onready var dodge_button: Button = %DodgeButton
@@ -167,7 +169,10 @@ func _build_round_dots() -> void:
 	_round_dots.clear()
 	for i in range(MAX_ROUNDS):
 		var dot := ColorRect.new()
-		dot.custom_minimum_size = Vector2(16, 16)
+		# Signal segments: thin bars that stretch to fill the row, so the round
+		# meter reads as a discrete progress strip rather than a row of dots.
+		dot.custom_minimum_size = Vector2(6, 8)
+		dot.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		dot.color = DOT_PENDING_COLOR
 		round_dots_row.add_child(dot)
 		_round_dots.append(dot)

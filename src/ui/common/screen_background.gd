@@ -8,8 +8,8 @@ extends Control
 enum Mode { LINEAR, RADIAL }
 
 @export var mode: Mode = Mode.LINEAR
-@export var top_color: Color = Color("#151822")
-@export var bottom_color: Color = Color("#0f121a")
+@export var top_color: Color = Color("#14171f")
+@export var bottom_color: Color = Color("#0f1218")
 @export var show_grid: bool = false
 @export var grid_step: int = 48
 @export var grid_color: Color = Color(90.0 / 255.0, 110.0 / 255.0, 160.0 / 255.0, 0.05)
